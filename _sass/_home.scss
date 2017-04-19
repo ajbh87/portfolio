@@ -1,0 +1,53 @@
+//----------------------- Home Page
+.home {
+
+}
+
+.section {
+  @extend %vertical-rhythm;
+}
+
+.section-content {
+  box-sizing: border-box;
+  background: rgba(255,255,255,.8);
+  padding: $spacing-unit-sm;
+  transition: .2s transform ease-out;
+  transform-origin: center center;
+  transform: scale(.9);
+  &.focused {
+    transform: scale(1);
+  }
+  @include media-query($tablet){
+    width: 75%;
+    padding: $spacing-unit;
+  }
+  
+  &__title {
+  }
+  &__text {
+  }
+}
+
+#bg-line {
+  z-index: 1;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  &__svg{
+    width: 100%;
+    height: 100%;
+  }
+  &__line{
+    fill: none;
+    stroke: $brand-color;
+    stroke-miterlimit:10;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    transition: stroke-dashoffset .5s ease-out;
+  }
+}

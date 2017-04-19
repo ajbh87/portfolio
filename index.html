@@ -1,0 +1,40 @@
+---
+layout: default
+isHome: true
+options: "{
+  position: 'center',
+  in: $element => {
+    $element.el.classList.add('focused')
+  },
+  out: $element => {
+    $element.el.classList.remove('focused')
+  }               
+}"
+---
+<div id="bg-line">
+  <svg id="bg-line__svg" data-name="Background Line" viewBox="0 0 100 100" width="100%" height="100%" preserveAspectRatio="none" >
+    <title>Background Line</title>
+    <line id="bg-line__line" x1="87.25" x2="87.25" y2="100"/>
+  </svg>
+</div>
+{% capture intro %}
+{% include_relative _home/1-intro.markdown %}
+{% endcapture %}
+{% include home_section.html title="Intro" content=intro action=page.options %}
+
+{% capture centuries %}
+{% include_relative _home/2-centuries.markdown %}
+{% endcapture %}
+{% include home_section.html title="A few centuries ago" content=centuries action=page.options %}
+
+{% capture later %}
+{% include_relative _home/3-later.markdown %}
+{% endcapture %}
+{% include home_section.html title="Some time later" content=later action=page.options %}
+
+{% capture beyond %}
+{% include_relative _home/4-beyond.markdown %}
+{% endcapture %}
+
+{% include home_section.html title="Beyond the Frontend of Web" content=beyond action=page.options %}
+

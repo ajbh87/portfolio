@@ -1,0 +1,76 @@
+%content-padding {
+  padding: $spacing-unit-sm;
+  @include media-query($tablet) {
+    padding: ($spacing-unit / 2) $spacing-unit;
+  }
+}
+
+//----------------------- Site header
+.header {
+  @extend %content-padding;
+  display: flex;
+  &__title {
+    display: block;
+    float: left;
+    flex: 0 1 auto;
+    @include media-query($tablet){
+      width: 75vw;
+    }
+  }
+  &__nav {
+    float: right;
+    flex: 0 0 auto;
+  }
+}
+
+//----------------------------- Page content
+.content {
+  @extend %content-padding;
+  position: relative;
+}
+
+.page-heading {
+    margin-bottom: $spacing-unit;
+}
+
+.post-list {
+  margin-left: 0;
+  list-style: none;
+
+  > li {
+    margin-bottom: $spacing-unit;
+  }
+}
+
+.post-meta {
+  font-size: $small-font-size;
+  color: $grey-color;
+}
+
+.post-link {
+  display: block;
+  font-size: 24px;
+}
+
+
+//----------------------- Posts
+
+.post-header {
+  margin-bottom: $spacing-unit;
+}
+
+.post-title {
+
+}
+
+.post-content {
+  margin-bottom: $spacing-unit;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+//---------------------- Footer
+.footer {
+  @extend %content-padding;
+}

@@ -1,0 +1,91 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+
+
+
+// Our variables
+$base-font-family: 'Quicksand', Helvetica, Helvetica Neue, Arial, sans-serif;
+$base-font-size-fixed: 18px;
+$base-font-size: 2vw;
+
+$base-font-weight: 400;
+$small-font-size: $base-font-size * 0.875;
+$base-line-height: 1.4em;
+$font-weight-light: 300;
+$font-weight-bold: 700;
+
+$spacing-unit: 2vw;
+$spacing-unit-sm: 30px;
+
+$grey-color-light: #FDF7F7;
+$grey-color: #403D3C;
+$grey-color-dark: #1C1919;
+$grey-color-dark-t: transparentize($grey-color-dark, 0.1);
+
+$blue: #456F74;
+$blue-t: transparentize($blue, 0.2);
+$blue-xt: transparentize($blue, 0.6);
+
+$blue-dark: darken($blue, 25%);
+$blue-dark-2: darken($blue, 50%);
+$orange: #EB5937;
+
+$text-color: $grey-color-dark;
+$background-color: $grey-color-light;
+$brand-color: $orange;
+
+// Width of the content area
+$content-width: 1200px;
+
+$tablet: 800px;
+$desktop: 1280px;
+
+$menu-transition: .5s ease-out;
+
+@mixin media-query($device) {
+  @media screen and (min-width: $device) {
+    @content; 
+  }
+}
+
+@mixin color-mix($c1, $c2, $t, $a: "color", $s: "", $o: 0, $repeat: 1) {
+  $p: 100 / ($t - 1);
+  $r: $repeat + 'n + ';
+
+  @for $i from 1 through $t - $o {
+    &:nth-child(#{$r + $i}) #{$s}{
+      $f: $p * ($i - 1 + $o);
+      $t: percentage($f/100);
+      #{$a}: mix($c2, $c1, $t);
+    }
+  }
+}
+
+@mixin attr-iterator($attr, $size, $prefix: $attr) {
+  $dirs: all, top, right, bottom, left;
+  @each $dir in $dirs {
+    $full-attr: '';
+    @if $dir == all {
+      $full-attr: $attr;
+    }
+    @else {
+      $full-attr: #{$attr}-#{$dir};
+    }
+    .#{$prefix}--#{$dir} {
+      #{$full-attr}: $size;
+    }
+  }
+}
+
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+  "normalize",
+  "syntax-highlighting",
+  "base",
+  "layout",
+  "home"
+;

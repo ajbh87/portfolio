@@ -1,0 +1,15 @@
+{
+  "name": "ajbermudez.com",
+  "version": "1.0.0",
+  "description": "personal website for alfredo bermudez",
+  "main": "index.js",
+  "scripts": {
+    "webpack": "webpack --config webpack.config.js"
+  },
+  "author": "ALfredo J Bermudez",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "webpack": "^2.4.1"
+  }
+}
