@@ -9,4 +9,4 @@ github_username:  ajbh87
 
 # Build settings
 markdown: kramdown
-exclude: [webpack.config.js, package.json, _home, node_modules, scripts]
+exclude: [README.md, webpack.config.js, package.json, _home, node_modules, scripts]
