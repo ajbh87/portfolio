@@ -22,52 +22,50 @@ import scrollTrigger from './scrollTrigger';
     return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
   }
   
-  function onLoad() {
-    class svgLine {
-      constructor(element){
-        this.el = {
-          path: element.querySelector('.bg-line__line'),
-          length: 0
-        }
+  class svgLine {
+    constructor(element){
+      this.el = {
+        path: element,
+        length: 0
+      }
+      this.calculatePathLength();
+
+      window.addEventListener('resize', () => { 
         this.calculatePathLength();
-
-        window.addEventListener('resize', () => { 
-          this.calculatePathLength();
-        })
-      }
-
-      pathLength(percent){
-        const offset = round(this.el.length * percent, 1);
-        this.el.path.style.strokeDashoffset = 100 - offset;
-      }
-      
-      calculatePathLength(path){
-        let length = this.el.path.getTotalLength();
-        
-		this.el.length = round(length, 3);
-      }
+      })
     }
-        
-    const scope = { 
-      sectionOptions: [{
-        position: 'center',
-        active: sectionAct,
-        inactive: sectionInact
-      }]
-    },
+
+    pathLength(percent){
+      const offset = round(this.el.length * percent, 4);
+      this.el.path.style.strokeDashoffset = this.el.length - offset;
+    }
+
+    calculatePathLength(path){
+      let length = this.el.path.getTotalLength();
+
+      this.el.length = round(length, 4);
+      this.el.path.style.strokeDashoffset = this.el.length;
+      this.el.path.style.strokeDasharray = this.el.length;
+    }
+  }
+  
+  function onLoad() {
+    const sectionOptions = [{
+            position: 'center',
+            active: sectionAct,
+            inactive: sectionInact
+          }],
           triggers = new scrollTrigger({
-            scope
-          });
+            scope: { 
+              sectionOptions
+            },
+            probe: bindScrollToLine
+          }),
+          line = new svgLine(document.querySelector('.bg-line__line')),
+          container = document.querySelector('.bg-line');
     
-    function sectionTop(obj) {
-      let line = new svgLine(obj.el);
-      
-      line.pathLength(.5);
-    }
-    function sectionCenter(obj) {
-      let line = new svgLine(obj.el);
-      
-      line.pathLength(1);
+    function bindScrollToLine(percent) {      
+      line.pathLength(percent);
     }
     
     function sectionAct(obj) {
@@ -82,4 +80,6 @@ import scrollTrigger from './scrollTrigger';
     }
   }
   window.addEventListener('load', onLoad);
+  
+  
 })();

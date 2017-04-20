@@ -1,6 +1,6 @@
 //----------------------- Home Page
 .home {
-
+  position: relative;
 }
 
 .section {
@@ -55,8 +55,7 @@
     fill: none;
     stroke: $brand-color;
     stroke-miterlimit: 1;
-    stroke-dasharray: 100;
-    stroke-dashoffset: 100;
-    transition: stroke-dashoffset 1.5s ease-out;
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
   }
 }

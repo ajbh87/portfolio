@@ -78,7 +78,7 @@ class scrollTrigger {
           st = this;
     let scrollTimeout = null,
         resizeTimeout = null;
-    
+
     st.elements = [];
     st.window = st.calcWinSize();
     
@@ -152,7 +152,8 @@ class scrollTrigger {
     function createOptions(override) {
       let options = Object.assign({
         scope: {},
-        dataName: 'data-scroll-trigger'
+        dataName: 'data-scroll-trigger',
+        probe: null
       }, override);
     
       options.selector = '[' + options.dataName + ']';
@@ -160,6 +161,8 @@ class scrollTrigger {
       return options;
     }
     function onScrollTrigger() {
+      let percentScrolled = 0;
+      
       st.elements.forEach(element => {
         element.actions.forEach(action => {
           const scrolled = window.scrollY + action.offset,
@@ -237,6 +240,12 @@ class scrollTrigger {
         });
         
       });
+      
+      if (options.probe != null) {
+        percentScrolled = (window.scrollY) / (st.window.documentHeight - st.window.height);
+        debugger;
+        options.probe(percentScrolled)
+      }
     }
     function onScrollResize() {
       if (resizeTimeout != null) {
@@ -256,7 +265,6 @@ class scrollTrigger {
         }, 150);
       }
     }
-
   }
   
   calcOffset(elt) {
@@ -295,7 +303,9 @@ class scrollTrigger {
       width,
       height,
       vCenter: height / 2,
-      hCenter: width / 2
+      hCenter: width / 2,
+      documentHeight: g.offsetHeight,
+      documentWidth: g.offsetWidth
     }
   }
   get winSize() {
@@ -335,52 +345,50 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
   }
   
-  function onLoad() {
-    class svgLine {
-      constructor(element){
-        this.el = {
-          path: element.querySelector('.bg-line__line'),
-          length: 0
-        }
+  class svgLine {
+    constructor(element){
+      this.el = {
+        path: element,
+        length: 0
+      }
+      this.calculatePathLength();
+
+      window.addEventListener('resize', () => { 
         this.calculatePathLength();
-
-        window.addEventListener('resize', () => { 
-          this.calculatePathLength();
-        })
-      }
-
-      pathLength(percent){
-        const offset = round(this.el.length * percent, 1);
-        this.el.path.style.strokeDashoffset = 100 - offset;
-      }
-      
-      calculatePathLength(path){
-        let length = this.el.path.getTotalLength();
-        
-		this.el.length = round(length, 3);
-      }
+      })
     }
-        
-    const scope = { 
-      sectionOptions: [{
-        position: 'center',
-        active: sectionAct,
-        inactive: sectionInact
-      }]
-    },
+
+    pathLength(percent){
+      const offset = round(this.el.length * percent, 4);
+      this.el.path.style.strokeDashoffset = this.el.length - offset;
+    }
+
+    calculatePathLength(path){
+      let length = this.el.path.getTotalLength();
+
+      this.el.length = round(length, 4);
+      this.el.path.style.strokeDashoffset = this.el.length;
+      this.el.path.style.strokeDasharray = this.el.length;
+    }
+  }
+  
+  function onLoad() {
+    const sectionOptions = [{
+            position: 'center',
+            active: sectionAct,
+            inactive: sectionInact
+          }],
           triggers = new __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__["a" /* default */]({
-            scope
-          });
+            scope: { 
+              sectionOptions
+            },
+            probe: bindScrollToLine
+          }),
+          line = new svgLine(document.querySelector('.bg-line__line')),
+          container = document.querySelector('.bg-line');
     
-    function sectionTop(obj) {
-      let line = new svgLine(obj.el);
-      
-      line.pathLength(.5);
-    }
-    function sectionCenter(obj) {
-      let line = new svgLine(obj.el);
-      
-      line.pathLength(1);
+    function bindScrollToLine(percent) {      
+      line.pathLength(percent);
     }
     
     function sectionAct(obj) {
@@ -395,6 +403,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   }
   window.addEventListener('load', onLoad);
+  
+  
 })();
 
 /***/ })

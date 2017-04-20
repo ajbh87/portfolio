@@ -5,7 +5,7 @@ class scrollTrigger {
           st = this;
     let scrollTimeout = null,
         resizeTimeout = null;
-    
+
     st.elements = [];
     st.window = st.calcWinSize();
     
@@ -79,7 +79,8 @@ class scrollTrigger {
     function createOptions(override) {
       let options = Object.assign({
         scope: {},
-        dataName: 'data-scroll-trigger'
+        dataName: 'data-scroll-trigger',
+        probe: null
       }, override);
     
       options.selector = '[' + options.dataName + ']';
@@ -87,6 +88,8 @@ class scrollTrigger {
       return options;
     }
     function onScrollTrigger() {
+      let percentScrolled = 0;
+      
       st.elements.forEach(element => {
         element.actions.forEach(action => {
           const scrolled = window.scrollY + action.offset,
@@ -164,6 +167,12 @@ class scrollTrigger {
         });
         
       });
+      
+      if (options.probe != null) {
+        percentScrolled = (window.scrollY) / (st.window.documentHeight - st.window.height);
+        debugger;
+        options.probe(percentScrolled)
+      }
     }
     function onScrollResize() {
       if (resizeTimeout != null) {
@@ -183,7 +192,6 @@ class scrollTrigger {
         }, 150);
       }
     }
-
   }
   
   calcOffset(elt) {
@@ -222,7 +230,9 @@ class scrollTrigger {
       width,
       height,
       vCenter: height / 2,
-      hCenter: width / 2
+      hCenter: width / 2,
+      documentHeight: g.offsetHeight,
+      documentWidth: g.offsetWidth
     }
   }
   get winSize() {

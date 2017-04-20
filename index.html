@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: home
 isHome: true
 options: "sectionOptions"
 ---
@@ -8,13 +8,6 @@ options: "sectionOptions"
   {% include_relative _home/1-intro.markdown %}
   {% endcapture %}
   {% include home_section.html title="Intro" content=intro %}
-  <div class="bg-line">
-    <svg class="bg-line__svg" viewBox="0 0 100 40" width="100%" height="100%" preserveAspectRatio="none" >
-      <title>Background Line 1</title>
-      <line class="bg-line__straight" x1="85" y1="0" x2="85" y2="40"/>
-      <line class="bg-line__line" x1="85" y1="0" x2="85" y2="40"/>
-    </svg>
-  </div>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -22,13 +15,6 @@ options: "sectionOptions"
   {% include_relative _home/2-centuries.markdown %}
   {% endcapture %}
   {% include home_section.html title="A few centuries ago" content=centuries action=page.options %}
-  <div class="bg-line">
-    <svg class="bg-line__svg" viewBox="0 0 100 40" width="100%" height="100%" preserveAspectRatio="none" >
-      <title>Background Line 2</title>
-      <line class="bg-line__straight" x1="85" y1="0" x2="85" y2="40"/>
-      <polyline class="bg-line__line" points="85,0 85,20 91,26 91,40"/>
-    </svg>
-  </div>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -36,13 +22,6 @@ options: "sectionOptions"
   {% include_relative _home/3-later.markdown %}
   {% endcapture %}
   {% include home_section.html title="Some time later" content=later action=page.options %}
-  <div class="bg-line">
-    <svg class="bg-line__svg" viewBox="0 0 100 40" width="100%" height="100%" preserveAspectRatio="none" >
-      <title>Background Line 3</title>
-      <line class="bg-line__straight" x1="85" y1="0" x2="85" y2="40"/>
-      <polyline class="bg-line__line" points="91,0 91,20 85,26 85,20 79,20 79,40"/>
-    </svg>
-  </div>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -50,13 +29,6 @@ options: "sectionOptions"
   {% include_relative _home/4-beyond.markdown %}
   {% endcapture %}
   {% include home_section.html title="Beyond the Frontend of Web" content=beyond action=page.options %}
-  <div class="bg-line">
-    <svg class="bg-line__svg" viewBox="0 0 100 40" width="100%" height="100%" preserveAspectRatio="none" >
-      <title>Background Line 4</title>
-      <line class="bg-line__straight" x1="85" y1="0" x2="85" y2="40"/>
-      <polyline class="bg-line__line" points="79,0 79,20 91,32 91,40"/>
-    </svg>
-  </div>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -64,13 +36,15 @@ options: "sectionOptions"
   {% include_relative _home/4-beyond.markdown %}
   {% endcapture %}
   {% include home_section.html title="Finish" content=beyond action=page.options %}
-  <div class="bg-line">
-    <svg class="bg-line__svg" viewBox="0 0 100 40" width="100%" height="100%" preserveAspectRatio="none" >
-      <title>Background Line 5</title>
-      <line class="bg-line__straight" x1="85" y1="0" x2="85" y2="40"/>
-      <polyline class="bg-line__line" points="91,0 91,14 85,20 85,40"/>
-    </svg>
-  </div>
+</div>
+
+<div class="bg-line">
+  <svg class="bg-line__svg" viewBox="0 0 100 200" width="100%" height="100%" preserveAspectRatio="none" >
+    <title>Background Line 1</title>
+    <line class="bg-line__straight" x1="85" y1="0" x2="85" y2="200"/>
+    <polyline class="bg-line__line" points="85,0 85,40 85,55 90,63.3 90,80 90,100 90,104.7 85,113 85,99 79,107.4 
+      79,120 79,134.8 90,147.9 90,153 90,160 90,169.4 85,181 85,200 	"/>
+  </svg>
 </div>
 
 
