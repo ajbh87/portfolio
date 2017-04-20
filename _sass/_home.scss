@@ -4,13 +4,15 @@
 }
 
 .section {
-  @extend %vertical-rhythm;
+  position: relative;
+  display: flex;
 }
 
 .section-content {
   box-sizing: border-box;
   background: rgba(255,255,255,.8);
   padding: $spacing-unit-sm;
+  margin-bottom: $spacing-unit-sm;
   transition: .2s transform ease-out;
   transform-origin: center center;
   transform: scale(.9);
@@ -20,6 +22,7 @@
   @include media-query($tablet){
     width: 75%;
     padding: $spacing-unit;
+    margin-bottom: $spacing-unit;
   }
   
   &__title {
@@ -28,8 +31,8 @@
   }
 }
 
-#bg-line {
-  z-index: 1;
+.bg-line {
+  z-index: 0;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -37,17 +40,23 @@
   left: 0;
   width: 100%;
   height: 100%;
+  overflow: hidden;
   
-  &__svg{
+  &__svg {
     width: 100%;
     height: 100%;
   }
-  &__line{
+  &__straight {
+    fill: none;
+    stroke: $grey-color;
+    stroke-miterlimit: 10;
+  }
+  &__line {
     fill: none;
     stroke: $brand-color;
-    stroke-miterlimit:10;
+    stroke-miterlimit: 1;
     stroke-dasharray: 100;
     stroke-dashoffset: 100;
-    transition: stroke-dashoffset .5s ease-out;
+    transition: stroke-dashoffset 2s ease-out;
   }
 }

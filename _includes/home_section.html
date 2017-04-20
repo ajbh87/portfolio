@@ -1,12 +1,9 @@
-<div class="section">
-  <div class="section-content" 
-       data-scroll-trigger="{{ include.action }}">
-    <div class="section-content__title">
-      <h2>{{ include.title }}</h2>
-    </div>
-    <div class="section-content__content">
-      {{ include.content | markdownify }}
-    </div>
-    <div class="section-content__bg"></div>
+<div class="section-content">
+  <div class="section-content__title">
+    <h2>{{ include.title }}</h2>
+  </div>
+  <div class="section-content__content">
+    {{ include.content | markdownify }}
   </div>
 </div>
+
