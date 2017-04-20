@@ -35,9 +35,8 @@ class scrollTrigger {
               defaultTrigger = {
                 position: 'center', // center | top | bottom
                 offset: 0,
-                before: null,
                 top: null,
-                middle: null,
+                center: null,
                 bottom: null,
                 active: null,
                 inactive: null
@@ -100,8 +99,7 @@ class scrollTrigger {
                   beforeBottom: scrolled <= bottomTrigger,
                   afterBottom: bottomTrigger < scrolled
                 };
-          let beforeFunction = false,
-              topFunction = false,
+          let topFunction = false,
               centerFunction = false,
               bottomFunction = false,
               activeFunction = false,
@@ -130,9 +128,16 @@ class scrollTrigger {
 
               element.pastTop = true;
               
+            }
+            // center 
+            if (checks.afterCenter && element.pastCenter === false) {
+              centerFunction = checkFunction(action.center);
+              if (centerFunction !== false) centerFunction(element);
+
+              element.pastCenter = true;
             } 
             // bottom
-            else if (checks.afterBottom && element.pastBottom === false) {
+            if (checks.afterBottom && element.pastBottom === false) {
               bottomFunction = checkFunction(action.bottom);
 
               if (bottomFunction !== false) bottomFunction(element);
@@ -140,13 +145,7 @@ class scrollTrigger {
               element.pastBottom = true;  
             }
           } 
-          // before trigger
-          else if (element.pastTop === true) {
-            beforeFunction = checkFunction(action.bottom);
 
-            if (beforeFunction !== false) beforeFunction(element);
-            element.pastTop = false;
-          }
           // active | inactive
           if (checks.afterTop && checks.beforeBottom) {
             if (element.active === false) {

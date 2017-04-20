@@ -51,7 +51,6 @@ import scrollTrigger from './scrollTrigger';
     const scope = { 
       sectionOptions: [{
         position: 'center',
-        top: sectionTop,
         active: sectionAct,
         inactive: sectionInact
       }]
@@ -65,7 +64,7 @@ import scrollTrigger from './scrollTrigger';
       
       line.pathLength(.5);
     }
-    function sectionMiddle(obj) {
+    function sectionCenter(obj) {
       let line = new svgLine(obj.el);
       
       line.pathLength(1);
