@@ -3,7 +3,8 @@ class scrollTrigger {
     "use strict";
     const options = createOptions(override),
           st = this;
-    let timeout = null;
+    let scrollTimeout = null,
+        resizeTimeout = null;
     
     st.elements = [];
     st.window = st.calcWinSize();
@@ -36,10 +37,10 @@ class scrollTrigger {
                 offset: 0,
                 before: null,
                 top: null,
-                topActive: null,
                 middle: null,
-                middleActive: null,
-                bottom: null
+                bottom: null,
+                active: null,
+                inactive: null
               };
         let opt = [defaultTrigger],
             override = checkOverride(prop.nodeValue),
@@ -56,9 +57,9 @@ class scrollTrigger {
           },
           actions: [],
           active: false,
-          center: false,
-          before: true,
-          pastTop: false
+          pastCenter: false,
+          pastTop: false,
+          pastBottom: false
         }
         
         opt.forEach(trigger => {
@@ -86,35 +87,26 @@ class scrollTrigger {
       
       return options;
     }
-    function onScrollTrigger() {        
+    function onScrollTrigger() {
       st.elements.forEach(element => {
-        
         element.actions.forEach(action => {
           const scrolled = window.scrollY + action.offset,
                 centerTrigger = element.offset.top + (element.size.height / 2),
-                bottomTrigger = element.offset.top + element.size.height;
+                bottomTrigger = element.offset.top + element.size.height,
+                checks = {
+                  beforeTop: scrolled < element.offset.top,
+                  afterTop: element.offset.top <= scrolled,
+                  afterCenter: centerTrigger <= scrolled,
+                  beforeBottom: scrolled <= bottomTrigger,
+                  afterBottom: bottomTrigger < scrolled
+                };
           let beforeFunction = false,
               topFunction = false,
-              topActFunction = false,
               centerFunction = false,
-              centerActFunction = false,
-              bottomFunction = false;
+              bottomFunction = false,
+              activeFunction = false,
+              inactiveFunction = false;
               
-          function beforeTopPositon() {
-            return scrolled < element.offset.top;
-          }
-          function afterTopPositon() {
-            return element.offset.top <= scrolled;
-          }
-          function afterCenterPositon() {
-            return centerTrigger <= scrolled;
-          }
-          function beforeBottomPositon() {
-            return scrolled <= bottomTrigger;
-          }
-          function afterBottomPositon() {
-            return bottomTrigger < scrolled;
-          }
           function checkFunction(possibleFunc) {
             if (possibleFunc == null) {
               return false;
@@ -129,66 +121,57 @@ class scrollTrigger {
             }
           }
 
-          // top, topActive, middle, middleActive and bottom triggers
-          if (afterTopPositon()) {
-            if (element.active === false && element.pastTop === false) {
-              // top 
+          // top, and bottom triggers
+          if (checks.afterTop) {
+            // top 
+            if (element.pastTop === false) {
               topFunction = checkFunction(action.top);
               if (topFunction !== false) topFunction(element);
-              
-              // topActive
-              if (beforeBottomPositon()) {
-                topActFunction = checkFunction(action.topActive);
-                if (topActFunction !== false) topActFunction(element);
 
-              }
               element.pastTop = true;
-              element.active = true;
               
             } 
             // bottom
-            else if (afterBottomPositon()) {
+            else if (checks.afterBottom && element.pastBottom === false) {
               bottomFunction = checkFunction(action.bottom);
 
               if (bottomFunction !== false) bottomFunction(element);
 
-              element.active = false;  
+              element.pastBottom = true;  
             }
-            
-            // middle
-            if (afterCenterPositon() && element.center === false) {
-              centerFunction = checkFunction(action.middle);
+          } 
+          // before trigger
+          else if (element.pastTop === true) {
+            beforeFunction = checkFunction(action.bottom);
 
-              if (centerFunction !== false) centerFunction(element);
-              
-              if (beforeBottomPositon()) {
-                centerActFunction = checkFunction(action.middleActive);
+            if (beforeFunction !== false) beforeFunction(element);
+            element.pastTop = false;
+          }
+          // active | inactive
+          if (checks.afterTop && checks.beforeBottom) {
+            if (element.active === false) {
+              activeFunction = checkFunction(action.active);
 
-                if (centerActFunction !== false) centerActFunction(element);
-              }
-              element.center = true;
-            }
-          } else {
-            if (element.pastTop === true) {
-              beforeFunction = checkFunction(action.bottom);
-
-              if (beforeFunction !== false) beforeFunction(element);
-              element.pastTop = true;
+              if (activeFunction !== false) activeFunction(element);
+              element.active = true;
             }
           }
-          
+          else if (element.active === true) {
+            inactiveFunction = checkFunction(action.inactive);
+            
+            if (inactiveFunction !== false) inactiveFunction(element);
+            element.active = false;
+          }
         });
         
       });
     }
     function onScrollResize() {
-      if (timeout != null) {
-        window.clearTimeout(timeout);
-        
-        
+      if (resizeTimeout != null) {
+        window.clearTimeout(resizeTimeout);        
       }
       else {
-        timeout = window.setTimeout(() => {
+        resizeTimeout = window.setTimeout(() => {
           st.window = st.calcWinSize();
           st.elements.forEach(element => {
             element.size.height = element.offsetHeight;

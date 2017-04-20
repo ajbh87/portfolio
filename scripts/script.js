@@ -51,10 +51,9 @@ import scrollTrigger from './scrollTrigger';
     const scope = { 
       sectionOptions: [{
         position: 'center',
-        before: sectionOut,
         top: sectionTop,
-        topActive: sectionTopAct,
-        bottom: sectionOut
+        active: sectionAct,
+        inactive: sectionInact
       }]
     },
           triggers = new scrollTrigger({
@@ -72,12 +71,12 @@ import scrollTrigger from './scrollTrigger';
       line.pathLength(1);
     }
     
-    function sectionTopAct(obj) {
+    function sectionAct(obj) {
       const secContent = obj.el.querySelector('.section-content');
 
       secContent.classList.add('focused');
     }
-    function sectionOut(obj) {
+    function sectionInact(obj) {
       const secContent = obj.el.querySelector('.section-content');
       
       secContent.classList.remove('focused');
