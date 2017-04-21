@@ -75,6 +75,7 @@ class scrollTrigger {
     
     window.addEventListener('scroll', onScrollTrigger);
     window.addEventListener('resize', onScrollResize);
+    onScrollTrigger();
     
     function createOptions(override) {
       let options = Object.assign({
@@ -107,7 +108,7 @@ class scrollTrigger {
               bottomFunction = false,
               activeFunction = false,
               inactiveFunction = false;
-              
+ 
           function checkFunction(possibleFunc) {
             if (possibleFunc == null) {
               return false;
@@ -170,42 +171,34 @@ class scrollTrigger {
       
       if (options.probe != null) {
         percentScrolled = (window.scrollY) / (st.window.documentHeight - st.window.height);
-        debugger;
         options.probe(percentScrolled)
       }
     }
     function onScrollResize() {
-      if (resizeTimeout != null) {
-        window.clearTimeout(resizeTimeout);        
-      }
-      else {
-        resizeTimeout = window.setTimeout(() => {
-          st.window = st.calcWinSize();
-          st.elements.forEach(element => {
-            element.size.height = element.offsetHeight;
-            element.size.width = element.offsetWidth;
-            
-            element.actions.forEach(action => {
-              action.offset = st.getScrollOffset(opt.position);
-            });
+      window.clearTimeout(scrollTimeout);
+      scrollTimeout = window.setTimeout(() => {
+        st.window = st.calcWinSize();
+        st.elements.forEach(element => {
+          element.size.height = element.el.offsetHeight;
+          element.size.width = element.el.offsetWidth;
+          element.offset = st.calcOffset(element.el);
+          
+          element.actions.forEach(action => {
+            action.offset = st.getScrollOffset(action.position);
           });
-        }, 150);
-      }
+        });
+        onScrollTrigger();
+      }, 200);
     }
   }
-  
   calcOffset(elt) {
     var rect = elt.getBoundingClientRect(), bodyElt = document.body;
 
     return {
-      top: rect.top + bodyElt .scrollTop,
-      left: rect.left + bodyElt .scrollLeft
+      top: rect.top + bodyElt.scrollTop,
+      left: rect.left + bodyElt.scrollLeft
     }
   }
-  static offset(elt) {
-    return this.calcWinSize(elt);
-  }
-  
   getScrollOffset(position) {
     switch(position) {
       case 'top':
@@ -220,7 +213,6 @@ class scrollTrigger {
         break;
     }
   }
-  
   calcWinSize() {
     const e = document.documentElement,
       g = document.querySelector('body'),
@@ -234,9 +226,6 @@ class scrollTrigger {
       documentHeight: g.offsetHeight,
       documentWidth: g.offsetWidth
     }
-  }
-  get winSize() {
-    return this.calcWinSize();
   }
 }
 export default scrollTrigger;

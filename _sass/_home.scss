@@ -2,35 +2,106 @@
 .home {
   position: relative;
 }
+$prop: scaleX;
+
+@include clipAnimation(0, 1, 'expand', 'collapse', 100, $prop);
+@keyframes addBorderRadius {
+  0% {
+    border-radius: 0%;
+  }
+  40% {
+    border-radius: 50%;
+  }
+  100% {
+    border-radius: 50%;
+  }
+}
+@keyframes removeBorderRadius {
+  0% {
+    border-radius: 50%;
+  }
+  60% {
+    border-radius: 50%;
+  }
+  100% {
+    border-radius: 0%;
+  }
+}
 
 .section {
   position: relative;
   display: flex;
-}
-
-.section-content {
-  box-sizing: border-box;
-  background: rgba(255,255,255,.8);
-  padding: $spacing-unit-sm;
-  margin-bottom: $spacing-unit-sm;
-  transition: .2s transform ease-out;
-  transform-origin: center center;
-  transform: scale(.9);
-  &.focused {
-    transform: scale(1);
-  }
-  @include media-query($tablet){
-    width: 75%;
-    padding: $spacing-unit;
-    margin-bottom: $spacing-unit;
-  }
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  z-index: 1;
   
   &__title {
-  }
-  &__text {
+    display: block;
+    padding: $spacing-unit-sm;
+    @include media-query($tablet) {
+      padding: $spacing-unit;
+    };
   }
 }
 
+%default-animation {
+  $duration: .5s;
+  
+  animation-duration: $duration;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+}
+.section-content {
+  $origin: left center;
+  
+  overflow: hidden;
+  box-sizing: border-box;
+  background: rgba(255,255,255,.8);
+  margin-bottom: $spacing-unit-sm;
+
+  transform-origin: $origin;
+  transform: $prop + "(0)";
+  will-change: transform;
+  
+  @include media-query($tablet){
+    width: 75%;
+    margin-bottom: $spacing-unit;
+  }
+  &.unfocused {
+    animation-name: collapse;
+    @extend %default-animation;
+    transform: $prop + "(0)";
+  }
+  &.focused {
+    animation-name: expand;
+    @extend %default-animation;
+    transform: $prop + "(1)";
+  }
+  
+  &__content {
+    clear: both;
+    padding: $spacing-unit-sm;
+
+    transform-origin: $origin;
+    transform: $prop + "(100)";
+    &.unfocused {
+      animation-name: collapseInverse;
+      @extend %default-animation;
+      transform: $prop + "(100)";
+  }
+    &.focused {
+      animation-name: expandInverse;
+      @extend %default-animation;
+      transform: $prop + "(1)";
+    }
+    
+    @include media-query($tablet) {
+      padding: $spacing-unit;
+    };
+  }
+}
 .bg-line {
   z-index: 0;
   position: absolute;

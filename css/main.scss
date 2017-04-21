@@ -42,46 +42,12 @@ $desktop: 1280px;
 
 $menu-transition: .5s ease-out;
 
-@mixin media-query($device) {
-  @media screen and (min-width: $device) {
-    @content; 
-  }
-}
-
-@mixin color-mix($c1, $c2, $t, $a: "color", $s: "", $o: 0, $repeat: 1) {
-  $p: 100 / ($t - 1);
-  $r: $repeat + 'n + ';
-
-  @for $i from 1 through $t - $o {
-    &:nth-child(#{$r + $i}) #{$s}{
-      $f: $p * ($i - 1 + $o);
-      $t: percentage($f/100);
-      #{$a}: mix($c2, $c1, $t);
-    }
-  }
-}
-
-@mixin attr-iterator($attr, $size, $prefix: $attr) {
-  $dirs: all, top, right, bottom, left;
-  @each $dir in $dirs {
-    $full-attr: '';
-    @if $dir == all {
-      $full-attr: $attr;
-    }
-    @else {
-      $full-attr: #{$attr}-#{$dir};
-    }
-    .#{$prefix}--#{$dir} {
-      #{$full-attr}: $size;
-    }
-  }
-}
-
 
 // Import partials from `sass_dir` (defaults to `_sass`)
 @import
   "normalize",
   "syntax-highlighting",
+  "mixins",
   "base",
   "layout",
   "home"
