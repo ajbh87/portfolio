@@ -241,3 +241,18 @@ pre {
 // paddings and margins
 @include attr-iterator(padding, $spacing-unit, pad);
 
+// Buttons
+.button {
+  border: 1px solid transparent;
+  background: #fff;
+  &:hover {
+    
+  }
+  
+  &__text {
+    &--hidden {
+      display: none;
+    }
+  }
+}
+

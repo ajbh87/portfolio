@@ -100,6 +100,7 @@ $prop: scaleX;
     }
   }
 }
+
 @keyframes pulsate {
   0% {
     transform: scale(1);
@@ -116,7 +117,6 @@ $prop: scaleX;
 }
 .bg-line {
   $height: 250;
-  z-index: 0;
   position: absolute;
   top: 0;
   bottom: 0;
@@ -126,8 +126,10 @@ $prop: scaleX;
   height: 100%;
   
   &__svg {
+    position: relative;
     width: 100%;
     height: 100%;
+    z-index: 0;
   }
   &__straight {
     fill: none;
@@ -151,6 +153,7 @@ $prop: scaleX;
     
     $s: 2vw;
     $min: $base-font-size-fixed;
+    display: block;
     position: absolute;
     right: $offset;
     width: $s;
@@ -196,7 +199,6 @@ $prop: scaleX;
     &--2 {
       $step: 2;
       top: (($step * $eHeight) / $height * 100) * 1%;
-      right: $offset-minus;
     }
     &--3 {
       $step: 3;
@@ -211,5 +213,57 @@ $prop: scaleX;
       $step: 5;
       top: (($step * $eHeight) / $height * 100) * 1%;
     }
+  }
+}
+
+.content-slider {
+  position: fixed;
+  background: rgba(255, 255, 255, .5);
+  top: $spacing-unit;
+  bottom: $spacing-unit;
+  right: $spacing-unit;
+  
+  width: 20%;
+  width: calc(25vw - #{$spacing-unit * 2});
+  transform-origin: center center;
+  transform: scaleY(0);
+  will-change: transform;
+  
+  &.unfocused {
+    animation-name: collapse;
+    @extend %default-animation;
+    transform: scaleY(0);
+  }
+  &.focused {
+    overflow: auto;
+    animation-name: expand;
+    @extend %default-animation;
+    transform: scaleY(1);
+    
+  }
+  
+  &__container {
+    transform-origin: center center;
+    transform: scaleY(1000);
+    &.unfocused {
+      animation-name: collapseInverse;
+      @extend %default-animation;
+      transform: scaleY(1000);
+    }
+    &.focused {
+      animation-name: expandInverse;
+      @extend %default-animation;
+      transform: scaleY(1);
+    }
+  }
+  &__button-close {
+    position: absolute; 
+    right: ($spacing-unit / 2);
+    top: ($spacing-unit / 2);
+    min-width: $spacing-unit;
+    display: block;
+  }  
+  &__content {
+    
   }
 }
