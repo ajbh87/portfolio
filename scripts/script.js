@@ -18,7 +18,7 @@ import svgLine from './svgLine';
           line = new svgLine({
             path: document.querySelector('.bg-line__line'),
             triggers: {
-              points: [2, 5, 8, 10, 11]
+              points: [2, 4, 8, 10, 11]
             },
             container
           }),
@@ -28,10 +28,9 @@ import svgLine from './svgLine';
               sectionTimeout: null
             },
             probe: bindScrollToLine
-          });
+          }),
+          markers = document.querySelectorAll('.bg-line__point');
     let resizeTimeout = null;
-    
-    getSectionRatios();
     
     line.el.path.addEventListener('svgTrigger', (event) => {
       let point = null;
@@ -49,11 +48,13 @@ import svgLine from './svgLine';
       resizeTimeout = window.setTimeout(getSectionRatios, 500);
     });
     
+    getSectionRatios();
+    triggers.onScrollTrigger();
+    
+    
     function getSectionRatios() {
-      const cHeight = container.offsetHeight,
-            markers = document.querySelectorAll('.bg-line__point');
-      let points = line.el.path.points,
-          newRatios = [],
+      const cHeight = container.offsetHeight;
+      let newRatios = [],
           tops = [];
 
       triggers.elements.forEach((element, index) => {
