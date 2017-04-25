@@ -72,10 +72,12 @@ class scrollTrigger {
         st.elements.push(inserted);
       });
     })();
+    st.onScrollTrigger = onScrollTrigger;
+    st.onScrollTrigger();
+    window.addEventListener('scroll', st.onScrollTrigger);
     
-    window.addEventListener('scroll', onScrollTrigger);
     window.addEventListener('resize', onScrollResize);
-    onScrollTrigger();
+    
     
     function createOptions(override) {
       let options = Object.assign({

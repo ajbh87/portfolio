@@ -27,9 +27,10 @@ class svgLine {
   }
 
   pathLength(percent){
+    debugger;
     const _this = this,
           l = _this.el.length.val,
-          offset = round(l * percent, 4),
+          offset = l * percent,
           newLength = l - offset;
     this.el.path.style.strokeDashoffset = newLength;
 
@@ -79,9 +80,8 @@ class svgLine {
     let points = this.el.path.points,
         diffs = [],
         activeTrigger = 0,
-        index = 0,
-        triggerLengths = [],
-        lengths = [];
+        pointIndex = 0,
+        triggerLengths = [];
 
     if (triggerPoints != null) {
       ratios.forEach((ratio, i) => {
@@ -100,51 +100,68 @@ class svgLine {
       });
 
       _this.el.ratios = ratios;
-      for (index = 1; index < points.length; index++) {
-        let point = points[index], 
-            newY = 0,
+      triggerPoints.forEach((triggerIndex, index) => {
+        const trigger = points[triggerIndex];
+        let lastTrigger = null,
+            point = null,
+            children = [],
+            lengths = [],
             length = 0,
-            triggerLength = 0,
-            i = 0;
-
-        if (index < (points.length - 1)) {
-          newY = point.y + diffs[activeTrigger];
-        } else {
-          newY = point.y;
+            triggerLength = 0;
+        if (index > 0) {
+          lastTrigger = triggerPoints[index - 1];
         }
 
-        point.y = newY;
+        for (pointIndex = 1; pointIndex < points.length; pointIndex++) {
+          point = points[pointIndex];
+          length = calculateLength(points[pointIndex - 1], point);
 
-        length = calculateLength(points[index - 1], point);
-        lengths.push(length);
-
-        if (index === triggerPoints[activeTrigger]) {
-          triggerLength = 0;
-          lengths.forEach((l, lIndex) => {
-            if (lIndex < index) {
-              triggerLength += l;
+          if (point.y <= trigger.y) {
+            if (lastTrigger != null) {
+              if (point.y > points[lastTrigger].y) {
+                  point.y = changeY(point);
+              }
             }
-          })
-
-          triggerLengths.push({
-            val: triggerLength,
-            active: -1,
-            inactive: -1
-          });
-
-          if (activeTrigger < (triggerPoints.length - 1)) {
-            activeTrigger++;
+            else {
+              point.y = changeY(point);
+            }
+          }
+          
+          if (pointIndex <= triggerIndex) {
+            length = calculateLength(points[pointIndex - 1], point);
+            lengths.push(length);
           }
         }
-      }
+        lengths.forEach((length) => {
+          triggerLength = round(triggerLength + length, 0);
+        });
+
+        triggerLengths.push({
+          val: triggerLength,
+          active: -1,
+          inactive: -1
+        });
+
+        function changeY(point) {
+          let newY = 0;
+          if (index < (points.length - 1)) {
+            newY = point.y + diffs[index];
+          } else {
+            newY = point.y;
+          }
+          return newY;
+        }
+        
+      });
       _this.el.triggers.lengths = triggerLengths;
+      console.log(triggerLengths);
       _this.el.length = triggerLengths[triggerLengths.length - 1];
     }
 
     function calculateLength(pointSet1, pointSet2) {
       const lX = pointSet2.x - pointSet1.x, 
             lY = pointSet2.y - pointSet1.y;
-      return round(Math.sqrt((lX * lX) + (lY * lY)), 4);
+      return round(Math.sqrt((lX * lX) + (lY * lY)), 2);
     }
   }
 };
