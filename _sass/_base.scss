@@ -35,11 +35,7 @@ h1, h2, h3, h4, h5, h6,
 p, blockquote, pre,
 ul, ol, dl, figure,
 %vertical-rhythm {
-  margin-bottom: $spacing-unit-sm;  
-
-  @include media-query($tablet){
-    margin-bottom: $spacing-unit;
-  };
+  margin-bottom: $spacing-unit;
   
   &:last-child {
     margin-bottom: 0;
@@ -132,15 +128,15 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
  * Links
  */
 a {
-  color: $brand-color;
+  color: $primary;
   text-decoration: none;
 
   &:visited {
-    color: darken($brand-color, 10%);
+    color: darken($primary-dark, 10%);
   }
 
   &:hover,  {
-    color: darken($brand-color, 20%);
+    color: $primary-dark;
   }
 }
 
@@ -198,13 +194,8 @@ pre {
     max-width: $content-width;
     margin-right: auto;
     margin-left: auto;
-    padding: 0 $spacing-unit-sm 0 $spacing-unit-sm;
+    padding: 0 $spacing-unit 0 $spacing-unit;
     @extend %clearfix;
-
-    @include media-query($tablet) {
-        padding-right: $spacing-unit;
-        padding-left: $spacing-unit;
-    }
 }
 
 /**
@@ -236,6 +227,7 @@ pre {
 
 // Title
 .title {
+
   &__main {
     &:after {
       content: ":";
@@ -248,5 +240,4 @@ pre {
 
 // paddings and margins
 @include attr-iterator(padding, $spacing-unit, pad);
-@include attr-iterator(padding, $spacing-unit-sm, pad-sm);
 

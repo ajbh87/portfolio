@@ -34,20 +34,25 @@ $prop: scaleX;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  min-height: 100vh;
+  min-height: 60vh;
   z-index: 1;
   
   &__title {
     display: block;
-    padding: $spacing-unit-sm;
-    @include media-query($tablet) {
-      padding: $spacing-unit;
-    };
+    padding: $spacing-unit;
+    transition: all .8s ease(out-quad);
+    transform: scale(.95) translate(-50%, 0);
+    opacity: 0;
+    
+    &.focused {
+      transform: scale(1) translate(0,0);
+      opacity: 1;
+    }
   }
 }
 
 %default-animation {
-  $duration: .5s;
+  $duration: 1s;
   
   animation-duration: $duration;
   animation-iteration-count: 1;
@@ -56,19 +61,16 @@ $prop: scaleX;
 .section-content {
   $origin: left center;
   
+  width: 75%;
   overflow: hidden;
   box-sizing: border-box;
-  background: rgba(255,255,255,.8);
-  margin-bottom: $spacing-unit-sm;
+  background: #fff;
+  margin-bottom: $spacing-unit;
 
   transform-origin: $origin;
   transform: $prop + "(0)";
   will-change: transform;
   
-  @include media-query($tablet){
-    width: 75%;
-    margin-bottom: $spacing-unit;
-  }
   &.unfocused {
     animation-name: collapse;
     @extend %default-animation;
@@ -82,27 +84,38 @@ $prop: scaleX;
   
   &__content {
     clear: both;
-    padding: $spacing-unit-sm;
+    padding: $spacing-unit;
 
     transform-origin: $origin;
-    transform: $prop + "(100)";
+    transform: $prop + "(1000)";
     &.unfocused {
       animation-name: collapseInverse;
       @extend %default-animation;
-      transform: $prop + "(100)";
+      transform: $prop + "(1000)";
   }
     &.focused {
       animation-name: expandInverse;
       @extend %default-animation;
       transform: $prop + "(1)";
     }
+  }
+}
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  50% {
+    opacity: .8;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
     
-    @include media-query($tablet) {
-      padding: $spacing-unit;
-    };
   }
 }
 .bg-line {
+  $height: 250;
   z-index: 0;
   position: absolute;
   top: 0;
@@ -111,7 +124,6 @@ $prop: scaleX;
   left: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;
   
   &__svg {
     width: 100%;
@@ -123,10 +135,81 @@ $prop: scaleX;
     stroke-miterlimit: 10;
   }
   &__line {
+    $length: 285; // pre calculated unsing  path.getTotalLength() in chrome
     fill: none;
-    stroke: $brand-color;
+    stroke: $primary;
     stroke-miterlimit: 1;
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
+    stroke-dasharray: $length;
+    stroke-dashoffset: $length;
+  }
+  &__point {
+    $offset: 12.5%;
+    $offset-plus: 5%;
+    $offset-minus: 20%;
+    $steps: 5;
+    $eHeight: $height / $steps;
+    
+    $s: 2vw;
+    $min: $base-font-size-fixed;
+    position: absolute;
+    right: $offset;
+    width: $s;
+    min-width: $min;
+    height: $s;
+    min-height: $min;
+    background: $secondary;
+    border-radius: 50%;
+    z-index: 1;
+    transform: translate(50%, -50%);
+    opacity: 0;
+    transition: opacity .5s ease(out-cubic);
+    
+    &:after {
+      box-sizing: border-box;
+      content: " ";
+      display: block;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 0.15rem solid $secondary-light;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0);
+    }
+    &--active {
+      opacity: 1;
+      &:after {
+        animation-name: pulsate;
+        animation-timing-function: ease(out-cubic);
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+      }
+    }
+    &--0 {
+      top: 0;
+    }
+    &--1 {
+      $step: 1;
+      top: (($step * $eHeight) / $height * 100) * 1%;
+      right: $offset-plus;
+    }
+    &--2 {
+      $step: 2;
+      top: (($step * $eHeight) / $height * 100) * 1%;
+      right: $offset-minus;
+    }
+    &--3 {
+      $step: 3;
+      top: (($step * $eHeight) / $height * 100) * 1%;
+      right: $offset-plus;
+    }
+    &--4 {
+      $step: 4;
+      top: (($step * $eHeight) / $height * 100) * 1%;
+    }
+    &--5 {
+      $step: 5;
+      top: (($step * $eHeight) / $height * 100) * 1%;
+    }
   }
 }

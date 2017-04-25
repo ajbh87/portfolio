@@ -1,8 +1,8 @@
 %content-padding {
-  padding: $spacing-unit-sm;
-  @include media-query($tablet) {
-    padding: ($spacing-unit / 2) $spacing-unit;
-  }
+  padding: $spacing-unit;
+//  @include media-query($tablet) {
+//    padding: ($spacing-unit / 2) $spacing-unit;
+//  }
 }
 
 //----------------------- Site header
@@ -10,9 +10,15 @@
   @extend %content-padding;
   display: flex;
   &__title {
+    color: $primary;
     display: block;
     float: left;
     flex: 0 1 auto;
+    
+    &:visited {
+      color: $primary;
+    }
+    
     @include media-query($tablet){
       width: 75vw;
     }

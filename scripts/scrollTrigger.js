@@ -42,7 +42,7 @@ class scrollTrigger {
                 inactive: null
               };
         let opt = [defaultTrigger],
-            override = checkOverride(prop.nodeValue),
+            override = checkOverride(prop.value),
             inserted = {};
         
         opt = override !== false ? override : opt;
@@ -128,7 +128,7 @@ class scrollTrigger {
             // top 
             if (element.pastTop === false) {
               topFunction = checkFunction(action.top);
-              if (topFunction !== false) topFunction(element);
+              if (topFunction !== false) topFunction(element, options.scope);
 
               element.pastTop = true;
               
@@ -136,7 +136,7 @@ class scrollTrigger {
             // center 
             if (checks.afterCenter && element.pastCenter === false) {
               centerFunction = checkFunction(action.center);
-              if (centerFunction !== false) centerFunction(element);
+              if (centerFunction !== false) centerFunction(element, options.scope);
 
               element.pastCenter = true;
             } 
@@ -144,7 +144,7 @@ class scrollTrigger {
             if (checks.afterBottom && element.pastBottom === false) {
               bottomFunction = checkFunction(action.bottom);
 
-              if (bottomFunction !== false) bottomFunction(element);
+              if (bottomFunction !== false) bottomFunction(element, options.scope);
 
               element.pastBottom = true;  
             }
@@ -155,14 +155,14 @@ class scrollTrigger {
             if (element.active === false) {
               activeFunction = checkFunction(action.active);
 
-              if (activeFunction !== false) activeFunction(element);
+              if (activeFunction !== false) activeFunction(element, options.scope);
               element.active = true;
             }
           }
           else if (element.active === true) {
             inactiveFunction = checkFunction(action.inactive);
             
-            if (inactiveFunction !== false) inactiveFunction(element);
+            if (inactiveFunction !== false) inactiveFunction(element, options.scope);
             element.active = false;
           }
         });
@@ -170,7 +170,7 @@ class scrollTrigger {
       });
       
       if (options.probe != null) {
-        percentScrolled = (window.scrollY) / (st.window.documentHeight - st.window.height);
+        percentScrolled = round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
         options.probe(percentScrolled)
       }
     }
@@ -188,15 +188,19 @@ class scrollTrigger {
           });
         });
         onScrollTrigger();
-      }, 200);
+      }, 500);
+    }
+    function round(value, decimals) {
+      return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
     }
   }
   calcOffset(elt) {
-    var rect = elt.getBoundingClientRect(), bodyElt = document.body;
+    const rect = elt.getBoundingClientRect(),
+          body = document.body.getBoundingClientRect();
 
     return {
-      top: rect.top + bodyElt.scrollTop,
-      left: rect.left + bodyElt.scrollLeft
+      top: Math.abs(body.top) + rect.top,
+      left: Math.abs(body.left) + rect.left
     }
   }
   getScrollOffset(position) {

@@ -54,25 +54,47 @@
   }
   @return $list;
 }
+@function pow($number, $exponent) {
+  $value: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  }
+
+  @return $value;
+}
 @mixin clipAnimation($from: 0, $to: 1, $name: 'someting', $name2: 'anotherThing', $steps: 100, $prop: scale ) {
   $valuesList: generateValues($from, $to, $steps);
   $inverseValuesList: generateInverseValues($from, $to, $steps, $valuesList);
   
   $percentList: 0%;
+  $percentListEaseOut: $percentList;
   @for $i from 1 through $steps {
-    $c: 1 / $steps;
-    //cubic easing out
-    $v:  ($c * ($i * $i * $i + 1) + 1)/$steps; 
+    $t: $i / $steps;
     //quadratic easing in
-    //$v:  $c * $i * $i + 1;
+    $v:  ($t * $t) * 100; 
+    //quadratic easing out
+    //$v:  (-1 * $t * ($t - 2)) * 100; 
+        
+    //$t: $i / ($steps / 2);
+    //$v: 0;
+//    @if $t < 1 {
+//      $v: ((1 / 2) * $t * $t) * 100;
+//    }
+//    @else {
+//      $t: $t - 1;
+//      $v: ((-1 / 2) * ($t * ($t - 2) - 1)) * 100;
+//    }
     
     $text: $v + '%';
-    $percentList: append($percentList, $text);
+    $percentListEaseOut: append($percentListEaseOut, $text);
   }
-
+  
   @keyframes #{$name}{
     @for $i from 1 through $steps + 1 {
-      $percent: nth($percentList, $i);
+      $percent: nth($percentListEaseOut, $i);
       $value: nth($valuesList, $i);
       $text: $prop + "(" + $value + ")";
       #{$percent} { transform: #{$text}; }
@@ -80,7 +102,7 @@
   }
   @keyframes #{$name}Inverse {
     @for $i from 1 through $steps + 1 {
-      $percent: nth($percentList, $i);
+      $percent: nth($percentListEaseOut, $i);
       $value: nth($inverseValuesList, $i);
       $text: $prop + "(" + $value + ")";
       #{$percent} { transform: #{$text}; }
@@ -90,7 +112,7 @@
   @keyframes #{$name2}{
     $i: $steps + 1;
     @while $i > 0 {
-      $percent: nth($percentList, ($steps + 2 - $i));
+      $percent: nth($percentListEaseOut, ($steps + 2 - $i));
       $value: nth($valuesList, $i);
       $text: $prop + "(" + $value + ")";
       #{$percent} { transform: #{$text}; }
@@ -100,11 +122,20 @@
   @keyframes #{$name2}Inverse {
     $i: $steps + 1;
     @while $i > 0 {
-      $percent: nth($percentList, ($steps + 2 - $i));
+      $percent: nth($percentListEaseOut, ($steps + 2 - $i));
       $value: nth($inverseValuesList, $i);
       $text: $prop + "(" + $value + ")";
       #{$percent} { transform: #{$text}; }
       $i: $i - 1;
     }
   }
+}
+
+@function ease($key) {
+  @if map-has-key($ease, $key) {
+    @return map-get($ease, $key);
+  }
+
+  @warn "Unkown '#{$key}' in $ease.";
+  @return null;
 }

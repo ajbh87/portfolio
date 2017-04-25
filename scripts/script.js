@@ -1,98 +1,112 @@
 import scrollTrigger from './scrollTrigger';
-import AnimatedClip from './ac/ac';
-
+import svgLine from './svgLine';
 
 (function () {
   "use strict";
-  function hasClass(el) {
-    return el.classList.contains(className);
-  }
-  function outerHeight(el) {
-    var height = el.offsetHeight;
-    var style = getComputedStyle(el);
-
-    height += parseInt(style.marginTop) + parseInt(style.marginBottom);
-    return height;
-  }
-  function outerWidth(el) {
-    var width = el.offsetWidth;
-    var style = getComputedStyle(el);
-
-    width += parseInt(style.marginLeft) + parseInt(style.marginRight);
-    return width;
-  }
-  function round(value, decimals) {
-    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-  }
   
-  class svgLine {
-    constructor(element){
-      let timeout;
-      this.el = {
-        path: element,
-        length: 0
-      }
-      this.calculatePathLength();
-      window.addEventListener('resize', () => { 
-        window.clearTimeout(timeout);
-        timeout = window.setTimeout(() => {
-          this.calculatePathLength();
-        }, 150);
-      })
-    }
-    pathLength(percent){
-      const offset = round(this.el.length * percent, 4);
-      this.el.path.style.strokeDashoffset = this.el.length - offset;
-    }
-    calculatePathLength(path){
-      let length = this.el.path.getTotalLength();
-
-      this.el.length = round(length, 4);
-      this.el.path.style.strokeDashoffset = this.el.length;
-      this.el.path.style.strokeDasharray = this.el.length;
-    }
-  }
+  window.addEventListener('load', onLoad);  
   
   function onLoad() {
+    /* global svgLine,scrollTrigger */
     "use strict";
     const sectionOptions = [{
             position: 'center',
             active: sectionAct,
             inactive: sectionInact
           }],
-          line = new svgLine(document.querySelector('.bg-line__line')),
+          container = document.querySelector('.bg-line'),
+          line = new svgLine({
+            path: document.querySelector('.bg-line__line'),
+            triggers: {
+              points: [2, 5, 8, 10, 11]
+            },
+            container
+          }),
           triggers = new scrollTrigger({
             scope: { 
-              sectionOptions
+              sectionOptions,
+              sectionTimeout: null
             },
             probe: bindScrollToLine
-          }),
-          container = document.querySelector('.bg-line');
+          });
+    let resizeTimeout = null;
     
-    function bindScrollToLine(percent) {      
-      line.pathLength(percent);
-    }
+    getSectionRatios();
+    
+    line.el.path.addEventListener('svgTrigger', (event) => {
+      let point = null;
+      if (event.detail.active != null) {
+        point = container.querySelector('.bg-line__point--' + event.detail.active);
+        point.classList.add('bg-line__point--active');
+      } 
+      else if (event.detail.inactive != null) {
+        point = container.querySelector('.bg-line__point--' + event.detail.inactive);
+        point.classList.remove('bg-line__point--active');
+      }
+    });
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(getSectionRatios, 500);
+    });
+    
+    function getSectionRatios() {
+      const cHeight = container.offsetHeight,
+            markers = document.querySelectorAll('.bg-line__point');
+      let points = line.el.path.points,
+          newRatios = [],
+          tops = [];
 
-    function sectionAct(obj) {
-      const secContent = obj.el.querySelector('.section-content');
-      const subContent = secContent.querySelector('.section-content__content');
+      triggers.elements.forEach((element, index) => {
+        const marker = markers[index + 1],
+              ratio = element.size.height / cHeight;
+        let top = 0,
+            lastTop = 0;
+        
+        if (index > 0) {
+          lastTop = tops[tops.length - 1];
+        }
+        
+        top = (ratio * 100) + lastTop;
+        marker.style.top = top + '%';
+        
+        tops.push(top);
+        newRatios.push(ratio);
+      });
       
-      secContent.classList.add('focused');
-      secContent.classList.remove('unfocused');
+      line.setRatios(newRatios);
+    }
+    function bindScrollToLine(percent) {      
+      const newLength = line.pathLength(percent);
+    }
+    
+    function sectionAct(obj, scope) {
+      const sec = getChildren(obj.el);
       
-      subContent.classList.add('focused');
-      subContent.classList.remove('unfocused');
+      sec.title.classList.add('focused');
+      
+      sec.content.classList.add('focused');
+      sec.content.classList.remove('unfocused');
+
+      sec.subContent.classList.add('focused');
+      sec.subContent.classList.remove('unfocused');
     }
     function sectionInact(obj) {
-      const secContent = obj.el.querySelector('.section-content');
-      const subContent = secContent.querySelector('.section-content__content');
-
-      secContent.classList.add('unfocused');
-      secContent.classList.remove('focused');
+      const sec = getChildren(obj.el);
       
-      subContent.classList.add('unfocused');
-      subContent.classList.remove('focused');
+      sec.title.classList.remove('focused');
+
+      sec.content.classList.add('unfocused');
+      sec.content.classList.remove('focused');
+      
+      sec.subContent.classList.add('unfocused');
+      sec.subContent.classList.remove('focused');
+    }
+    function getChildren(el) {
+      return {
+        title: el.querySelector('.section__title'),
+        content: el.querySelector('.section-content'),
+        subContent: el.querySelector('.section-content__content')
+      }
     }
   }
-  window.addEventListener('load', onLoad);  
 })();

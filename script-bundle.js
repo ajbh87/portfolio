@@ -63,248 +63,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/**
- *
- * Copyright 2017 Google Inc. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-
-class AnimatedClip {
-  constructor (ac, classSel) {
-    this._aC = ac;
-    this._aCContents = this._aC.querySelector('.' + classSel + '-contents');
-    this._aCToggleButton = this._aC.querySelector('.' + classSel + '-toggle');
-    this._aCTitle = this._aC.querySelector('.' + classSel + '-title');
-    this._classSel = classSel;
-    debugger;
-    this._expanded = true;
-    this._animate = false;
-    this._collapsed;
-
-    this.expand = this.expand.bind(this);
-    this.collapse = this.collapse.bind(this);
-    this.toggle = this.toggle.bind(this);
-
-    this._calculateScales();
-    this._createEaseAnimations();
-    this._addEventListeners();
-
-    this.collapse();
-    this.activate();
-  }
-
-  activate () {
-    this._aC.classList.add(this._classSel  + '--active');
-    this._animate = true;
-  }
-
-  collapse () {
-    if (!this._expanded) {
-      return;
-    }
-    this._expanded = false;
-
-    const {x, y} = this._collapsed;
-    const invX = 1 / x;
-    const invY = 1 / y;
-
-    this._aC.style.transform = `scale(${x}, ${y})`;
-    this._aCContents.style.transform = `scale(${invX}, ${invY})`;
-    
-    if (!this._animate) {
-      return;
-    }
-
-    this._applyAnimation({expand: false});
-  }
-
-  expand () {
-    if (this._expanded) {
-      return;
-    }
-    this._expanded = true;
-
-    this._aC.style.transform = `scale(1, 1)`;
-    this._aCContents.style.transform = `scale(1, 1)`;
-      
-    if (!this._animate) {
-      return;
-    }
-
-    this._applyAnimation({expand: true});
-  }
-
-  toggle () {
-    if (this._expanded) {
-      this.collapse();
-      return;
-    }
-
-    this.expand();
-  }
-
-  _addEventListeners () {
-    this._aCToggleButton.addEventListener('click', this.toggle);
-  }
-
-  _applyAnimation ({expand}=opts) {
-    this._aC.classList.remove(this._classSel  + '--expanded');
-    this._aC.classList.remove(this._classSel  + '--collapsed');
-    this._aCContents.classList.remove(this._classSel  + '__contents--expanded');
-    this._aCContents.classList.remove(this._classSel  + '__contents--collapsed');
-
-    // Force a recalc styles here so the classes take hold.
-    window.getComputedStyle(this._aC).transform;
-
-    if (expand) {
-      this._aC.classList.add(this._classSel  + '--expanded');
-      this._aCContents.classList.add(this._classSel  + '__contents--expanded');
-      return;
-    }
-
-    this._aC.classList.add(this._classSel  + '--collapsed');
-    this._aCContents.classList.add(this._classSel  + '__contents--collapsed');
-  }
-
-  _calculateScales () {
-    const collapsed = this._aCTitle.getBoundingClientRect();
-    const expanded = this._aC.getBoundingClientRect();
-
-    this._collapsed = {
-      x: collapsed.width / expanded.width,
-      y: collapsed.height / expanded.height
-    }
-  }
-
-  _createEaseAnimations () {
-    let aCEase = document.querySelector('.aC-ease');
-    if (aCEase) {
-      return aCEase;
-    }
-
-    aCEase = document.createElement('style');
-    aCEase.classList.add(this._classSel  + '-ease');
-
-    const aCExpandAnimation = [];
-    const aCExpandContentsAnimation = [];
-    const aCCollapseAnimation = [];
-    const aCCollapseContentsAnimation = [];
-    for (let i = 0; i <= 100; i++) {
-      const step = this._ease(i/100);
-      const startX = this._collapsed.x;
-      const startY = this._collapsed.y;
-      const endX = 1;
-      const endY = 1;
-
-      // Expand animation.
-      this._append({
-        i,
-        step,
-        startX: this._collapsed.x,
-        startY: this._collapsed.y,
-        endX: 1,
-        endY: 1,
-        outerAnimation: aCExpandAnimation,
-        innerAnimation: aCExpandContentsAnimation
-      });
-
-      // Collapse animation.
-      this._append({
-        i,
-        step,
-        startX: 1,
-        startY: 1,
-        endX: this._collapsed.x,
-        endY: this._collapsed.y,
-        outerAnimation: aCCollapseAnimation,
-        innerAnimation: aCCollapseContentsAnimation
-      });
-    }
-
-    aCEase.textContent = `
-      @keyframes aCExpandAnimation {
-        ${aCExpandAnimation.join('')}
-      }
-
-      @keyframes aCExpandContentsAnimation {
-        ${aCExpandContentsAnimation.join('')}
-      }
-      
-      @keyframes aCCollapseAnimation {
-        ${aCCollapseAnimation.join('')}
-      }
-
-      @keyframes aCCollapseContentsAnimation {
-        ${aCCollapseContentsAnimation.join('')}
-      }`;
-
-    document.head.appendChild(aCEase);
-    return aCEase;
-  }
-
-  _append ({
-        i,
-        step,
-        startX, 
-        startY, 
-        endX, 
-        endY, 
-        outerAnimation, 
-        innerAnimation}=opts) {
-
-    const xScale = startX + (endX - startX) * step;
-    const yScale = startY + (endY - startY) * step;
-
-    const invScaleX = 1 / xScale;
-    const invScaleY = 1 / yScale;
-
-    outerAnimation.push(`
-      ${i}% {
-        transform: scale(${xScale}, ${yScale});
-      }`);
-
-    innerAnimation.push(`
-      ${i}% {
-        transform: scale(${invScaleX}, ${invScaleY});
-      }`);
-  }
-
-  _clamp (value, min, max) {
-    return Math.max(min, Math.min(max, value));
-  }
-
-  _ease (v, pow=4) {
-    v = this._clamp(v, 0, 1);
-
-    return 1 - Math.pow(1 - v, pow);
-  }
-}
-/* unused harmony default export */ var _unused_webpack_default_export = (AnimatedClip);
-
-
-/***/ }),
-/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -352,7 +115,7 @@ class scrollTrigger {
                 inactive: null
               };
         let opt = [defaultTrigger],
-            override = checkOverride(prop.nodeValue),
+            override = checkOverride(prop.value),
             inserted = {};
         
         opt = override !== false ? override : opt;
@@ -438,7 +201,7 @@ class scrollTrigger {
             // top 
             if (element.pastTop === false) {
               topFunction = checkFunction(action.top);
-              if (topFunction !== false) topFunction(element);
+              if (topFunction !== false) topFunction(element, options.scope);
 
               element.pastTop = true;
               
@@ -446,7 +209,7 @@ class scrollTrigger {
             // center 
             if (checks.afterCenter && element.pastCenter === false) {
               centerFunction = checkFunction(action.center);
-              if (centerFunction !== false) centerFunction(element);
+              if (centerFunction !== false) centerFunction(element, options.scope);
 
               element.pastCenter = true;
             } 
@@ -454,7 +217,7 @@ class scrollTrigger {
             if (checks.afterBottom && element.pastBottom === false) {
               bottomFunction = checkFunction(action.bottom);
 
-              if (bottomFunction !== false) bottomFunction(element);
+              if (bottomFunction !== false) bottomFunction(element, options.scope);
 
               element.pastBottom = true;  
             }
@@ -465,14 +228,14 @@ class scrollTrigger {
             if (element.active === false) {
               activeFunction = checkFunction(action.active);
 
-              if (activeFunction !== false) activeFunction(element);
+              if (activeFunction !== false) activeFunction(element, options.scope);
               element.active = true;
             }
           }
           else if (element.active === true) {
             inactiveFunction = checkFunction(action.inactive);
             
-            if (inactiveFunction !== false) inactiveFunction(element);
+            if (inactiveFunction !== false) inactiveFunction(element, options.scope);
             element.active = false;
           }
         });
@@ -480,7 +243,7 @@ class scrollTrigger {
       });
       
       if (options.probe != null) {
-        percentScrolled = (window.scrollY) / (st.window.documentHeight - st.window.height);
+        percentScrolled = round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
         options.probe(percentScrolled)
       }
     }
@@ -498,15 +261,19 @@ class scrollTrigger {
           });
         });
         onScrollTrigger();
-      }, 200);
+      }, 500);
+    }
+    function round(value, decimals) {
+      return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
     }
   }
   calcOffset(elt) {
-    var rect = elt.getBoundingClientRect(), bodyElt = document.body;
+    const rect = elt.getBoundingClientRect(),
+          body = document.body.getBoundingClientRect();
 
     return {
-      top: rect.top + bodyElt.scrollTop,
-      left: rect.left + bodyElt.scrollLeft
+      top: Math.abs(body.top) + rect.top,
+      left: Math.abs(body.left) + rect.left
     }
   }
   getScrollOffset(position) {
@@ -541,111 +308,285 @@ class scrollTrigger {
 /* harmony default export */ __webpack_exports__["a"] = (scrollTrigger);
 
 /***/ }),
-/* 2 */
+/* 1 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ac_ac__ = __webpack_require__(0);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__svgLine__ = __webpack_require__(2);
 
 
 
 (function () {
   "use strict";
-  function hasClass(el) {
-    return el.classList.contains(className);
-  }
-  function outerHeight(el) {
-    var height = el.offsetHeight;
-    var style = getComputedStyle(el);
-
-    height += parseInt(style.marginTop) + parseInt(style.marginBottom);
-    return height;
-  }
-  function outerWidth(el) {
-    var width = el.offsetWidth;
-    var style = getComputedStyle(el);
-
-    width += parseInt(style.marginLeft) + parseInt(style.marginRight);
-    return width;
-  }
-  function round(value, decimals) {
-    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-  }
   
-  class svgLine {
-    constructor(element){
-      let timeout;
-      this.el = {
-        path: element,
-        length: 0
-      }
-      this.calculatePathLength();
-      window.addEventListener('resize', () => { 
-        window.clearTimeout(timeout);
-        timeout = window.setTimeout(() => {
-          this.calculatePathLength();
-        }, 150);
-      })
-    }
-    pathLength(percent){
-      const offset = round(this.el.length * percent, 4);
-      this.el.path.style.strokeDashoffset = this.el.length - offset;
-    }
-    calculatePathLength(path){
-      let length = this.el.path.getTotalLength();
-
-      this.el.length = round(length, 4);
-      this.el.path.style.strokeDashoffset = this.el.length;
-      this.el.path.style.strokeDasharray = this.el.length;
-    }
-  }
+  window.addEventListener('load', onLoad);  
   
   function onLoad() {
+    /* global svgLine,scrollTrigger */
     "use strict";
     const sectionOptions = [{
             position: 'center',
             active: sectionAct,
             inactive: sectionInact
           }],
-          line = new svgLine(document.querySelector('.bg-line__line')),
+          container = document.querySelector('.bg-line'),
+          line = new __WEBPACK_IMPORTED_MODULE_1__svgLine__["a" /* default */]({
+            path: document.querySelector('.bg-line__line'),
+            triggers: {
+              points: [2, 5, 8, 10, 11]
+            },
+            container
+          }),
           triggers = new __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__["a" /* default */]({
             scope: { 
-              sectionOptions
+              sectionOptions,
+              sectionTimeout: null
             },
             probe: bindScrollToLine
-          }),
-          container = document.querySelector('.bg-line');
+          });
+    let resizeTimeout = null;
     
-    function bindScrollToLine(percent) {      
-      line.pathLength(percent);
-    }
+    getSectionRatios();
+    
+    line.el.path.addEventListener('svgTrigger', (event) => {
+      let point = null;
+      if (event.detail.active != null) {
+        point = container.querySelector('.bg-line__point--' + event.detail.active);
+        point.classList.add('bg-line__point--active');
+      } 
+      else if (event.detail.inactive != null) {
+        point = container.querySelector('.bg-line__point--' + event.detail.inactive);
+        point.classList.remove('bg-line__point--active');
+      }
+    });
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(getSectionRatios, 500);
+    });
+    
+    function getSectionRatios() {
+      const cHeight = container.offsetHeight,
+            markers = document.querySelectorAll('.bg-line__point');
+      let points = line.el.path.points,
+          newRatios = [],
+          tops = [];
 
-    function sectionAct(obj) {
-      const secContent = obj.el.querySelector('.section-content');
-      const subContent = secContent.querySelector('.section-content__content');
+      triggers.elements.forEach((element, index) => {
+        const marker = markers[index + 1],
+              ratio = element.size.height / cHeight;
+        let top = 0,
+            lastTop = 0;
+        
+        if (index > 0) {
+          lastTop = tops[tops.length - 1];
+        }
+        
+        top = (ratio * 100) + lastTop;
+        marker.style.top = top + '%';
+        
+        tops.push(top);
+        newRatios.push(ratio);
+      });
       
-      secContent.classList.add('focused');
-      secContent.classList.remove('unfocused');
+      line.setRatios(newRatios);
+    }
+    function bindScrollToLine(percent) {      
+      const newLength = line.pathLength(percent);
+    }
+    
+    function sectionAct(obj, scope) {
+      const sec = getChildren(obj.el);
       
-      subContent.classList.add('focused');
-      subContent.classList.remove('unfocused');
+      sec.title.classList.add('focused');
+      
+      sec.content.classList.add('focused');
+      sec.content.classList.remove('unfocused');
+
+      sec.subContent.classList.add('focused');
+      sec.subContent.classList.remove('unfocused');
     }
     function sectionInact(obj) {
-      const secContent = obj.el.querySelector('.section-content');
-      const subContent = secContent.querySelector('.section-content__content');
-
-      secContent.classList.add('unfocused');
-      secContent.classList.remove('focused');
+      const sec = getChildren(obj.el);
       
-      subContent.classList.add('unfocused');
-      subContent.classList.remove('focused');
+      sec.title.classList.remove('focused');
+
+      sec.content.classList.add('unfocused');
+      sec.content.classList.remove('focused');
+      
+      sec.subContent.classList.add('unfocused');
+      sec.subContent.classList.remove('focused');
+    }
+    function getChildren(el) {
+      return {
+        title: el.querySelector('.section__title'),
+        content: el.querySelector('.section-content'),
+        subContent: el.querySelector('.section-content__content')
+      }
     }
   }
-  window.addEventListener('load', onLoad);  
 })();
+
+/***/ }),
+/* 2 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+
+class svgLine {
+  constructor(options) {
+    const _this = this,
+        style = getComputedStyle(options.path);
+    let timeout;
+
+    _this.svgEvent = {
+      active: 0
+    }
+    _this.triggerEvent = new CustomEvent('svgTrigger', {
+      detail: _this.svgEvent
+    });
+
+    _this.el = Object.assign({
+      length: parseFloat(style["stroke-dasharray"]),
+      height: options.path.viewportElement.viewBox.baseVal.height,
+      ratios: [],
+      triggers: {},
+      triggerPad: 0
+    }, options);
+    _this.el.triggers.lengths = [];
+
+    if (_this.el.triggers.points != null) {
+      _this.el.ratios = _this.getRatios(_this.el.triggers.points);
+    }
+  }
+
+  pathLength(percent){
+    const _this = this,
+          l = _this.el.length.val,
+          offset = round(l * percent, 4),
+          newLength = l - offset;
+    this.el.path.style.strokeDashoffset = newLength;
+
+    this.el.triggers.lengths.forEach((length, index) => {
+      if (offset >= (length.val - _this.el.triggerPad)) {
+        if (length.active !== true) {
+          _this.svgEvent.active = index + 1;
+          length.active = true;
+          delete _this.svgEvent.inactive;
+        }
+      } else {
+        if (length.active !== false) {
+          _this.svgEvent.inactive = index + 1;
+          length.active = false;
+          delete _this.svgEvent.active;
+        }
+      }
+      _this.el.path.dispatchEvent(_this.triggerEvent);
+    });
+    return newLength;
+  }
+  getRatios(triggerPoints) {
+    const _this = this,
+          points = _this.el.path.points;
+    let ratios = [],
+        ys = [];
+    triggerPoints.forEach((triggerPoint, index) => {
+      let y = _this.el.path.points[triggerPoint].y,
+          newRatio = 0;
+      ys.push(y);
+
+      if (index === 0) {
+        newRatio = y / _this.el.height;
+      } else {
+        newRatio = (y - ys[index - 1]) / _this.el.height;
+      }
+      ratios.push(newRatio);
+    });
+    return ratios;
+  }
+  setRatios(ratios) {
+    const _this = this,
+          cHeight = _this.el.container.offsetHeight,
+          triggerPoints = _this.el.triggers.points,
+          triggerlengths = [],
+          oldRatios = _this.el.ratios;
+    let points = this.el.path.points,
+        diffs = [],
+        activeTrigger = 0,
+        index = 0,
+        triggerLengths = [],
+        lengths = [];
+
+    if (triggerPoints != null) {
+      ratios.forEach((ratio, i) => {
+        let y = points[triggerPoints[i]].y,
+            ratioDiff = ratio / oldRatios[i],
+            newY = 0;
+        if (i > 0) {
+          y = y - points[triggerPoints[i - 1]].y;
+        }
+        newY = round((y * ratioDiff) - y, 3);
+
+        if (diffs.length > 0) {
+          newY = round(newY + diffs[diffs.length - 1], 3);
+        }
+        diffs.push(newY);
+      });
+
+      _this.el.ratios = ratios;
+      for (index = 1; index < points.length; index++) {
+        let point = points[index], 
+            newY = 0,
+            length = 0,
+            triggerLength = 0,
+            i = 0;
+
+        if (index < (points.length - 1)) {
+          newY = point.y + diffs[activeTrigger];
+        } else {
+          newY = point.y;
+        }
+
+        point.y = newY;
+
+        length = calculateLength(points[index - 1], point);
+        lengths.push(length);
+
+        if (index === triggerPoints[activeTrigger]) {
+          triggerLength = 0;
+          lengths.forEach((l, lIndex) => {
+            if (lIndex < index) {
+              triggerLength += l;
+            }
+          })
+
+          triggerLengths.push({
+            val: triggerLength,
+            active: -1,
+            inactive: -1
+          });
+
+          if (activeTrigger < (triggerPoints.length - 1)) {
+            activeTrigger++;
+          }
+        }
+      }
+      _this.el.triggers.lengths = triggerLengths;
+      _this.el.length = triggerLengths[triggerLengths.length - 1];
+    }
+
+    function calculateLength(pointSet1, pointSet2) {
+      const lX = pointSet2.x - pointSet1.x, 
+            lY = pointSet2.y - pointSet1.y;
+      return round(Math.sqrt((lX * lX) + (lY * lY)), 4);
+    }
+  }
+};
+function round(value, decimals) {
+  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+}
+/* harmony default export */ __webpack_exports__["a"] = (svgLine);
 
 /***/ })
 /******/ ]);
