@@ -1,3 +1,4 @@
+import saKnife from './saKnife';
 class scrollTrigger {
   constructor(override) {
     "use strict";
@@ -172,7 +173,7 @@ class scrollTrigger {
       });
       
       if (options.probe != null) {
-        percentScrolled = round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
+        percentScrolled = saKnife.round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
         options.probe(percentScrolled)
       }
     }
@@ -191,9 +192,6 @@ class scrollTrigger {
         });
         onScrollTrigger();
       }, 500);
-    }
-    function round(value, decimals) {
-      return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
     }
   }
   calcOffset(elt) {
