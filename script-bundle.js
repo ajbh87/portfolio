@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,6 +71,47 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+function whichTransitionEvent(){
+  const el = document.createElement('fakeelement'),
+        transitions = {
+          transition: 'transitionend',
+          OTransition: 'oTransitionEnd',
+          MozTransition: 'transitionend',
+          WebkitTransition: 'webkitTransitionEnd'
+        };
+  let t;
+
+  for(t in transitions){
+    if( el.style[t] !== undefined ){
+      return transitions[t];
+    }
+  }
+}
+const saKnife = {
+  transitionEvent: whichTransitionEvent(),
+  hasClass: function (el, className) {
+    let response = false;
+    
+    if (el.classList)
+      response = el.classList.contains(className);
+    else
+      response = new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+    
+    return response;
+  },
+  round: function (value, decimals) {
+    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
+  }
+}
+/* harmony default export */ __webpack_exports__["a"] = (saKnife);
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife__ = __webpack_require__(0);
+
 class scrollTrigger {
   constructor(override) {
     "use strict";
@@ -85,7 +126,7 @@ class scrollTrigger {
     (function generateElementsObj() {
       const elements = document.querySelectorAll(options.selector);
 
-      elements.forEach(element => {
+      elements.forEach((element, index) => {
         function checkOverride(override) {
           if (Array.isArray(options.scope[override])) {
             return options.scope[override];
@@ -131,7 +172,8 @@ class scrollTrigger {
           active: false,
           pastCenter: false,
           pastTop: false,
-          pastBottom: false
+          pastBottom: false,
+          index
         }
         
         opt.forEach(trigger => {
@@ -146,9 +188,8 @@ class scrollTrigger {
       });
     })();
     st.onScrollTrigger = onScrollTrigger;
-    st.onScrollTrigger();
-    window.addEventListener('scroll', st.onScrollTrigger);
     
+    window.addEventListener('scroll', st.onScrollTrigger);
     window.addEventListener('resize', onScrollResize);
     
     
@@ -245,7 +286,7 @@ class scrollTrigger {
       });
       
       if (options.probe != null) {
-        percentScrolled = round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
+        percentScrolled = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
         options.probe(percentScrolled)
       }
     }
@@ -264,9 +305,6 @@ class scrollTrigger {
         });
         onScrollTrigger();
       }, 500);
-    }
-    function round(value, decimals) {
-      return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
     }
   }
   calcOffset(elt) {
@@ -310,132 +348,12 @@ class scrollTrigger {
 /* harmony default export */ __webpack_exports__["a"] = (scrollTrigger);
 
 /***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__svgLine__ = __webpack_require__(2);
-
-
-
-(function () {
-  "use strict";
-  
-  window.addEventListener('load', onLoad);  
-  
-  function onLoad() {
-    /* global svgLine,scrollTrigger */
-    "use strict";
-    const sectionOptions = [{
-            position: 'center',
-            active: sectionAct,
-            inactive: sectionInact
-          }],
-          container = document.querySelector('.bg-line'),
-          line = new __WEBPACK_IMPORTED_MODULE_1__svgLine__["a" /* default */]({
-            path: document.querySelector('.bg-line__line'),
-            triggers: {
-              points: [2, 4, 8, 10, 11]
-            },
-            container
-          }),
-          triggers = new __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__["a" /* default */]({
-            scope: { 
-              sectionOptions,
-              sectionTimeout: null
-            },
-            probe: bindScrollToLine
-          }),
-          markers = document.querySelectorAll('.bg-line__point');
-    let resizeTimeout = null;
-    
-    line.el.path.addEventListener('svgTrigger', (event) => {
-      let point = null;
-      if (event.detail.active != null) {
-        point = container.querySelector('.bg-line__point--' + event.detail.active);
-        point.classList.add('bg-line__point--active');
-      } 
-      else if (event.detail.inactive != null) {
-        point = container.querySelector('.bg-line__point--' + event.detail.inactive);
-        point.classList.remove('bg-line__point--active');
-      }
-    });
-    window.addEventListener('resize', () => {
-      window.clearTimeout(resizeTimeout);
-      resizeTimeout = window.setTimeout(getSectionRatios, 500);
-    });
-    
-    getSectionRatios();
-    triggers.onScrollTrigger();
-    
-    
-    function getSectionRatios() {
-      const cHeight = container.offsetHeight;
-      let newRatios = [],
-          tops = [];
-
-      triggers.elements.forEach((element, index) => {
-        const marker = markers[index + 1],
-              ratio = element.size.height / cHeight;
-        let top = 0,
-            lastTop = 0;
-        
-        if (index > 0) {
-          lastTop = tops[tops.length - 1];
-        }
-        
-        top = (ratio * 100) + lastTop;
-        marker.style.top = top + '%';
-        
-        tops.push(top);
-        newRatios.push(ratio);
-      });
-      
-      line.setRatios(newRatios);
-    }
-    function bindScrollToLine(percent) {      
-      const newLength = line.pathLength(percent);
-    }
-    
-    function sectionAct(obj, scope) {
-      const sec = getChildren(obj.el);
-      
-      sec.title.classList.add('focused');
-      
-      sec.content.classList.add('focused');
-      sec.content.classList.remove('unfocused');
-
-      sec.subContent.classList.add('focused');
-      sec.subContent.classList.remove('unfocused');
-    }
-    function sectionInact(obj) {
-      const sec = getChildren(obj.el);
-      
-      sec.title.classList.remove('focused');
-
-      sec.content.classList.add('unfocused');
-      sec.content.classList.remove('focused');
-      
-      sec.subContent.classList.add('unfocused');
-      sec.subContent.classList.remove('focused');
-    }
-    function getChildren(el) {
-      return {
-        title: el.querySelector('.section__title'),
-        content: el.querySelector('.section-content'),
-        subContent: el.querySelector('.section-content__content')
-      }
-    }
-  }
-})();
-
-/***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife__ = __webpack_require__(0);
+
 
 class svgLine {
   constructor(options) {
@@ -465,7 +383,6 @@ class svgLine {
   }
 
   pathLength(percent){
-    debugger;
     const _this = this,
           l = _this.el.length.val,
           offset = l * percent,
@@ -529,10 +446,10 @@ class svgLine {
         if (i > 0) {
           y = y - points[triggerPoints[i - 1]].y;
         }
-        newY = round((y * ratioDiff) - y, 3);
+        newY = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round((y * ratioDiff) - y, 3);
 
         if (diffs.length > 0) {
-          newY = round(newY + diffs[diffs.length - 1], 3);
+          newY = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round(newY + diffs[diffs.length - 1], 3);
         }
         diffs.push(newY);
       });
@@ -571,7 +488,7 @@ class svgLine {
           }
         }
         lengths.forEach((length) => {
-          triggerLength = round(triggerLength + length, 0);
+          triggerLength = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round(triggerLength + length, 0);
         });
 
         triggerLengths.push({
@@ -592,21 +509,201 @@ class svgLine {
         
       });
       _this.el.triggers.lengths = triggerLengths;
-      console.log(triggerLengths);
       _this.el.length = triggerLengths[triggerLengths.length - 1];
     }
 
     function calculateLength(pointSet1, pointSet2) {
       const lX = pointSet2.x - pointSet1.x, 
             lY = pointSet2.y - pointSet1.y;
-      return round(Math.sqrt((lX * lX) + (lY * lY)), 2);
+      return __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round(Math.sqrt((lX * lX) + (lY * lY)), 2);
     }
   }
 };
-function round(value, decimals) {
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-}
 /* harmony default export */ __webpack_exports__["a"] = (svgLine);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__svgLine__ = __webpack_require__(2);
+
+
+
+(function () {
+  class sliderControls {
+    constructor() {
+      const sc = this;
+      sc.el = document.querySelector('.content-slider');
+      sc.container = sc.el.querySelector('.content-slider__container');
+      sc.content = sc.el.querySelector('.content-slider__content');
+      sc.close = sc.el.querySelector('.content-slider__button-close');
+      sc.transition = 500;
+      sc.close.addEventListener('click', () => {
+        sc.hide();
+      });
+    }
+    show(element) {
+      const sc = this;
+      let timeout;
+      
+      if (element != null) {
+        try {
+          window.setTimeout(onTransitionEnd, sc.transition);
+          sc.content.classList.add('fade');          
+        }
+        catch (e) {
+          console.log(e);
+        }
+      }
+      
+      sc.el.classList.add('focused');
+        
+      function onTransitionEnd() {
+        sc.content.classList.remove('fade');
+        sc.content.innerHTML = element.innerHTML;
+      }
+
+    }
+    hide(clear) {
+      const sc = this;
+      if (clear){
+        window.setTimeout(() => {
+          sc.content.innerHTML = '';
+        }, sc.transition);
+      } 
+      sc.el.classList.remove('focused');
+    }
+  }
+  
+  window.addEventListener('load', onLoad);  
+  
+  function onLoad() {
+    "use strict";
+    const sectionOptions = [{
+            position: 'center',
+            active: sectionAct,
+            inactive: sectionInact
+          }],
+          container = document.querySelector('.bg-line'),
+          line = new __WEBPACK_IMPORTED_MODULE_1__svgLine__["a" /* default */]({
+            path: document.querySelector('.bg-line__line'),
+            triggers: {
+              points: [2, 4, 8, 10, 11]
+            },
+            container
+          }),
+          triggers = new __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__["a" /* default */]({
+            scope: { 
+              sectionOptions,
+              sectionTimeout: null
+            },
+            probe: bindScrollToLine
+          }),
+          markers = document.querySelectorAll('.bg-line__point'),
+          slider = new sliderControls();
+    let resizeTimeout = null;
+
+    line.el.path.addEventListener('svgTrigger', (event) => {
+      let point = null;
+      if (event.detail.active != null) {
+        point = container.querySelector('.bg-line__point--' + event.detail.active);
+        point.classList.add('bg-line__point--active');
+      } 
+      else if (event.detail.inactive != null) {
+        point = container.querySelector('.bg-line__point--' + event.detail.inactive);
+        point.classList.remove('bg-line__point--active');
+      }
+    });
+    
+    markers.forEach((marker) => {
+      marker.addEventListener('click', () =>{
+        slider.show();
+      });
+    });
+    window.addEventListener('resize', () => {
+      window.clearTimeout(resizeTimeout);
+      resizeTimeout = window.setTimeout(getSectionRatios, 500);
+    });
+    
+    getSectionRatios();
+    triggers.onScrollTrigger();
+    
+    
+    function getSectionRatios() {
+      const cHeight = container.offsetHeight;
+      let newRatios = [],
+          tops = [];
+
+      triggers.elements.forEach((element, index) => {
+        const marker = markers[index + 1],
+              ratio = element.size.height / cHeight;
+        let top = 0,
+            lastTop = 0;
+        
+        if (index > 0) {
+          lastTop = tops[tops.length - 1];
+        }
+        
+        top = (ratio * 100) + lastTop;
+        marker.style.top = top + '%';
+        
+        tops.push(top);
+        newRatios.push(ratio);
+      });
+      
+      line.setRatios(newRatios);
+    }
+    function bindScrollToLine(percent) {      
+      const newLength = line.pathLength(percent);
+    }
+    
+    function sectionAct(obj) {
+      const sec = getChildren(obj.el),
+            winSize = triggers.calcWinSize(),
+            dataSelector = '.slider-content',
+            dataElement = obj.el.querySelector(dataSelector);
+      
+      if (winSize.width >= 900 && obj.index > 0 && obj.index < 4) {
+        slider.show(dataElement);
+      } else {
+        if (obj.index === 0) {
+          slider.hide(true);
+        } else {
+          slider.hide();
+        }
+      }
+      
+      sec.title.classList.add('focused');
+      
+      sec.content.classList.add('focused');
+      sec.content.classList.remove('unfocused');
+
+      sec.subContent.classList.add('focused');
+      sec.subContent.classList.remove('unfocused');
+    }
+    function sectionInact(obj) {
+      const sec = getChildren(obj.el);
+      
+      sec.title.classList.remove('focused');
+
+      sec.content.classList.add('unfocused');
+      sec.content.classList.remove('focused');
+      
+      sec.subContent.classList.add('unfocused');
+      sec.subContent.classList.remove('focused');
+    }
+    function getChildren(el) {
+      return {
+        title: el.querySelector('.section__title'),
+        content: el.querySelector('.section-content'),
+        subContent: el.querySelector('.section-content__content')
+      }
+    }
+  }
+})();
 
 /***/ })
 /******/ ]);
