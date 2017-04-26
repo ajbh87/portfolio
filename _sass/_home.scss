@@ -1,8 +1,10 @@
+$prop: scaleX;
+$sec-width: 75%;
+$slide-width: 15%;
 //----------------------- Home Page
 .home {
   position: relative;
 }
-$prop: scaleX;
 
 @include clipAnimation(0, 1, 'expand', 'collapse', 100, $prop);
 @keyframes addBorderRadius {
@@ -28,24 +30,32 @@ $prop: scaleX;
   }
 }
 
+  
 .section {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
-  min-height: 60vh;
+  width: $sec-width;
   z-index: 1;
-  
+  @include media-query($tablet){
+    width: #{$sec-width - $slide-width};
+  };
   &__title {
+    position: sticky;
+    top: -1px;
     display: block;
-    padding: $spacing-unit;
+    z-index: 1;
+    width: 100%;
+    padding: ($spacing-unit / 2) $spacing-unit;
+    background: $grey-color-lighter;
     transition: all .8s ease(out-quad);
-    transform: scale(.95) translate(-50%, 0);
+    transform: translate(0, -50%);
     opacity: 0;
     
     &.focused {
-      transform: scale(1) translate(0,0);
+      transform: translate(0,0);
       opacity: 1;
     }
   }
@@ -60,8 +70,8 @@ $prop: scaleX;
 }
 .section-content {
   $origin: left center;
-  
-  width: 75%;
+  float: left;
+  width: 100%;
   overflow: hidden;
   box-sizing: border-box;
   background: #fff;
@@ -165,7 +175,9 @@ $prop: scaleX;
     z-index: 1;
     transform: translate(50%, -50%);
     opacity: 0;
-    transition: opacity .5s ease(out-cubic);
+    visibility: hidden;
+    transition: all .5s ease(out-cubic);
+    cursor: pointer;
     
     &:after {
       box-sizing: border-box;
@@ -181,6 +193,7 @@ $prop: scaleX;
     }
     &--active {
       opacity: 1;
+      visibility: visible;
       &:after {
         animation-name: pulsate;
         animation-timing-function: ease(out-cubic);
@@ -216,54 +229,67 @@ $prop: scaleX;
   }
 }
 
+%slider-animation {
+  $duration: .75s;
+  
+  animation-duration: $duration;
+  animation-iteration-count: 1;
+  animation-timing-function: linear;
+}
+
 .content-slider {
   position: fixed;
-  background: rgba(255, 255, 255, .5);
-  top: $spacing-unit;
-  bottom: $spacing-unit;
-  right: $spacing-unit;
+  top: 0;
+  right: 0;
+  z-index: 5;
+  height: 80%;
+  height: calc(100% - #{$spacing-unit * 2});
+  width: 80%;
+  width: calc(100% - #{$spacing-unit * 2});
+  margin: $spacing-unit;
+  overflow: hidden;
+  background: $primary;
+  color: #fff;
   
-  width: 20%;
-  width: calc(25vw - #{$spacing-unit * 2});
-  transform-origin: center center;
-  transform: scaleY(0);
+  transform-origin: center top;
+  transform: translate(0, 100%);
   will-change: transform;
+  transition: transform .75s ease(out-quad);
   
-  &.unfocused {
-    animation-name: collapse;
-    @extend %default-animation;
-    transform: scaleY(0);
-  }
+  @include media-query($tablet){
+    right: 25%;
+    height: 100%;
+    width: $slide-width;
+    margin: 0;
+  };
+  
   &.focused {
-    overflow: auto;
-    animation-name: expand;
-    @extend %default-animation;
-    transform: scaleY(1);
-    
+    transform: translate(0, 0);
   }
   
-  &__container {
-    transform-origin: center center;
-    transform: scaleY(1000);
-    &.unfocused {
-      animation-name: collapseInverse;
-      @extend %default-animation;
-      transform: scaleY(1000);
-    }
-    &.focused {
-      animation-name: expandInverse;
-      @extend %default-animation;
-      transform: scaleY(1);
-    }
-  }
   &__button-close {
     position: absolute; 
-    right: ($spacing-unit / 2);
-    top: ($spacing-unit / 2);
-    min-width: $spacing-unit;
+    right: 0;
+    top: 0;
     display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: transparent;
+    @include media-query($tablet){
+      display: none;
+    }
   }  
   &__content {
-    
+    padding: 1.5rem 1rem 1rem 1rem;
+    transition: opacity .5s ease(out-quad);
+    opacity: 1;
+    font-size: .8rem;
+    line-height: 1rem;
+    @include media-query($tablet){
+      padding: 1rem
+    };
+    &.fade {
+      opacity: 0;
+    }
   }
 }

@@ -3,8 +3,6 @@
 ---
 @charset "utf-8";
 
-
-// Our variables
 $base-font-family: 'Quicksand', Helvetica, Helvetica Neue, Arial, sans-serif;
 $base-font-size-fixed: 18px;
 $base-font-size: 2vw;
@@ -18,8 +16,9 @@ $font-weight-bold: 700;
 $spacing-unit: 1.5rem;
 
 // colors
-$grey-color-light: #f1f1f1;
+$grey-color-lighter: #f5f1f1;
 $grey-color: #403D3C;
+$grey-color-light: lighten($grey-color, 50%);
 $grey-color-dark: #1C1919;
 $grey-color-dark-t: transparentize($grey-color-dark, 0.1);
 
@@ -31,7 +30,7 @@ $secondary-light: #30FFE3;
 //$secondary-dark: #00AB94;
 
 $text-color: $grey-color-dark;
-$background-color: $grey-color-light;
+$background-color: $grey-color-lighter;
 
 // Width of the content area
 $content-width: 1200px;

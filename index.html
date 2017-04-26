@@ -15,6 +15,15 @@ options: "sectionOptions"
   {% include_relative _home/2-centuries.markdown %}
   {% endcapture %}
   {% include home_section.html title="A few centuries ago" content=centuries action=page.options %}
+  
+  <script class="slider-content" type="text/html">
+    <p>
+      There are not a lot of archaeological records from this era.
+    </p>
+    <div class="content-slider__element">
+      
+    </div>
+  </script>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -22,6 +31,11 @@ options: "sectionOptions"
   {% include_relative _home/3-later.markdown %}
   {% endcapture %}
   {% include home_section.html title="Some time later" content=later action=page.options %}
+  <script class="slider-content" type="text/html">
+    <div class="content-slider__element">
+      another somethingg
+    </div>
+  </script>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -29,6 +43,11 @@ options: "sectionOptions"
   {% include_relative _home/4-beyond.markdown %}
   {% endcapture %}
   {% include home_section.html title="Beyond the Frontend of Web" content=beyond action=page.options %}
+  <script class="slider-content" type="text/html">
+    <div class="content-slider__element">
+      something 3
+    </div>
+  </script>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -54,13 +73,11 @@ options: "sectionOptions"
 </div>
 
 <div class="content-slider">
-  <button class="content-slider__button-close button button--close">
-    <span class="button__icon">X</span>
-    <span class="button__text button__text--hidden">Close</span>
-  </button>
   <div class="content-slider__container">
-    <div class="content-slider__content">
-      
-    </div>
+    <button class="content-slider__button-close button button--close">
+      <span class="button__icon">&times;</span>
+      <span class="button__text button__text--hidden">Close</span>
+    </button>
+    <div class="content-slider__content"></div>
   </div>
 </div>
