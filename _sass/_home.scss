@@ -38,8 +38,9 @@ $slide-width: 15%;
   justify-content: center;
   align-items: flex-start;
   width: $sec-width;
+  min-height: 50vh;
   z-index: 1;
-  @include media-query($tablet){
+  @include media-query($media-min){
     width: #{$sec-width - $slide-width};
   };
   &__title {
@@ -50,14 +51,21 @@ $slide-width: 15%;
     width: 100%;
     padding: ($spacing-unit / 2) $spacing-unit;
     background: $grey-color-lighter;
-    transition: all .8s ease(out-quad);
-    transform: translate(0, -50%);
+    transition: opacity .8s ease(out-quad);
     opacity: 0;
     
     &.focused {
-      transform: translate(0,0);
       opacity: 1;
     }
+    
+    &--animate {
+      transition: transform .8s ease(out-quad);
+      transform: translate(0, -50%);
+      .focused & {
+        transform: translate(0,0);
+      }
+    }
+    
   }
 }
 
@@ -256,7 +264,7 @@ $slide-width: 15%;
   will-change: transform;
   transition: transform .75s ease(out-quad);
   
-  @include media-query($tablet){
+  @include media-query($media-min){
     right: 25%;
     height: 100%;
     width: $slide-width;
@@ -275,7 +283,7 @@ $slide-width: 15%;
     width: 1.5rem;
     height: 1.5rem;
     background: transparent;
-    @include media-query($tablet){
+    @include media-query($media-min){
       display: none;
     }
   }  
@@ -285,8 +293,8 @@ $slide-width: 15%;
     opacity: 1;
     font-size: .8rem;
     line-height: 1rem;
-    @include media-query($tablet){
-      padding: 1rem
+    @include media-query($media-min){
+      padding: 1rem;
     };
     &.fade {
       opacity: 0;

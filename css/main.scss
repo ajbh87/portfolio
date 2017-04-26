@@ -3,9 +3,16 @@
 ---
 @charset "utf-8";
 
+@import "mixins";
 $base-font-family: 'Quicksand', Helvetica, Helvetica Neue, Arial, sans-serif;
-$base-font-size-fixed: 18px;
-$base-font-size: 2vw;
+
+$media-min: 800px;
+
+$base-font-size-fixed: 16px;
+$max-font-size-fixed: 35px;
+$base-font-size: strip-unit($base-font-size-fixed / $media-min) * 100vw;
+
+$media-max: $max-font-size-fixed * ( 1 /strip-unit($base-font-size/100));
 
 $base-font-weight: 400;
 $small-font-size: $base-font-size * 0.875;
@@ -34,9 +41,6 @@ $background-color: $grey-color-lighter;
 
 // Width of the content area
 $content-width: 1200px;
-
-$tablet: 900px;
-$desktop: 1280px;
 
 $menu-transition: .5s ease-out;
 
@@ -71,7 +75,6 @@ $ease: (
 @import
   "normalize",
   "syntax-highlighting",
-  "mixins",
   "base",
   "layout",
   "home"

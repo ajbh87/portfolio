@@ -13,9 +13,12 @@ dl, dd, ol, ul, figure {
  */
 html {
   font: $base-font-weight #{$base-font-size-fixed}/#{$base-line-height} $base-font-family;
-  @include media-query($tablet) {
+  @include media-query($media-min) {
     font-size: $base-font-size;
-  };
+  }
+  @include media-query($media-max) {
+    font-size: $max-font-size-fixed;
+  }
 }
 body {
   color: $text-color;
@@ -43,23 +46,23 @@ ul, ol, dl, figure,
 }
 
 h1, .h1 {
-  font-size: 2.6666rem;
+  font-size: 2.25rem;
   line-height: 1.05em;
 }
 h2, .h2 {
-  font-size: 2.2rem;
+  font-size: 2rem;
   line-height: 1.1em;
 }
 h3, .h3 {
-  font-size: 2rem;
+  font-size: 1.75rem;
   line-height: 1.2em;
 }
 h4, .h4 {
-  font-size: 1.6666rem;
+  font-size: 1.50rem;
   line-height: 1.2em;
 }
 h5, .h5 {
-  font-size: 1.3333rem;
+  font-size: 1.25rem;
   line-height: 1.2em;
 }
 h6, .h6 {
