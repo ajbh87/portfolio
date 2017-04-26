@@ -13,7 +13,7 @@ class scrollTrigger {
     (function generateElementsObj() {
       const elements = document.querySelectorAll(options.selector);
 
-      elements.forEach(element => {
+      elements.forEach((element, index) => {
         function checkOverride(override) {
           if (Array.isArray(options.scope[override])) {
             return options.scope[override];
@@ -59,7 +59,8 @@ class scrollTrigger {
           active: false,
           pastCenter: false,
           pastTop: false,
-          pastBottom: false
+          pastBottom: false,
+          index
         }
         
         opt.forEach(trigger => {
@@ -74,9 +75,8 @@ class scrollTrigger {
       });
     })();
     st.onScrollTrigger = onScrollTrigger;
-    st.onScrollTrigger();
-    window.addEventListener('scroll', st.onScrollTrigger);
     
+    window.addEventListener('scroll', st.onScrollTrigger);
     window.addEventListener('resize', onScrollResize);
     
     
