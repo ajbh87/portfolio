@@ -143,6 +143,12 @@ a {
   }
 }
 
+button {
+  &:not([disabled]) {
+    cursor: pointer;
+  }
+}
+
 /**
  * Blockquotes
  */
@@ -227,7 +233,6 @@ pre {
   width: 1px; 
 }
 
-
 // Title
 .title {
 
@@ -257,5 +262,9 @@ pre {
       display: none;
     }
   }
+  &__icon {
+    position: relative;
+    top: -.125rem;;
+  } 
 }
 

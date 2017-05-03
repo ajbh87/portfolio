@@ -2,16 +2,16 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 @charset "utf-8";
-
 @import "mixins";
-$base-font-family: 'Quicksand', Helvetica, Helvetica Neue, Arial, sans-serif;
 
+$base-font-family: 'Quicksand', Helvetica, Helvetica Neue, Arial, sans-serif;
 $media-min: 800px;
 
 $base-font-size-fixed: 16px;
-$max-font-size-fixed: 35px;
-$base-font-size: strip-unit($base-font-size-fixed / $media-min) * 100vw;
 
+$max-font-size-fixed: 35px;
+
+$base-font-size: strip-unit($base-font-size-fixed / $media-min) * 100vw;
 $media-max: $max-font-size-fixed * ( 1 /strip-unit($base-font-size/100));
 
 $base-font-weight: 400;
@@ -21,6 +21,7 @@ $font-weight-light: 300;
 $font-weight-bold: 700;
 
 $spacing-unit: 1.5rem;
+$spacing-unit-sm: ($spacing-unit / 2);
 
 // colors
 $grey-color-lighter: #f5f1f1;
@@ -31,10 +32,8 @@ $grey-color-dark-t: transparentize($grey-color-dark, 0.1);
 
 $primary: #FF6E30;
 $primary-dark: #E3591E;
-
 $secondary: #00B29A;
 $secondary-light: #30FFE3;
-//$secondary-dark: #00AB94;
 
 $text-color: $grey-color-dark;
 $background-color: $grey-color-lighter;
@@ -43,6 +42,7 @@ $background-color: $grey-color-lighter;
 $content-width: 1200px;
 
 $menu-transition: .5s ease-out;
+
 
 $ease: (
   in-quad:      cubic-bezier(0.550,  0.085, 0.680, 0.530),
