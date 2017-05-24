@@ -131,7 +131,7 @@ const saKnife = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(0);
 
 class scrollTrigger {
   constructor(override) {
@@ -142,9 +142,28 @@ class scrollTrigger {
         resizeTimeout = null;
 
     st.elements = [];
-    st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].winSize();
+    st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].winSize();
+    st.onScrollTrigger = onScrollTrigger;
+    st.onScrollResize = onScrollResize;
     
-    (function generateElementsObj() {
+    generateElementsObj();
+    
+    window.addEventListener('scroll', st.onScrollTrigger);
+    window.addEventListener('resize', st.onScrollResize);
+    
+    // Private
+    function createOptions(override) {
+      let options = Object.assign({
+        scope: {},
+        dataName: 'data-scroll-trigger',
+        probe: null
+      }, override);
+    
+      options.selector = '[' + options.dataName + ']';
+      
+      return options;
+    }
+    function generateElementsObj() {
       const elements = document.querySelectorAll(options.selector);
 
       elements.forEach((element, index) => {
@@ -184,7 +203,7 @@ class scrollTrigger {
         
         inserted = {
           el: element,
-          offset: __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].offset(element),
+          offset: __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].offset(element),
           size: {
             height: element.offsetHeight,
             width: element.offsetWidth
@@ -207,24 +226,9 @@ class scrollTrigger {
         
         st.elements.push(inserted);
       });
-    })();
-    st.onScrollTrigger = onScrollTrigger;
-    
-    window.addEventListener('scroll', st.onScrollTrigger);
-    window.addEventListener('resize', onScrollResize);
-    
-    
-    function createOptions(override) {
-      let options = Object.assign({
-        scope: {},
-        dataName: 'data-scroll-trigger',
-        probe: null
-      }, override);
-    
-      options.selector = '[' + options.dataName + ']';
-      
-      return options;
     }
+    
+    // Public
     function onScrollTrigger() {
       let percentScrolled = 0;
       
@@ -306,18 +310,18 @@ class scrollTrigger {
       });
       
       if (options.probe != null) {
-        percentScrolled = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
+        percentScrolled = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
         options.probe(percentScrolled);
       }
     }
     function onScrollResize() {
       window.clearTimeout(scrollTimeout);
       scrollTimeout = window.setTimeout(() => {
-        st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].winSize();
+        st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].winSize();
         st.elements.forEach(element => {
           element.size.height = element.el.offsetHeight;
           element.size.width = element.el.offsetWidth;
-          element.offset = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].offset(element.el);
+          element.offset = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].offset(element.el);
           
           element.actions.forEach(action => {
             action.offset = st.getScrollOffset(action.position);
@@ -349,8 +353,7 @@ class scrollTrigger {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife__ = __webpack_require__(0);
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(0);
 
 class svgLine {
   constructor(options) {
@@ -443,10 +446,10 @@ class svgLine {
         if (i > 0) {
           y = y - points[triggerPoints[i - 1]].y;
         }
-        newY = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round((y * ratioDiff) - y, 3);
+        newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((y * ratioDiff) - y, 3);
 
         if (diffs.length > 0) {
-          newY = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round(newY + diffs[diffs.length - 1], 3);
+          newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(newY + diffs[diffs.length - 1], 3);
         }
         diffs.push(newY);
       });
@@ -485,7 +488,7 @@ class svgLine {
           }
         }
         lengths.forEach((length) => {
-          triggerLength = __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round(triggerLength + length, 0);
+          triggerLength = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(triggerLength + length, 0);
         });
 
         triggerLengths.push({
@@ -512,7 +515,7 @@ class svgLine {
     function calculateLength(pointSet1, pointSet2) {
       const lX = pointSet2.x - pointSet1.x, 
             lY = pointSet2.y - pointSet1.y;
-      return __WEBPACK_IMPORTED_MODULE_0__saKnife__["a" /* default */].round(Math.sqrt((lX * lX) + (lY * lY)), 2);
+      return __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(Math.sqrt((lX * lX) + (lY * lY)), 2);
     }
   }
 };
@@ -524,9 +527,9 @@ class svgLine {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__svgLine__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__saKnife__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scrollTrigger_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__svgLine_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__saKnife_js__ = __webpack_require__(0);
 
 
 
@@ -574,12 +577,12 @@ class sliderControls {
     function childClick(child) {
       const childClassName = 'active',
             contentOffset = sc.content.scrollTop,
-            winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife__["a" /* default */].winSize();
+            winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife_js__["a" /* default */].winSize();
       let childOffset = child.offsetTop;
       
       childOffset = winSize.vCenter - childOffset - (child.offsetHeight / 2);
       // hide
-      if (__WEBPACK_IMPORTED_MODULE_2__saKnife__["a" /* default */].hasClass(child, childClassName)) {
+      if (__WEBPACK_IMPORTED_MODULE_2__saKnife_js__["a" /* default */].hasClass(child, childClassName)) {
         removeClass(child, childClassName);
         sc.content.style.transform = sc.lastPos;
 
@@ -622,7 +625,7 @@ class sliderControls {
     sc.el.classList.remove('focused');
   }
   slidePercent(percent) {
-    let winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife__["a" /* default */].winSize(),
+    let winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife_js__["a" /* default */].winSize(),
         childOffset = 0,
         scrollable = this.content.offsetHeight - winSize.height,
         scroll = 0;
@@ -646,14 +649,14 @@ function onLoad() {
           inactive: sectionInact
         }],
         container = document.querySelector('.bg-line'),
-        line = new __WEBPACK_IMPORTED_MODULE_1__svgLine__["a" /* default */]({
-          path: document.querySelector('.bg-line__line'),
+        line = new __WEBPACK_IMPORTED_MODULE_1__svgLine_js__["a" /* default */]({
+          path: document.querySelector('.bg-line__path'),
           triggers: {
             points: [2, 4, 8, 10, 11]
           },
           container
         }),
-        triggers = new __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__["a" /* default */]({
+        triggers = new __WEBPACK_IMPORTED_MODULE_0__scrollTrigger_js__["a" /* default */]({
           scope: { 
             sectionOptions,
             sectionTimeout: null
@@ -728,20 +731,23 @@ function onLoad() {
 
   function sectionAct(obj) {
     const sec = getChildren(obj.el),
-          winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife__["a" /* default */].winSize(),
+          winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife_js__["a" /* default */].winSize(),
           dataSelector = '.slider-content',
           dataElement = obj.el.querySelector(dataSelector);
     
-    obj.bindScrollSlider = function () {
-      let percent = ((window.scrollY + winSize.vCenter) - obj.offset.top) / obj.size.height;
-
-      //if (percent > 0) {
-        slider.slidePercent(percent); 
-      //}
-    };
+    obj.bindScrollSlider = null;
     
     if (winSize.width >= 900 && obj.index > 0 && obj.index < 4) {
       slider.show(dataElement, () => {
+        let sliderTimeout;
+        obj.bindScrollSlider = function () {
+          window.clearTimeout(sliderTimeout);
+          sliderTimeout = window.setTimeout(() => {
+            let percent = ((window.scrollY + winSize.vCenter) - obj.offset.top) / obj.size.height;
+
+            slider.slidePercent(percent); 
+          }, 50);
+        };
         window.addEventListener('scroll', obj.bindScrollSlider);
         obj.bindScrollSlider();
       });

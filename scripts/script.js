@@ -1,6 +1,6 @@
-import scrollTrigger from './scrollTrigger';
-import svgLine from './svgLine';
-import saKnife from './saKnife';
+import scrollTrigger from './scrollTrigger.js';
+import svgLine from './svgLine.js';
+import saKnife from './saKnife.js';
 
 class sliderControls {
   constructor() {
@@ -118,7 +118,7 @@ function onLoad() {
         }],
         container = document.querySelector('.bg-line'),
         line = new svgLine({
-          path: document.querySelector('.bg-line__line'),
+          path: document.querySelector('.bg-line__path'),
           triggers: {
             points: [2, 4, 8, 10, 11]
           },
@@ -203,16 +203,19 @@ function onLoad() {
           dataSelector = '.slider-content',
           dataElement = obj.el.querySelector(dataSelector);
     
-    obj.bindScrollSlider = function () {
-      let percent = ((window.scrollY + winSize.vCenter) - obj.offset.top) / obj.size.height;
-
-      //if (percent > 0) {
-        slider.slidePercent(percent); 
-      //}
-    };
+    obj.bindScrollSlider = null;
     
     if (winSize.width >= 900 && obj.index > 0 && obj.index < 4) {
       slider.show(dataElement, () => {
+        let sliderTimeout;
+        obj.bindScrollSlider = function () {
+          window.clearTimeout(sliderTimeout);
+          sliderTimeout = window.setTimeout(() => {
+            let percent = ((window.scrollY + winSize.vCenter) - obj.offset.top) / obj.size.height;
+
+            slider.slidePercent(percent); 
+          }, 50);
+        };
         window.addEventListener('scroll', obj.bindScrollSlider);
         obj.bindScrollSlider();
       });

@@ -1,4 +1,4 @@
-import saKnife from './saKnife';
+import saKnife from './saKnife.js';
 class scrollTrigger {
   constructor(override) {
     "use strict";
@@ -9,8 +9,27 @@ class scrollTrigger {
 
     st.elements = [];
     st.window = saKnife.winSize();
+    st.onScrollTrigger = onScrollTrigger;
+    st.onScrollResize = onScrollResize;
     
-    (function generateElementsObj() {
+    generateElementsObj();
+    
+    window.addEventListener('scroll', st.onScrollTrigger);
+    window.addEventListener('resize', st.onScrollResize);
+    
+    // Private
+    function createOptions(override) {
+      let options = Object.assign({
+        scope: {},
+        dataName: 'data-scroll-trigger',
+        probe: null
+      }, override);
+    
+      options.selector = '[' + options.dataName + ']';
+      
+      return options;
+    }
+    function generateElementsObj() {
       const elements = document.querySelectorAll(options.selector);
 
       elements.forEach((element, index) => {
@@ -73,24 +92,9 @@ class scrollTrigger {
         
         st.elements.push(inserted);
       });
-    })();
-    st.onScrollTrigger = onScrollTrigger;
-    
-    window.addEventListener('scroll', st.onScrollTrigger);
-    window.addEventListener('resize', onScrollResize);
-    
-    
-    function createOptions(override) {
-      let options = Object.assign({
-        scope: {},
-        dataName: 'data-scroll-trigger',
-        probe: null
-      }, override);
-    
-      options.selector = '[' + options.dataName + ']';
-      
-      return options;
     }
+    
+    // Public
     function onScrollTrigger() {
       let percentScrolled = 0;
       

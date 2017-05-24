@@ -1,8 +1,8 @@
 title: A Strange Path to Becoming a Web Developer
-sub-title: the Story of Alfredo J. Bermúdez
+sub-title: The Story of Alfredo J. Bermúdez
 email: alfredo@ajbermudez.com
 description: > # this means to ignore newlines until "baseurl:"
-  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive knowledge of HTML, CSS, Javascript. Experience with several frameworks including JQuery, Bootstrap, DevExtreme, AngularJS.
+  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive knowledge of HTML, CSS, Javascript. Experience with several frameworks including JQuery, Bootstrap, DevExtreme, AngularJS and REACT.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://ajbermudez.com" # the base hostname & protocol for your site
 github_username:  ajbh87

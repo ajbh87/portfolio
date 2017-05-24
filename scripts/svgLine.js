@@ -1,5 +1,4 @@
-"use strict";
-import saKnife from './saKnife';
+import saKnife from './saKnife.js';
 class svgLine {
   constructor(options) {
     const _this = this,
