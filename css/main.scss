@@ -36,13 +36,12 @@ $secondary: #00B29A;
 $secondary-light: #30FFE3;
 
 $text-color: $grey-color-dark;
-$background-color: $grey-color-lighter;
+$background-color: $grey-color;
 
 // Width of the content area
 $content-width: 1200px;
 
 $menu-transition: .5s ease-out;
-
 
 $ease: (
   in-quad:      cubic-bezier(0.550,  0.085, 0.680, 0.530),

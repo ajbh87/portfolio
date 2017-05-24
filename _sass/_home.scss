@@ -51,7 +51,8 @@ $slide-width: 15%; // 15% ~ 7.5rem
     
     padding: ($spacing-unit / 2) $spacing-unit;
     
-    background: $grey-color-lighter;
+    background: $background-color;
+    color: #fff;
     
     transition: opacity .8s ease(out-quad);
     opacity: 0;
@@ -156,10 +157,10 @@ $slide-width: 15%; // 15% ~ 7.5rem
   }
   &__straight {
     fill: none;
-    stroke: $grey-color;
+    stroke: $grey-color-dark;
     stroke-miterlimit: 10;
   }
-  &__line {
+  &__path {
     $length: 285; // pre calculated unsing  path.getTotalLength() in chrome
     fill: none;
     stroke: $primary;
@@ -321,13 +322,10 @@ $slide-width: 15%; // 15% ~ 7.5rem
     font-size: .8rem;
     line-height: 1rem;
     
-    transition: opacity .5s ease(out-quad);
-//      transform .25s ease(out-quad);
+    transition: 
+      opacity .5s ease(out-quad),
+      transform .25s ease(out-quad);
     opacity: 1;
-    
-    .expand & {
-      transition: transform .25s ease(out-quad);
-    }
     
     &.fade {
       opacity: 0;
