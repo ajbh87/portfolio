@@ -1,4 +1,4 @@
-"use strict";
+import saKnife from './saKnife.js';
 class svgLine {
   constructor(options) {
     const _this = this,
@@ -27,7 +27,6 @@ class svgLine {
   }
 
   pathLength(percent){
-    debugger;
     const _this = this,
           l = _this.el.length.val,
           offset = l * percent,
@@ -91,10 +90,10 @@ class svgLine {
         if (i > 0) {
           y = y - points[triggerPoints[i - 1]].y;
         }
-        newY = round((y * ratioDiff) - y, 3);
+        newY = saKnife.round((y * ratioDiff) - y, 3);
 
         if (diffs.length > 0) {
-          newY = round(newY + diffs[diffs.length - 1], 3);
+          newY = saKnife.round(newY + diffs[diffs.length - 1], 3);
         }
         diffs.push(newY);
       });
@@ -133,7 +132,7 @@ class svgLine {
           }
         }
         lengths.forEach((length) => {
-          triggerLength = round(triggerLength + length, 0);
+          triggerLength = saKnife.round(triggerLength + length, 0);
         });
 
         triggerLengths.push({
@@ -154,18 +153,14 @@ class svgLine {
         
       });
       _this.el.triggers.lengths = triggerLengths;
-      console.log(triggerLengths);
       _this.el.length = triggerLengths[triggerLengths.length - 1];
     }
 
     function calculateLength(pointSet1, pointSet2) {
       const lX = pointSet2.x - pointSet1.x, 
             lY = pointSet2.y - pointSet1.y;
-      return round(Math.sqrt((lX * lX) + (lY * lY)), 2);
+      return saKnife.round(Math.sqrt((lX * lX) + (lY * lY)), 2);
     }
   }
 };
-function round(value, decimals) {
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-}
 export default svgLine;

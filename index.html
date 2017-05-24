@@ -15,13 +15,35 @@ options: "sectionOptions"
   {% include_relative _home/2-centuries.markdown %}
   {% endcapture %}
   {% include home_section.html title="A few centuries ago" content=centuries action=page.options %}
+  
+  <script class="slider-content" type="text/html">
+    <p>
+      *Just a few archaeological records from this era have been found.
+    </p>
+    <div class="content-slider__element" tabindex="1" data-content="GyroPack SVG">
+      <img class="content-slider__link" src="./images/gyro-pack.svg" alt="GyroPack SVG" />
+    </div>
+    <div class="content-slider__element" tabindex="3" data-content="Fundación Nilita Vientós Gastón Logo Color">
+      <img class="content-slider__link" src="./images/nilitaColor.svg" alt="Fundación Nilita Vientós Gastón Logo Color" />
+    </div>
+  </script>
 </div>
-
 <div class="section" data-scroll-trigger="{{ page.options }}">
   {% capture later %}
   {% include_relative _home/3-later.markdown %}
   {% endcapture %}
   {% include home_section.html title="Some time later" content=later action=page.options %}
+  <script class="slider-content" type="text/html">
+    <div class="content-slider__element" tabindex="1" data-content="En Serio - Alex, Anibal y Rosello">
+      <img class="content-slider__link" src="./images/alex.anibal.rossello.min.jpg" alt="En Serio - Alex, Anibal y Rosello" />
+    </div>
+    <div class="content-slider__element" tabindex="2" data-content="En Serio - Alex y Gadaffi">
+      <img class="content-slider__link" src="./images/alexygadaffi.min.jpg" alt="En Serio - Alex y Gadaffi" />
+    </div>
+    <div class="content-slider__element" tabindex="3" data-content="En Serio - Alex, Luke y Leia">
+      <img class="content-slider__link" src="./images/alexyluke.min.jpg" alt="En Serio - Alex, Luke y Leia" />
+    </div>
+  </script>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -29,6 +51,11 @@ options: "sectionOptions"
   {% include_relative _home/4-beyond.markdown %}
   {% endcapture %}
   {% include home_section.html title="Beyond the Frontend of Web" content=beyond action=page.options %}
+  <script class="slider-content" type="text/html">
+    <div class="content-slider__element">
+      something 3
+    </div>
+  </script>
 </div>
 
 <div class="section" data-scroll-trigger="{{ page.options }}">
@@ -42,15 +69,21 @@ options: "sectionOptions"
   <svg class="bg-line__svg" viewBox="0 0 100 250" width="100%" height="100%" preserveAspectRatio="none" >
     <title>Background Line</title>
     <line class="bg-line__straight" x1="87.5" y1="0" x2="87.5" y2="250"/>
-    <polyline class="bg-line__line" points="87.5,0 87.5,50 95,60 95,90 87.5,100 80,90 80,110 80,140 95,160 95,190 87.5,200 
+    <polyline class="bg-line__path" points="87.5,0 87.5,50 95,60 95,90 87.5,100 80,90 80,110 80,140 95,160 95,190 87.5,200 
 		87.5,250"/>
   </svg>
-  <div class="bg-line__point bg-line__point--0 bg-line__point--active"></div>
-  <div class="bg-line__point bg-line__point--1"></div>
-  <div class="bg-line__point bg-line__point--2"></div>
-  <div class="bg-line__point bg-line__point--3"></div>
-  <div class="bg-line__point bg-line__point--4"></div>
-  <div class="bg-line__point bg-line__point--5"></div>
+  <button class="bg-line__point bg-line__point--0" disabled="disabled"></button>
+  <button class="bg-line__point bg-line__point--1" data-index="1"></button>
+  <button class="bg-line__point bg-line__point--2" data-index="2"></button>
+  <button class="bg-line__point bg-line__point--3" data-index="2"></button>
+  <button class="bg-line__point bg-line__point--4" disabled="disabled"></button>
+  <button class="bg-line__point bg-line__point--5" disabled="disabled"></button>
 </div>
 
-
+<div id="content-slider" class="content-slider">
+  <button class="content-slider__button-close button button--close">
+    <span class="button__icon">&times;</span>
+    <span class="button__text button__text--hidden">Close</span>
+  </button>
+  <div class="content-slider__content"></div>
+</div>

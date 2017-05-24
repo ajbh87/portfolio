@@ -1,6 +1,6 @@
 %content-padding {
   padding: $spacing-unit;
-//  @include media-query($tablet) {
+//  @include media-query($media-min) {
 //    padding: ($spacing-unit / 2) $spacing-unit;
 //  }
 }
@@ -19,7 +19,7 @@
       color: $primary;
     }
     
-    @include media-query($tablet){
+    @include media-query($media-min){
       width: 75vw;
     }
   }

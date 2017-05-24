@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 3);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -71,6 +71,68 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+function whichTransitionEvent(){
+  const el = document.createElement('fakeelement'),
+        transitions = {
+          transition: 'transitionend',
+          OTransition: 'oTransitionEnd',
+          MozTransition: 'transitionend',
+          WebkitTransition: 'webkitTransitionEnd'
+        };
+  let t;
+
+  for(t in transitions){
+    if( el.style[t] !== undefined ){
+      return transitions[t];
+    }
+  }
+}
+const saKnife = {
+  transitionEvent: whichTransitionEvent(),
+  offset: (el) => {
+    const rect = el.getBoundingClientRect(),
+          body = document.body.getBoundingClientRect();
+
+    return {
+      top: Math.abs(body.top) + rect.top,
+      left: Math.abs(body.left) + rect.left
+    }
+  },
+  winSize: () => {
+    const e = document.documentElement,
+      g = document.querySelector('body'),
+      width = e.clientWidth||g.clientWidth,
+      height = e.clientHeight||g.clientHeight;
+    return {
+      width,
+      height,
+      vCenter: height / 2,
+      hCenter: width / 2,
+      documentHeight: g.offsetHeight,
+      documentWidth: g.offsetWidth
+    }
+  },
+  hasClass: (el, className) => {
+    let response = false;
+    
+    if (el.classList)
+      response = el.classList.contains(className);
+    else
+      response = new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+    
+    return response;
+  },
+  round: (value, decimals) => Number(Math.round(value+'e'+decimals)+'e-'+decimals)
+}
+/* harmony default export */ __webpack_exports__["a"] = (saKnife);
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(0);
+
 class scrollTrigger {
   constructor(override) {
     "use strict";
@@ -80,12 +142,31 @@ class scrollTrigger {
         resizeTimeout = null;
 
     st.elements = [];
-    st.window = st.calcWinSize();
+    st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].winSize();
+    st.onScrollTrigger = onScrollTrigger;
+    st.onScrollResize = onScrollResize;
     
-    (function generateElementsObj() {
+    generateElementsObj();
+    
+    window.addEventListener('scroll', st.onScrollTrigger);
+    window.addEventListener('resize', st.onScrollResize);
+    
+    // Private
+    function createOptions(override) {
+      let options = Object.assign({
+        scope: {},
+        dataName: 'data-scroll-trigger',
+        probe: null
+      }, override);
+    
+      options.selector = '[' + options.dataName + ']';
+      
+      return options;
+    }
+    function generateElementsObj() {
       const elements = document.querySelectorAll(options.selector);
 
-      elements.forEach(element => {
+      elements.forEach((element, index) => {
         function checkOverride(override) {
           if (Array.isArray(options.scope[override])) {
             return options.scope[override];
@@ -122,7 +203,7 @@ class scrollTrigger {
         
         inserted = {
           el: element,
-          offset: st.calcOffset(element),
+          offset: __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].offset(element),
           size: {
             height: element.offsetHeight,
             width: element.offsetWidth
@@ -131,7 +212,8 @@ class scrollTrigger {
           active: false,
           pastCenter: false,
           pastTop: false,
-          pastBottom: false
+          pastBottom: false,
+          index
         }
         
         opt.forEach(trigger => {
@@ -144,25 +226,9 @@ class scrollTrigger {
         
         st.elements.push(inserted);
       });
-    })();
-    st.onScrollTrigger = onScrollTrigger;
-    st.onScrollTrigger();
-    window.addEventListener('scroll', st.onScrollTrigger);
-    
-    window.addEventListener('resize', onScrollResize);
-    
-    
-    function createOptions(override) {
-      let options = Object.assign({
-        scope: {},
-        dataName: 'data-scroll-trigger',
-        probe: null
-      }, override);
-    
-      options.selector = '[' + options.dataName + ']';
-      
-      return options;
     }
+    
+    // Public
     function onScrollTrigger() {
       let percentScrolled = 0;
       
@@ -204,7 +270,6 @@ class scrollTrigger {
             if (element.pastTop === false) {
               topFunction = checkFunction(action.top);
               if (topFunction !== false) topFunction(element, options.scope);
-
               element.pastTop = true;
               
             }
@@ -245,18 +310,18 @@ class scrollTrigger {
       });
       
       if (options.probe != null) {
-        percentScrolled = round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
-        options.probe(percentScrolled)
+        percentScrolled = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
+        options.probe(percentScrolled);
       }
     }
     function onScrollResize() {
       window.clearTimeout(scrollTimeout);
       scrollTimeout = window.setTimeout(() => {
-        st.window = st.calcWinSize();
+        st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].winSize();
         st.elements.forEach(element => {
           element.size.height = element.el.offsetHeight;
           element.size.width = element.el.offsetWidth;
-          element.offset = st.calcOffset(element.el);
+          element.offset = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].offset(element.el);
           
           element.actions.forEach(action => {
             action.offset = st.getScrollOffset(action.position);
@@ -264,18 +329,6 @@ class scrollTrigger {
         });
         onScrollTrigger();
       }, 500);
-    }
-    function round(value, decimals) {
-      return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-    }
-  }
-  calcOffset(elt) {
-    const rect = elt.getBoundingClientRect(),
-          body = document.body.getBoundingClientRect();
-
-    return {
-      top: Math.abs(body.top) + rect.top,
-      left: Math.abs(body.left) + rect.left
     }
   }
   getScrollOffset(position) {
@@ -292,150 +345,15 @@ class scrollTrigger {
         break;
     }
   }
-  calcWinSize() {
-    const e = document.documentElement,
-      g = document.querySelector('body'),
-      width = e.clientWidth||g.clientWidth,
-      height = e.clientHeight||g.clientHeight;
-    return {
-      width,
-      height,
-      vCenter: height / 2,
-      hCenter: width / 2,
-      documentHeight: g.offsetHeight,
-      documentWidth: g.offsetWidth
-    }
-  }
 }
 /* harmony default export */ __webpack_exports__["a"] = (scrollTrigger);
-
-/***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__svgLine__ = __webpack_require__(2);
-
-
-
-(function () {
-  "use strict";
-  
-  window.addEventListener('load', onLoad);  
-  
-  function onLoad() {
-    /* global svgLine,scrollTrigger */
-    "use strict";
-    const sectionOptions = [{
-            position: 'center',
-            active: sectionAct,
-            inactive: sectionInact
-          }],
-          container = document.querySelector('.bg-line'),
-          line = new __WEBPACK_IMPORTED_MODULE_1__svgLine__["a" /* default */]({
-            path: document.querySelector('.bg-line__line'),
-            triggers: {
-              points: [2, 4, 8, 10, 11]
-            },
-            container
-          }),
-          triggers = new __WEBPACK_IMPORTED_MODULE_0__scrollTrigger__["a" /* default */]({
-            scope: { 
-              sectionOptions,
-              sectionTimeout: null
-            },
-            probe: bindScrollToLine
-          }),
-          markers = document.querySelectorAll('.bg-line__point');
-    let resizeTimeout = null;
-    
-    line.el.path.addEventListener('svgTrigger', (event) => {
-      let point = null;
-      if (event.detail.active != null) {
-        point = container.querySelector('.bg-line__point--' + event.detail.active);
-        point.classList.add('bg-line__point--active');
-      } 
-      else if (event.detail.inactive != null) {
-        point = container.querySelector('.bg-line__point--' + event.detail.inactive);
-        point.classList.remove('bg-line__point--active');
-      }
-    });
-    window.addEventListener('resize', () => {
-      window.clearTimeout(resizeTimeout);
-      resizeTimeout = window.setTimeout(getSectionRatios, 500);
-    });
-    
-    getSectionRatios();
-    triggers.onScrollTrigger();
-    
-    
-    function getSectionRatios() {
-      const cHeight = container.offsetHeight;
-      let newRatios = [],
-          tops = [];
-
-      triggers.elements.forEach((element, index) => {
-        const marker = markers[index + 1],
-              ratio = element.size.height / cHeight;
-        let top = 0,
-            lastTop = 0;
-        
-        if (index > 0) {
-          lastTop = tops[tops.length - 1];
-        }
-        
-        top = (ratio * 100) + lastTop;
-        marker.style.top = top + '%';
-        
-        tops.push(top);
-        newRatios.push(ratio);
-      });
-      
-      line.setRatios(newRatios);
-    }
-    function bindScrollToLine(percent) {      
-      const newLength = line.pathLength(percent);
-    }
-    
-    function sectionAct(obj, scope) {
-      const sec = getChildren(obj.el);
-      
-      sec.title.classList.add('focused');
-      
-      sec.content.classList.add('focused');
-      sec.content.classList.remove('unfocused');
-
-      sec.subContent.classList.add('focused');
-      sec.subContent.classList.remove('unfocused');
-    }
-    function sectionInact(obj) {
-      const sec = getChildren(obj.el);
-      
-      sec.title.classList.remove('focused');
-
-      sec.content.classList.add('unfocused');
-      sec.content.classList.remove('focused');
-      
-      sec.subContent.classList.add('unfocused');
-      sec.subContent.classList.remove('focused');
-    }
-    function getChildren(el) {
-      return {
-        title: el.querySelector('.section__title'),
-        content: el.querySelector('.section-content'),
-        subContent: el.querySelector('.section-content__content')
-      }
-    }
-  }
-})();
 
 /***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(0);
 
 class svgLine {
   constructor(options) {
@@ -465,7 +383,6 @@ class svgLine {
   }
 
   pathLength(percent){
-    debugger;
     const _this = this,
           l = _this.el.length.val,
           offset = l * percent,
@@ -529,10 +446,10 @@ class svgLine {
         if (i > 0) {
           y = y - points[triggerPoints[i - 1]].y;
         }
-        newY = round((y * ratioDiff) - y, 3);
+        newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((y * ratioDiff) - y, 3);
 
         if (diffs.length > 0) {
-          newY = round(newY + diffs[diffs.length - 1], 3);
+          newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(newY + diffs[diffs.length - 1], 3);
         }
         diffs.push(newY);
       });
@@ -571,7 +488,7 @@ class svgLine {
           }
         }
         lengths.forEach((length) => {
-          triggerLength = round(triggerLength + length, 0);
+          triggerLength = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(triggerLength + length, 0);
         });
 
         triggerLengths.push({
@@ -592,21 +509,285 @@ class svgLine {
         
       });
       _this.el.triggers.lengths = triggerLengths;
-      console.log(triggerLengths);
       _this.el.length = triggerLengths[triggerLengths.length - 1];
     }
 
     function calculateLength(pointSet1, pointSet2) {
       const lX = pointSet2.x - pointSet1.x, 
             lY = pointSet2.y - pointSet1.y;
-      return round(Math.sqrt((lX * lX) + (lY * lY)), 2);
+      return __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(Math.sqrt((lX * lX) + (lY * lY)), 2);
     }
   }
 };
-function round(value, decimals) {
-  return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-}
 /* harmony default export */ __webpack_exports__["a"] = (svgLine);
+
+/***/ }),
+/* 3 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scrollTrigger_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__svgLine_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__saKnife_js__ = __webpack_require__(0);
+
+
+
+
+class sliderControls {
+  constructor() {
+    const sc = this;
+    sc.el = document.querySelector('.content-slider');
+    sc.content = sc.el.querySelector('.content-slider__content');
+    sc.close = sc.el.querySelector('.content-slider__button-close');
+    sc.transition = 500;
+    sc.close.addEventListener('click', () => {
+      sc.hide();
+    });
+    sc.acttiveChild = null;
+  }
+  show(element, callback) {
+    const sc = this;
+    let timeout;
+    resetAll();
+
+    window.setTimeout(onTransitionEnd, sc.transition);
+    sc.content.classList.add('fade');
+    sc.el.classList.add('focused');
+
+    function onTransitionEnd() {
+      let children;
+      sc.content.classList.remove('fade');
+      sc.content.innerHTML = element.innerHTML;
+      children = sc.content.querySelectorAll('.content-slider__element');
+      
+      children.forEach((child) => {
+        child.addEventListener('click', () => {
+          childClick(child);
+        });
+        child.addEventListener('keydown', (e) => {
+          if (e.key === "Enter" || e.keyCode === 13)
+            childClick(child);
+        });
+      });
+      if (callback != null) {
+        callback();
+      }
+    }
+    function childClick(child) {
+      const childClassName = 'active',
+            contentOffset = sc.content.scrollTop,
+            winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife_js__["a" /* default */].winSize();
+      let childOffset = child.offsetTop;
+      
+      childOffset = winSize.vCenter - childOffset - (child.offsetHeight / 2);
+      // hide
+      if (__WEBPACK_IMPORTED_MODULE_2__saKnife_js__["a" /* default */].hasClass(child, childClassName)) {
+        removeClass(child, childClassName);
+        sc.content.style.transform = sc.lastPos;
+
+        window.setTimeout(() => {
+          resetAll();
+        }, sc.transition);
+      }
+      // Show
+      else {
+        if (sc.acttiveChild != null) {
+          removeClass(sc.acttiveChild, childClassName);
+        } else {
+          sc.lastPos = sc.content.style.transform;
+          addClass(sc.el, 'expand');
+        }
+        sc.slidePixels(childOffset);
+        addClass(child, childClassName);
+        sc.acttiveChild = child;
+      }
+    }
+    function resetAll() {
+      sc.acttiveChild = null;
+      removeClass(sc.el, 'expand');
+    }
+    function addClass(el, className) {
+      el.classList.add(className);
+    }
+    function removeClass(el, className) {
+      el.classList.remove(className);
+    }
+
+  }
+  hide(clear) {
+    const sc = this;
+    if (clear){
+      window.setTimeout(() => {
+        sc.content.innerHTML = '';
+      }, sc.transition);
+    } 
+    sc.el.classList.remove('focused');
+  }
+  slidePercent(percent) {
+    let winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife_js__["a" /* default */].winSize(),
+        childOffset = 0,
+        scrollable = this.content.offsetHeight - winSize.height,
+        scroll = 0;
+    if (scrollable > 0) {
+      scroll = -scrollable * percent;
+    } else scroll = 0;
+    this.slidePixels(scroll);
+  }
+  slidePixels(childOffset) {
+    this.content.style.transform = 'translate(0, ' + childOffset + 'px)';
+  }
+}
+
+window.addEventListener('load', onLoad);  
+
+function onLoad() {
+  "use strict";
+  const sectionOptions = [{
+          position: 'center',
+          active: sectionAct,
+          inactive: sectionInact
+        }],
+        container = document.querySelector('.bg-line'),
+        line = new __WEBPACK_IMPORTED_MODULE_1__svgLine_js__["a" /* default */]({
+          path: document.querySelector('.bg-line__path'),
+          triggers: {
+            points: [2, 4, 8, 10, 11]
+          },
+          container
+        }),
+        triggers = new __WEBPACK_IMPORTED_MODULE_0__scrollTrigger_js__["a" /* default */]({
+          scope: { 
+            sectionOptions,
+            sectionTimeout: null
+          },
+          probe: bindScrollToLine
+        }),
+        markers = document.querySelectorAll('.bg-line__point'),
+        slider = new sliderControls();
+  let resizeTimeout = null,
+      listenSecScroll = false,
+      sectionsSizes = getSectionRatios(),
+      activeSctionObj;
+  
+  line.setRatios(sectionsSizes.ratios);
+  line.el.path.addEventListener('svgTrigger', (event) => {
+    let point = null;
+    if (event.detail.active != null) {
+      point = container.querySelector('.bg-line__point--' + event.detail.active);
+      point.classList.add('bg-line__point--active');
+    } 
+    else if (event.detail.inactive != null) {
+      point = container.querySelector('.bg-line__point--' + event.detail.inactive);
+      point.classList.remove('bg-line__point--active');
+    }
+  });
+
+//  markers.forEach((marker) => {
+//    marker.addEventListener('click', () =>{
+//      slider.show();
+//    });
+//  });
+  window.addEventListener('resize', () => {
+    window.clearTimeout(resizeTimeout);
+    resizeTimeout = window.setTimeout(() => {
+      sectionsSizes = getSectionRatios();
+      line.setRatios(sectionsSizes.ratios);
+    }, 500);
+  });
+  
+  triggers.onScrollTrigger();
+  
+  function getSectionRatios() {
+    const cHeight = container.offsetHeight;
+    let ratios = [], // ratio calculation array
+        topArr = [], // top calculation array
+        offsetTopArr = [];
+
+    triggers.elements.forEach((element, index) => {
+      const marker = markers[index + 1],
+            ratio = element.size.height / cHeight;
+      let top = 0,
+          lastTop = 0;
+
+      if (index > 0) {
+        lastTop = topArr[topArr.length - 1];
+      }
+
+      top = (ratio * 100) + lastTop; // top calculation
+      marker.style.top = top + '%';
+
+      topArr.push(top);
+      ratios.push(ratio);
+    });
+
+    return {
+      ratios
+    };
+  }
+  function bindScrollToLine(percent) {      
+    const newLength = line.pathLength(percent);
+  }
+
+  function sectionAct(obj) {
+    const sec = getChildren(obj.el),
+          winSize = __WEBPACK_IMPORTED_MODULE_2__saKnife_js__["a" /* default */].winSize(),
+          dataSelector = '.slider-content',
+          dataElement = obj.el.querySelector(dataSelector);
+    
+    obj.bindScrollSlider = null;
+    
+    if (winSize.width >= 900 && obj.index > 0 && obj.index < 4) {
+      slider.show(dataElement, () => {
+        let sliderTimeout;
+        obj.bindScrollSlider = function () {
+          window.clearTimeout(sliderTimeout);
+          sliderTimeout = window.setTimeout(() => {
+            let percent = ((window.scrollY + winSize.vCenter) - obj.offset.top) / obj.size.height;
+
+            slider.slidePercent(percent); 
+          }, 50);
+        };
+        window.addEventListener('scroll', obj.bindScrollSlider);
+        obj.bindScrollSlider();
+      });
+    } else {
+      if (obj.index === 0) {
+        slider.hide(true);
+      } else {
+        slider.hide();
+      }
+    }
+    
+    sec.title.classList.add('focused');
+
+    sec.content.classList.add('focused');
+    sec.content.classList.remove('unfocused');
+
+    sec.subContent.classList.add('focused');
+    sec.subContent.classList.remove('unfocused');
+    
+  }
+  function sectionInact(obj) {
+    const sec = getChildren(obj.el);
+    window.removeEventListener('scroll', obj.bindScrollSlider);
+    sec.title.classList.remove('focused');
+
+    sec.content.classList.add('unfocused');
+    sec.content.classList.remove('focused');
+
+    sec.subContent.classList.add('unfocused');
+    sec.subContent.classList.remove('focused');
+  }
+  function getChildren(el) {
+    return {
+      title: el.querySelector('.section__title'),
+      content: el.querySelector('.section-content'),
+      subContent: el.querySelector('.section-content__content')
+    }
+  }
+}
+
 
 /***/ })
 /******/ ]);

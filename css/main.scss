@@ -2,12 +2,17 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 @charset "utf-8";
+@import "mixins";
 
-
-// Our variables
 $base-font-family: 'Quicksand', Helvetica, Helvetica Neue, Arial, sans-serif;
-$base-font-size-fixed: 18px;
-$base-font-size: 2vw;
+$media-min: 800px;
+
+$base-font-size-fixed: 16px;
+
+$max-font-size-fixed: 35px;
+
+$base-font-size: strip-unit($base-font-size-fixed / $media-min) * 100vw;
+$media-max: $max-font-size-fixed * ( 1 /strip-unit($base-font-size/100));
 
 $base-font-weight: 400;
 $small-font-size: $base-font-size * 0.875;
@@ -16,28 +21,25 @@ $font-weight-light: 300;
 $font-weight-bold: 700;
 
 $spacing-unit: 1.5rem;
+$spacing-unit-sm: ($spacing-unit / 2);
 
 // colors
-$grey-color-light: #f1f1f1;
+$grey-color-lighter: #f5f1f1;
 $grey-color: #403D3C;
+$grey-color-light: lighten($grey-color, 50%);
 $grey-color-dark: #1C1919;
 $grey-color-dark-t: transparentize($grey-color-dark, 0.1);
 
 $primary: #FF6E30;
 $primary-dark: #E3591E;
-
 $secondary: #00B29A;
 $secondary-light: #30FFE3;
-//$secondary-dark: #00AB94;
 
 $text-color: $grey-color-dark;
-$background-color: $grey-color-light;
+$background-color: $grey-color;
 
 // Width of the content area
 $content-width: 1200px;
-
-$tablet: 900px;
-$desktop: 1280px;
 
 $menu-transition: .5s ease-out;
 
@@ -72,7 +74,6 @@ $ease: (
 @import
   "normalize",
   "syntax-highlighting",
-  "mixins",
   "base",
   "layout",
   "home"

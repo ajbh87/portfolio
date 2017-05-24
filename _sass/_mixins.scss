@@ -131,6 +131,8 @@
   }
 }
 
+
+
 @function ease($key) {
   @if map-has-key($ease, $key) {
     @return map-get($ease, $key);
@@ -138,4 +140,12 @@
 
   @warn "Unkown '#{$key}' in $ease.";
   @return null;
+}
+
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
 }

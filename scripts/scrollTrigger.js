@@ -1,3 +1,4 @@
+import saKnife from './saKnife.js';
 class scrollTrigger {
   constructor(override) {
     "use strict";
@@ -7,12 +8,31 @@ class scrollTrigger {
         resizeTimeout = null;
 
     st.elements = [];
-    st.window = st.calcWinSize();
+    st.window = saKnife.winSize();
+    st.onScrollTrigger = onScrollTrigger;
+    st.onScrollResize = onScrollResize;
     
-    (function generateElementsObj() {
+    generateElementsObj();
+    
+    window.addEventListener('scroll', st.onScrollTrigger);
+    window.addEventListener('resize', st.onScrollResize);
+    
+    // Private
+    function createOptions(override) {
+      let options = Object.assign({
+        scope: {},
+        dataName: 'data-scroll-trigger',
+        probe: null
+      }, override);
+    
+      options.selector = '[' + options.dataName + ']';
+      
+      return options;
+    }
+    function generateElementsObj() {
       const elements = document.querySelectorAll(options.selector);
 
-      elements.forEach(element => {
+      elements.forEach((element, index) => {
         function checkOverride(override) {
           if (Array.isArray(options.scope[override])) {
             return options.scope[override];
@@ -49,7 +69,7 @@ class scrollTrigger {
         
         inserted = {
           el: element,
-          offset: st.calcOffset(element),
+          offset: saKnife.offset(element),
           size: {
             height: element.offsetHeight,
             width: element.offsetWidth
@@ -58,7 +78,8 @@ class scrollTrigger {
           active: false,
           pastCenter: false,
           pastTop: false,
-          pastBottom: false
+          pastBottom: false,
+          index
         }
         
         opt.forEach(trigger => {
@@ -71,25 +92,9 @@ class scrollTrigger {
         
         st.elements.push(inserted);
       });
-    })();
-    st.onScrollTrigger = onScrollTrigger;
-    st.onScrollTrigger();
-    window.addEventListener('scroll', st.onScrollTrigger);
-    
-    window.addEventListener('resize', onScrollResize);
-    
-    
-    function createOptions(override) {
-      let options = Object.assign({
-        scope: {},
-        dataName: 'data-scroll-trigger',
-        probe: null
-      }, override);
-    
-      options.selector = '[' + options.dataName + ']';
-      
-      return options;
     }
+    
+    // Public
     function onScrollTrigger() {
       let percentScrolled = 0;
       
@@ -131,7 +136,6 @@ class scrollTrigger {
             if (element.pastTop === false) {
               topFunction = checkFunction(action.top);
               if (topFunction !== false) topFunction(element, options.scope);
-
               element.pastTop = true;
               
             }
@@ -172,18 +176,18 @@ class scrollTrigger {
       });
       
       if (options.probe != null) {
-        percentScrolled = round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
-        options.probe(percentScrolled)
+        percentScrolled = saKnife.round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
+        options.probe(percentScrolled);
       }
     }
     function onScrollResize() {
       window.clearTimeout(scrollTimeout);
       scrollTimeout = window.setTimeout(() => {
-        st.window = st.calcWinSize();
+        st.window = saKnife.winSize();
         st.elements.forEach(element => {
           element.size.height = element.el.offsetHeight;
           element.size.width = element.el.offsetWidth;
-          element.offset = st.calcOffset(element.el);
+          element.offset = saKnife.offset(element.el);
           
           element.actions.forEach(action => {
             action.offset = st.getScrollOffset(action.position);
@@ -191,18 +195,6 @@ class scrollTrigger {
         });
         onScrollTrigger();
       }, 500);
-    }
-    function round(value, decimals) {
-      return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-    }
-  }
-  calcOffset(elt) {
-    const rect = elt.getBoundingClientRect(),
-          body = document.body.getBoundingClientRect();
-
-    return {
-      top: Math.abs(body.top) + rect.top,
-      left: Math.abs(body.left) + rect.left
     }
   }
   getScrollOffset(position) {
@@ -217,20 +209,6 @@ class scrollTrigger {
       default:
         return this.window.vCenter;
         break;
-    }
-  }
-  calcWinSize() {
-    const e = document.documentElement,
-      g = document.querySelector('body'),
-      width = e.clientWidth||g.clientWidth,
-      height = e.clientHeight||g.clientHeight;
-    return {
-      width,
-      height,
-      vCenter: height / 2,
-      hCenter: width / 2,
-      documentHeight: g.offsetHeight,
-      documentWidth: g.offsetWidth
     }
   }
 }

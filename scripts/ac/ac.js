@@ -24,7 +24,6 @@ class AnimatedClip {
     this._aCToggleButton = this._aC.querySelector('.' + classSel + '-toggle');
     this._aCTitle = this._aC.querySelector('.' + classSel + '-title');
     this._classSel = classSel;
-    debugger;
     this._expanded = true;
     this._animate = false;
     this._collapsed;
