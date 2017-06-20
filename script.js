@@ -1,6 +1,7 @@
-import scrollTrigger from './scrollTrigger.js';
-import svgLine from './svgLine.js';
-import saKnife from './saKnife.js';
+import scrollTrigger from './scripts/scrollTrigger.js';
+import svgLine from './scripts/svgLine.js';
+import saKnife from './scripts/saKnife.js';
+import debounce from './node_modules/lodash.debounce/index.js';
 
 class sliderControls {
   constructor() {
@@ -81,7 +82,6 @@ class sliderControls {
     function removeClass(el, className) {
       el.classList.remove(className);
     }
-
   }
   hide(clear) {
     const sc = this;
@@ -133,8 +133,7 @@ function onLoad() {
         }),
         markers = document.querySelectorAll('.bg-line__point'),
         slider = new sliderControls();
-  let resizeTimeout = null,
-      listenSecScroll = false,
+  let listenSecScroll = false,
       sectionsSizes = getSectionRatios(),
       activeSctionObj;
   
@@ -156,15 +155,15 @@ function onLoad() {
 //      slider.show();
 //    });
 //  });
-  window.addEventListener('resize', () => {
-    window.clearTimeout(resizeTimeout);
-    resizeTimeout = window.setTimeout(() => {
-      sectionsSizes = getSectionRatios();
-      line.setRatios(sectionsSizes.ratios);
-    }, 500);
-  });
-  
+
+  window.addEventListener('resize', debounce(onResize, 500));
   triggers.onScrollTrigger();
+  
+  function onResize() {
+    debugger;
+    sectionsSizes = getSectionRatios();
+    line.setRatios(sectionsSizes.ratios);
+  }
   
   function getSectionRatios() {
     const cHeight = container.offsetHeight;
