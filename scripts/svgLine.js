@@ -90,10 +90,10 @@ class svgLine {
         if (i > 0) {
           y = y - points[triggerPoints[i - 1]].y;
         }
-        newY = saKnife.round((y * ratioDiff) - y, 3);
+        newY = saKnife.round((y * ratioDiff) - y, 4);
 
         if (diffs.length > 0) {
-          newY = saKnife.round(newY + diffs[diffs.length - 1], 3);
+          newY = saKnife.round(newY + diffs[diffs.length - 1], 4);
         }
         diffs.push(newY);
       });
@@ -132,7 +132,7 @@ class svgLine {
           }
         }
         lengths.forEach((length) => {
-          triggerLength = saKnife.round(triggerLength + length, 0);
+          triggerLength = saKnife.round(triggerLength + length, 4);
         });
 
         triggerLengths.push({

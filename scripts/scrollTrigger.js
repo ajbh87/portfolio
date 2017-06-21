@@ -1,4 +1,6 @@
 import saKnife from './saKnife.js';
+import debounce from '../node_modules/lodash.debounce/index.js';
+
 class scrollTrigger {
   constructor(override) {
     "use strict";
@@ -14,8 +16,9 @@ class scrollTrigger {
     
     generateElementsObj();
     
-    window.addEventListener('scroll', st.onScrollTrigger);
-    window.addEventListener('resize', st.onScrollResize);
+    window.addEventListener('scroll', onScrollProbe);
+    window.addEventListener('scroll', debounce(onScrollTrigger, 100));
+    window.addEventListener('resize', debounce(onScrollResize, 100));
     
     // Private
     function createOptions(override) {
@@ -93,11 +96,8 @@ class scrollTrigger {
         st.elements.push(inserted);
       });
     }
-    
     // Public
-    function onScrollTrigger() {
-      let percentScrolled = 0;
-      
+    function onScrollTrigger() {  
       st.elements.forEach(element => {
         element.actions.forEach(action => {
           const scrolled = window.scrollY + action.offset,
@@ -174,27 +174,26 @@ class scrollTrigger {
         });
         
       });
-      
+    }
+    function onScrollProbe() {
+      let percentScrolled = 0;
       if (options.probe != null) {
         percentScrolled = saKnife.round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
         options.probe(percentScrolled);
       }
     }
     function onScrollResize() {
-      window.clearTimeout(scrollTimeout);
-      scrollTimeout = window.setTimeout(() => {
-        st.window = saKnife.winSize();
-        st.elements.forEach(element => {
-          element.size.height = element.el.offsetHeight;
-          element.size.width = element.el.offsetWidth;
-          element.offset = saKnife.offset(element.el);
-          
-          element.actions.forEach(action => {
-            action.offset = st.getScrollOffset(action.position);
-          });
+      st.window = saKnife.winSize();
+      st.elements.forEach(element => {
+        element.size.height = element.el.offsetHeight;
+        element.size.width = element.el.offsetWidth;
+        element.offset = saKnife.offset(element.el);
+        
+        element.actions.forEach(action => {
+          action.offset = st.getScrollOffset(action.position);
         });
-        onScrollTrigger();
-      }, 500);
+      });
+      onScrollTrigger();
     }
   }
   getScrollOffset(position) {

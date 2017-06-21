@@ -516,6 +516,10 @@ module.exports = debounce;
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js__);
+
+
 
 class scrollTrigger {
   constructor(override) {
@@ -532,8 +536,9 @@ class scrollTrigger {
     
     generateElementsObj();
     
-    window.addEventListener('scroll', st.onScrollTrigger);
-    window.addEventListener('resize', st.onScrollResize);
+    window.addEventListener('scroll', onScrollProbe);
+    window.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js___default()(onScrollTrigger, 100));
+    window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js___default()(onScrollResize, 100));
     
     // Private
     function createOptions(override) {
@@ -611,11 +616,8 @@ class scrollTrigger {
         st.elements.push(inserted);
       });
     }
-    
     // Public
-    function onScrollTrigger() {
-      let percentScrolled = 0;
-      
+    function onScrollTrigger() {  
       st.elements.forEach(element => {
         element.actions.forEach(action => {
           const scrolled = window.scrollY + action.offset,
@@ -692,27 +694,26 @@ class scrollTrigger {
         });
         
       });
-      
+    }
+    function onScrollProbe() {
+      let percentScrolled = 0;
       if (options.probe != null) {
         percentScrolled = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
         options.probe(percentScrolled);
       }
     }
     function onScrollResize() {
-      window.clearTimeout(scrollTimeout);
-      scrollTimeout = window.setTimeout(() => {
-        st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].winSize();
-        st.elements.forEach(element => {
-          element.size.height = element.el.offsetHeight;
-          element.size.width = element.el.offsetWidth;
-          element.offset = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].offset(element.el);
-          
-          element.actions.forEach(action => {
-            action.offset = st.getScrollOffset(action.position);
-          });
+      st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].winSize();
+      st.elements.forEach(element => {
+        element.size.height = element.el.offsetHeight;
+        element.size.width = element.el.offsetWidth;
+        element.offset = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].offset(element.el);
+        
+        element.actions.forEach(action => {
+          action.offset = st.getScrollOffset(action.position);
         });
-        onScrollTrigger();
-      }, 500);
+      });
+      onScrollTrigger();
     }
   }
   getScrollOffset(position) {
@@ -830,10 +831,10 @@ class svgLine {
         if (i > 0) {
           y = y - points[triggerPoints[i - 1]].y;
         }
-        newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((y * ratioDiff) - y, 3);
+        newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((y * ratioDiff) - y, 4);
 
         if (diffs.length > 0) {
-          newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(newY + diffs[diffs.length - 1], 3);
+          newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(newY + diffs[diffs.length - 1], 4);
         }
         diffs.push(newY);
       });
@@ -872,7 +873,7 @@ class svgLine {
           }
         }
         lengths.forEach((length) => {
-          triggerLength = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(triggerLength + length, 0);
+          triggerLength = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(triggerLength + length, 4);
         });
 
         triggerLengths.push({
@@ -948,110 +949,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-class sliderControls {
-  constructor() {
-    const sc = this;
-    sc.el = document.querySelector('.content-slider');
-    sc.content = sc.el.querySelector('.content-slider__content');
-    sc.close = sc.el.querySelector('.content-slider__button-close');
-    sc.transition = 500;
-    sc.close.addEventListener('click', () => {
-      sc.hide();
-    });
-    sc.acttiveChild = null;
-  }
-  show(element, callback) {
-    const sc = this;
-    let timeout;
-    resetAll();
-
-    window.setTimeout(onTransitionEnd, sc.transition);
-    sc.content.classList.add('fade');
-    sc.el.classList.add('focused');
-
-    function onTransitionEnd() {
-      let children;
-      sc.content.classList.remove('fade');
-      sc.content.innerHTML = element.innerHTML;
-      children = sc.content.querySelectorAll('.content-slider__element');
-      
-      children.forEach((child) => {
-        child.addEventListener('click', () => {
-          childClick(child);
-        });
-        child.addEventListener('keydown', (e) => {
-          if (e.key === "Enter" || e.keyCode === 13)
-            childClick(child);
-        });
-      });
-      if (callback != null) {
-        callback();
-      }
-    }
-    function childClick(child) {
-      const childClassName = 'active',
-            contentOffset = sc.content.scrollTop,
-            winSize = __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].winSize();
-      let childOffset = child.offsetTop;
-      
-      childOffset = winSize.vCenter - childOffset - (child.offsetHeight / 2);
-      // hide
-      if (__WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].hasClass(child, childClassName)) {
-        removeClass(child, childClassName);
-        sc.content.style.transform = sc.lastPos;
-
-        window.setTimeout(() => {
-          resetAll();
-        }, sc.transition);
-      }
-      // Show
-      else {
-        if (sc.acttiveChild != null) {
-          removeClass(sc.acttiveChild, childClassName);
-        } else {
-          sc.lastPos = sc.content.style.transform;
-          addClass(sc.el, 'expand');
-        }
-        sc.slidePixels(childOffset);
-        addClass(child, childClassName);
-        sc.acttiveChild = child;
-      }
-    }
-    function resetAll() {
-      sc.acttiveChild = null;
-      removeClass(sc.el, 'expand');
-    }
-    function addClass(el, className) {
-      el.classList.add(className);
-    }
-    function removeClass(el, className) {
-      el.classList.remove(className);
-    }
-  }
-  hide(clear) {
-    const sc = this;
-    if (clear){
-      window.setTimeout(() => {
-        sc.content.innerHTML = '';
-      }, sc.transition);
-    } 
-    sc.el.classList.remove('focused');
-  }
-  slidePercent(percent) {
-    let winSize = __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].winSize(),
-        childOffset = 0,
-        scrollable = this.content.offsetHeight - winSize.height,
-        scroll = 0;
-    if (scrollable > 0) {
-      scroll = -scrollable * percent;
-    } else scroll = 0;
-    this.slidePixels(scroll);
-  }
-  slidePixels(childOffset) {
-    this.content.style.transform = 'translate(0, ' + childOffset + 'px)';
-  }
-}
-
 window.addEventListener('load', onLoad);  
 
 function onLoad() {
@@ -1076,8 +973,7 @@ function onLoad() {
           },
           probe: bindScrollToLine
         }),
-        markers = document.querySelectorAll('.bg-line__point'),
-        slider = new sliderControls();
+        markers = document.querySelectorAll('.bg-line__point');
   let listenSecScroll = false,
       sectionsSizes = getSectionRatios(),
       activeSctionObj;
@@ -1095,17 +991,10 @@ function onLoad() {
     }
   });
 
-//  markers.forEach((marker) => {
-//    marker.addEventListener('click', () =>{
-//      slider.show();
-//    });
-//  });
-
   window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 500));
   triggers.onScrollTrigger();
   
   function onResize() {
-    debugger;
     sectionsSizes = getSectionRatios();
     line.setRatios(sectionsSizes.ratios);
   }
@@ -1115,7 +1004,6 @@ function onLoad() {
     let ratios = [], // ratio calculation array
         topArr = [], // top calculation array
         offsetTopArr = [];
-
     triggers.elements.forEach((element, index) => {
       const marker = markers[index + 1],
             ratio = element.size.height / cHeight;
@@ -1130,66 +1018,39 @@ function onLoad() {
       marker.style.top = top + '%';
 
       topArr.push(top);
-      ratios.push(ratio);
+      ratios.push(__WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].round(ratio, 6));
     });
 
-    return {
-      ratios
-    };
+    return { ratios, topArr };
   }
   function bindScrollToLine(percent) {      
     const newLength = line.pathLength(percent);
   }
 
   function sectionAct(obj) {
-    const sec = getChildren(obj.el),
-          winSize = __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].winSize(),
-          dataSelector = '.slider-content',
-          dataElement = obj.el.querySelector(dataSelector);
-    
-    obj.bindScrollSlider = null;
-    
-    if (winSize.width >= 900 && obj.index > 0 && obj.index < 4) {
-      slider.show(dataElement, () => {
-        let sliderTimeout;
-        obj.bindScrollSlider = function () {
-          window.clearTimeout(sliderTimeout);
-          sliderTimeout = window.setTimeout(() => {
-            let percent = ((window.scrollY + winSize.vCenter) - obj.offset.top) / obj.size.height;
+    requestAnimationFrame(() => {
+      const sec = getChildren(obj.el);
+      
+      sec.title.classList.add('focused');
 
-            slider.slidePercent(percent); 
-          }, 50);
-        };
-        window.addEventListener('scroll', obj.bindScrollSlider);
-        obj.bindScrollSlider();
-      });
-    } else {
-      if (obj.index === 0) {
-        slider.hide(true);
-      } else {
-        slider.hide();
-      }
-    }
-    
-    sec.title.classList.add('focused');
+      sec.content.classList.add('focused');
+      sec.content.classList.remove('unfocused');
 
-    sec.content.classList.add('focused');
-    sec.content.classList.remove('unfocused');
-
-    sec.subContent.classList.add('focused');
-    sec.subContent.classList.remove('unfocused');
-    
+      sec.subContent.classList.add('focused');
+      sec.subContent.classList.remove('unfocused');
+    });
   }
   function sectionInact(obj) {
-    const sec = getChildren(obj.el);
-    window.removeEventListener('scroll', obj.bindScrollSlider);
-    sec.title.classList.remove('focused');
+    requestAnimationFrame(() => {
+      const sec = getChildren(obj.el);
+      sec.title.classList.remove('focused');
 
-    sec.content.classList.add('unfocused');
-    sec.content.classList.remove('focused');
+      sec.content.classList.add('unfocused');
+      sec.content.classList.remove('focused');
 
-    sec.subContent.classList.add('unfocused');
-    sec.subContent.classList.remove('focused');
+      sec.subContent.classList.add('unfocused');
+      sec.subContent.classList.remove('focused');
+    });
   }
   function getChildren(el) {
     return {

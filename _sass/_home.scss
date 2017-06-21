@@ -257,6 +257,7 @@ $slide-width: 15%; // 15% ~ 7.5rem
 }
 
 .content-slider {
+  display: none;
   $button-s: 1rem;
   
   position: fixed;
