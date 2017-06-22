@@ -22,9 +22,10 @@ function onLoad() {
         }),
         triggers = new scrollTrigger({
           scope: { 
-            sectionOptions,
-            sectionTimeout: null
+            sectionOptions
           },
+          active: sectionAct,
+          inactive: sectionInact,
           probe: bindScrollToLine
         }),
         markers = document.querySelectorAll('.bg-line__point');
@@ -45,8 +46,7 @@ function onLoad() {
     }
   });
 
-  window.addEventListener('resize', debounce(onResize, 500));
-  triggers.onScrollTrigger();
+  window.addEventListener('sizesRecalculated', onResize);
   
   function onResize() {
     sectionsSizes = getSectionRatios();
@@ -81,29 +81,33 @@ function onLoad() {
     const newLength = line.pathLength(percent);
   }
 
-  function sectionAct(obj) {
+  function sectionAct(el) {
     requestAnimationFrame(() => {
-      const sec = getChildren(obj.el);
-      
-      sec.title.classList.add('focused');
+      requestAnimationFrame(() => {
+        const sec = getChildren(el);
+        
+        sec.title.classList.add('focused');
 
-      sec.content.classList.add('focused');
-      sec.content.classList.remove('unfocused');
+        sec.content.classList.add('focused');
+        sec.content.classList.remove('unfocused');
 
-      sec.subContent.classList.add('focused');
-      sec.subContent.classList.remove('unfocused');
+        sec.subContent.classList.add('focused');
+        sec.subContent.classList.remove('unfocused');
+      });
     });
   }
-  function sectionInact(obj) {
+  function sectionInact(el) {
     requestAnimationFrame(() => {
-      const sec = getChildren(obj.el);
-      sec.title.classList.remove('focused');
+      requestAnimationFrame(() => {
+        const sec = getChildren(el);
+        sec.title.classList.remove('focused');
 
-      sec.content.classList.add('unfocused');
-      sec.content.classList.remove('focused');
+        sec.content.classList.add('unfocused');
+        sec.content.classList.remove('focused');
 
-      sec.subContent.classList.add('unfocused');
-      sec.subContent.classList.remove('focused');
+        sec.subContent.classList.add('unfocused');
+        sec.subContent.classList.remove('focused');
+      });
     });
   }
   function getChildren(el) {

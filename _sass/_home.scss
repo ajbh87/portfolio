@@ -1,4 +1,4 @@
-$prop: scaleX;
+$prop: scaleY;
 $sec-width: 75%;
 $slide-width: 15%; // 15% ~ 7.5rem 
 //----------------------- Home Page
@@ -40,18 +40,16 @@ $slide-width: 15%; // 15% ~ 7.5rem
   min-height: 50vh;
   z-index: 1;
   
-  @include media-query($media-min){
-    width: #{$sec-width - $slide-width};
-  };
   &__title {
-    position: sticky;
-    top: -1px;
+    //position: sticky;
+    //top: -1px;
     z-index: 1;
     width: 100%;
     
     padding: ($spacing-unit / 2) $spacing-unit;
     
-    background: $background-color;
+    //background: $background-color;
+    text-align: right;
     color: #fff;
     
     transition: opacity .8s ease(out-quad);
@@ -61,13 +59,13 @@ $slide-width: 15%; // 15% ~ 7.5rem
       opacity: 1;
     }
     
-    &--animate {
-      transition: transform .8s ease(out-quad);
-      transform: translate(0, -50%);
-      .focused & {
-        transform: translate(0,0);
-      }
-    }
+    // &--animate {
+    //   transition: transform .8s ease(out-quad);
+    //   transform: translate(0, -50%);
+    //   .focused & {
+    //     transform: translate(0,0);
+    //   }
+    // }
     
   }
 }
@@ -80,7 +78,7 @@ $slide-width: 15%; // 15% ~ 7.5rem
   animation-timing-function: linear;
 }
 .section-content {
-  $origin: left center;
+  $origin: center top;
   box-sizing: border-box;
   float: left;
   width: 100%;
