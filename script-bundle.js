@@ -515,9 +515,9 @@ module.exports = debounce;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(0);
 __webpack_require__(4);
 
 
@@ -528,22 +528,14 @@ class scrollTrigger {
     "use strict";
     const options = createOptions(override),
           st = this;
-    let scrollTimeout = null,
-        resizeTimeout = null,
-        customEvent  = new CustomEvent('sizesRecalculated', {
-          detail: st
-        });
-
     st.elements = [];
-    st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].winSize();
+    st.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
     
     generateElementsObj();
     
     window.addEventListener('scroll', onScrollProbe);
-
-    window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_1__node_modules_lodash_debounce_index_js___default()(onScrollResize, 250));
+    window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(onScrollResize, 250));
     
-    // Private
     function createOptions(override) {
       let options = Object.assign({
         scope: {},
@@ -556,95 +548,53 @@ class scrollTrigger {
       return options;
     }
     function generateElementsObj() {
-      const elements = document.querySelectorAll(options.selector),
-            defaultTrigger = {
-              position: 'center', // center | top | bottom
-              offset: 0,
-              top: null,
-              center: null,
-              bottom: null,
-              active: null,
-              inactive: null
-            };
+      const checkOverride = (override) => {
+              if (Array.isArray(options.scope[override])) {
+                return options.scope[override];
+              } 
+              else {
+                try {
+                  eval('override = ' + override);
+                }
+                catch (e) {
+                  alert('Eval error!!!');
+                  return false;
+                }
+                if (Array.isArray(override))
+                  return override;
+                else
+                  return false;
+              }
+            },
+            elements = document.querySelectorAll(options.selector),
+            threshold = 0.33,
+            observer = new IntersectionObserver(([entry]) => {
+              if (entry.intersectionRatio < threshold) options.inactive(entry.target);
+              else options.active(entry.target);
+            },{
+              threshold
+            });
 
       elements.forEach((element, index) => {
-        const prop = element.attributes.getNamedItem(options.dataName);
-        let override = checkOverride(prop.value),
-            opt = (override !== false) ? override : [Object.assign({}, defaultTrigger)],
-            inserted = {
-              el: element,
-              offset: __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].offset(element),
-              size: {
-                height: element.offsetHeight,
-                width: element.offsetWidth
-              },
-              actions: [],
-              active: false,
-              pastCenter: false,
-              pastTop: false,
-              pastBottom: false,
-              index
-            };
-
-        const observer = new IntersectionObserver(([entry]) => {
-          console.log(entry.intersectionRatio);
-          if (entry.intersectionRatio < 0.33) options.inactive(element);
-          else options.active(element);
-
-          // Stop watching the element
-          //observer.disconnect();
-        },{
-          threshold: 0.33
+        let prop = element.attributes.getNamedItem(options.dataName),
+            override = checkOverride(prop.value);
+        observer.observe(element);        
+        st.elements.push({
+          el: element,
+          active: false,
+          index
         });
-        observer.observe(element);
-        
-        opt.forEach(trigger => {
-          let newTrigger = Object.assign({}, defaultTrigger, trigger);
-          inserted.actions.push(newTrigger);
-        });
-        
-        st.elements.push(inserted);
       });
-      function checkOverride(override) {
-        if (Array.isArray(options.scope[override])) {
-          return options.scope[override];
-        } 
-        else {
-          try {
-            eval('override = ' + override);
-          }
-          catch (e) {
-            alert('Eval error!!!');
-            return false;
-          }
-          if (Array.isArray(override))
-            return override;
-          else
-            return false;
-        }
-      }
     }
-    // Public
     function onScrollProbe() {
       let percentScrolled = 0;
       if (options.probe != null) {
-        percentScrolled = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(window.scrollY / (st.window.documentHeight - st.window.height), 4);
+        percentScrolled = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].round(window.scrollY / (st.window.documentHeight - st.window.height), 4);
         options.probe(percentScrolled);
       }
     }
     function onScrollResize() {
-      st.window = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].winSize();
-      st.elements.forEach(element => {
-        element.size.height = element.el.offsetHeight;
-        element.size.width = element.el.offsetWidth;
-        element.offset = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].offset(element.el);
-        
-        element.actions.forEach(action => {
-          action.offset = st.getScrollOffset(action.position);
-        });
-      });
-      window.dispatchEvent(customEvent);
-      //onScrollTrigger();
+      st.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
       onScrollProbe();
     }
   }
@@ -1453,8 +1403,15 @@ function computeRectIntersection(rect1, rect2) {
  * @return {Object} The (possibly shimmed) rect of the element.
  */
 function getBoundingClientRect(el) {
-  var rect = el.getBoundingClientRect();
-  if (!rect) return;
+  var rect;
+
+  try {
+      rect = el.getBoundingClientRect();
+  } catch (e) {/* ignore Windows 7 IE11 "Unspecified error" */}
+
+  if (!rect) {
+      return getEmptyRect();
+  }
 
   // Older IE
   if (!rect.width || !rect.height) {
@@ -1566,30 +1523,30 @@ window.addEventListener('load', onLoad);
 function onLoad() {
   "use strict";
   const sectionOptions = [{
-          position: 'center',
-          active: sectionAct,
-          inactive: sectionInact
-        }],
-        container = document.querySelector('.bg-line'),
-        line = new __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__["a" /* default */]({
-          path: document.querySelector('.bg-line__path'),
-          triggers: {
-            points: [2, 4, 8, 10, 11]
-          },
-          container
-        }),
-        triggers = new __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__["a" /* default */]({
-          scope: { 
-            sectionOptions
-          },
-          active: sectionAct,
-          inactive: sectionInact,
-          probe: bindScrollToLine
-        }),
-        markers = document.querySelectorAll('.bg-line__point');
+      position: 'center',
+      active: sectionAct,
+      inactive: sectionInact
+  }],
+  container = document.querySelector('.bg-line'),
+  line = new __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__["a" /* default */]({
+      path: document.querySelector('.bg-line__path'),
+      triggers: {
+        points: [2, 4, 8, 10, 11]
+    },
+    container
+}),
+  triggers = new __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__["a" /* default */]({
+      scope: { 
+        sectionOptions
+    },
+    active: sectionAct,
+    inactive: sectionInact,
+    probe: bindScrollToLine
+}),
+  markers = document.querySelectorAll('.bg-line__point');
   let listenSecScroll = false,
-      sectionsSizes = getSectionRatios(),
-      activeSctionObj;
+  sectionsSizes = getSectionRatios(),
+  activeSctionObj;
   
   line.setRatios(sectionsSizes.ratios);
   line.el.path.addEventListener('svgTrigger', (event) => {
@@ -1597,83 +1554,83 @@ function onLoad() {
     if (event.detail.active != null) {
       point = container.querySelector('.bg-line__point--' + event.detail.active);
       point.classList.add('bg-line__point--active');
-    } 
-    else if (event.detail.inactive != null) {
+  } 
+  else if (event.detail.inactive != null) {
       point = container.querySelector('.bg-line__point--' + event.detail.inactive);
       point.classList.remove('bg-line__point--active');
-    }
-  });
+  }
+});
 
-  window.addEventListener('sizesRecalculated', onResize);
+  window.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));
   
   function onResize() {
     sectionsSizes = getSectionRatios();
     line.setRatios(sectionsSizes.ratios);
-  }
-  
-  function getSectionRatios() {
+}
+
+function getSectionRatios() {
     const cHeight = container.offsetHeight;
     let ratios = [], // ratio calculation array
         topArr = [], // top calculation array
         offsetTopArr = [];
-    triggers.elements.forEach((element, index) => {
-      const marker = markers[index + 1],
-            ratio = element.size.height / cHeight;
-      let top = 0,
+        triggers.elements.forEach((element, index) => {
+          const marker = markers[index + 1],
+          ratio = element.el.offsetHeight / cHeight;
+          let top = 0,
           lastTop = 0;
 
-      if (index > 0) {
-        lastTop = topArr[topArr.length - 1];
-      }
+          if (index > 0) {
+            lastTop = topArr[topArr.length - 1];
+        }
 
       top = (ratio * 100) + lastTop; // top calculation
       marker.style.top = top + '%';
 
       topArr.push(top);
       ratios.push(__WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].round(ratio, 6));
-    });
+  });
 
-    return { ratios, topArr };
-  }
-  function bindScrollToLine(percent) {      
-    const newLength = line.pathLength(percent);
-  }
-
-  function sectionAct(el) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const sec = getChildren(el);
-        
-        sec.title.classList.add('focused');
-
-        sec.content.classList.add('focused');
-        sec.content.classList.remove('unfocused');
-
-        sec.subContent.classList.add('focused');
-        sec.subContent.classList.remove('unfocused');
-      });
-    });
-  }
-  function sectionInact(el) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const sec = getChildren(el);
-        sec.title.classList.remove('focused');
-
-        sec.content.classList.add('unfocused');
-        sec.content.classList.remove('focused');
-
-        sec.subContent.classList.add('unfocused');
-        sec.subContent.classList.remove('focused');
-      });
-    });
-  }
-  function getChildren(el) {
-    return {
-      title: el.querySelector('.section__title'),
-      content: el.querySelector('.section-content'),
-      subContent: el.querySelector('.section-content__content')
+        return { ratios, topArr };
     }
+    function bindScrollToLine(percent) {      
+        const newLength = line.pathLength(percent);
+    }
+
+    function sectionAct(el) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const sec = getChildren(el);
+            
+            sec.title.classList.add('focused');
+
+            sec.content.classList.add('focused');
+            sec.content.classList.remove('unfocused');
+
+            sec.subContent.classList.add('focused');
+            sec.subContent.classList.remove('unfocused');
+        });
+      });
+    }
+    function sectionInact(el) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const sec = getChildren(el);
+            sec.title.classList.remove('focused');
+
+            sec.content.classList.add('unfocused');
+            sec.content.classList.remove('focused');
+
+            sec.subContent.classList.add('unfocused');
+            sec.subContent.classList.remove('focused');
+        });
+      });
+    }
+    function getChildren(el) {
+        return {
+          title: el.querySelector('.section__title'),
+          content: el.querySelector('.section-content'),
+          subContent: el.querySelector('.section-content__content')
+      }
   }
 }
 
