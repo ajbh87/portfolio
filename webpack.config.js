@@ -1,10 +1,13 @@
+/* globals process */
+/* globals __dirname */
+
 const webpack = require('webpack');
 const path = require('path');
-const CompressionPlugin = require("compression-webpack-plugin");
+const CompressionPlugin = require('compression-webpack-plugin');
 
-const ENV = process.env.NODE_ENV;
-    isDev = ENV === 'dev',
-    isProd = ENV === 'production';
+const ENV = process.env.NODE_ENV,
+    isDev = ENV === 'dev';
+
 const productionRules = [
     {
         test: /\.js$/,
@@ -22,12 +25,12 @@ const productionPlugins = devPlugins.concat([
     new webpack.optimize.UglifyJsPlugin({
         mangle: {
             except: []
-         },
+        },
         sourceMap: true
     }),
     new CompressionPlugin({
-        asset: "[path].gz[query]",
-        algorithm: "gzip",
+        asset: '[path].gz[query]',
+        algorithm: 'gzip',
         test: /\.(js|html|css)$/,
         threshold: 10240,
         minRatio: 0.8
@@ -35,16 +38,16 @@ const productionPlugins = devPlugins.concat([
 ]);
 
 module.exports = {
-  entry: {
-        'script-bundle': './script.js'
+    entry: {
+        'home-bundle': './script.js'
     },
-	output: {
-		filename: isDev ? '[name].js' : '[name].min.js',
-		path: path.resolve(__dirname)
-	},
-	module: {
-		rules: isDev ? [] : productionRules
-	},
-	plugins: isDev ? devPlugins : productionPlugins,
-	watch: isDev
+    output: {
+        filename: isDev ? '[name].js' : '[name].min.js',
+        path: path.resolve(__dirname)
+    },
+    module: {
+        rules: isDev ? [] : productionRules
+    },
+    plugins: isDev ? devPlugins : productionPlugins,
+    watch: isDev
 };

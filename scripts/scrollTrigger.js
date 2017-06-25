@@ -28,17 +28,29 @@ class scrollTrigger {
             return options;
         }
         function generateElementsObj() {
-            const elements = document.querySelectorAll(options.selector),
-                threshold = 0.33,
-                observer = new IntersectionObserver(([entry]) => {
-                    if (entry.intersectionRatio < threshold) options.inactive(entry.target);
-                    else options.active(entry.target);
+            const threshold = ((step) => {
+                    let t = [],
+                        newStep = step;
+                    if (0 < step && step < 1) {
+                        while(newStep <= 1) {
+                            t.push(newStep);
+                            newStep = saKnife.round(newStep + step, 1);
+                        }
+                    }
+                    return t;
+                })(0.1),
+                elements = document.querySelectorAll(options.selector),
+                inObserver = new IntersectionObserver(([entry]) => {
+                    if (entry.intersectionRatio < 0.2) return;
+
+                    options.active(entry.target);
+                    inObserver.unobserve(entry.target);
                 },{
                     threshold
                 });
-
             elements.forEach((element, index) => {
-                observer.observe(element);        
+                inObserver.observe(element);      
+                //outObserver.observe(element);    
                 st.elements.push({
                     el: element,
                     active: false,

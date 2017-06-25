@@ -3,50 +3,52 @@ layout: home
 isHome: true
 options: "sectionOptions"
 ---
-<div class="section" data-scroll-trigger="{{ page.options }}">
+<section class="section" data-scroll-trigger="{{ page.options }}">
   {% capture intro %}
   {% include_relative _home/1-intro.markdown %}
   {% endcapture %}
   {% include home_section.html title="Intro" content=intro %}
-</div>
+</section>
 
-<div class="section" data-scroll-trigger="{{ page.options }}">
+<section class="section" data-scroll-trigger="{{ page.options }}">
   {% capture centuries %}
   {% include_relative _home/2-centuries.markdown %}
   {% endcapture %}
-  {% include home_section.html title="A few centuries ago" content=centuries action=page.options %}
-  
-  <script class="slider-content" type="text/html">
+  {% capture gallery %}
     <p>
       *Just a few archaeological records from this era have been found.
     </p>
-    <div class="content-slider__element" tabindex="1" data-content="GyroPack SVG">
+    <a class="content-slider__element" data-content="GyroPack SVG">
       <img class="content-slider__link" src="./images/gyro-pack.svg" alt="GyroPack SVG" />
-    </div>
-    <div class="content-slider__element" tabindex="3" data-content="Fundación Nilita Vientós Gastón Logo Color">
+    </a>
+    <a class="content-slider__element" data-content="Fundación Nilita Vientós Gastón Logo Color">
       <img class="content-slider__link" src="./images/nilitaColor.svg" alt="Fundación Nilita Vientós Gastón Logo Color" />
-    </div>
-  </script>
-</div>
-<div class="section" data-scroll-trigger="{{ page.options }}">
-  {% capture later %}
-  {% include_relative _home/3-later.markdown %}
+    </a>
   {% endcapture %}
-  {% include home_section.html title="Some time later" content=later action=page.options %}
-  <script class="slider-content" type="text/html">
-    <div class="content-slider__element" tabindex="1" data-content="En Serio - Alex, Anibal y Rosello">
-      <img class="content-slider__link" src="./images/alex.anibal.rossello.min.jpg" alt="En Serio - Alex, Anibal y Rosello" />
-    </div>
-    <div class="content-slider__element" tabindex="2" data-content="En Serio - Alex y Gadaffi">
-      <img class="content-slider__link" src="./images/alexygadaffi.min.jpg" alt="En Serio - Alex y Gadaffi" />
-    </div>
-    <div class="content-slider__element" tabindex="3" data-content="En Serio - Alex, Luke y Leia">
-      <img class="content-slider__link" src="./images/alexyluke.min.jpg" alt="En Serio - Alex, Luke y Leia" />
-    </div>
-  </script>
-</div>
+  {% include home_section.html title="A few centuries ago" content=centuries gallery=gallery %}
+</section>
 
-<div class="section" data-scroll-trigger="{{ page.options }}">
+<section class="section" data-scroll-trigger="{{ page.options }}">
+  {% capture later %}
+    {% include_relative _home/3-later.markdown %}
+  {% endcapture %}
+
+  {% capture gallery %}
+    <a class="content-slider__element" data-content="En Serio - Alex, Anibal y Rosello">
+      <img class="content-slider__link" src="./images/alex.anibal.rossello.min.jpg" alt="En Serio - Alex, Anibal y Rosello" />
+    </a>
+    <a class="content-slider__element" data-content="En Serio - Alex y Gadaffi">
+      <img class="content-slider__link" src="./images/alexygadaffi.min.jpg" alt="En Serio - Alex y Gadaffi" />
+    </a>
+    <a class="content-slider__element" data-content="En Serio - Alex, Luke y Leia">
+      <img class="content-slider__link" src="./images/alexyluke.min.jpg" alt="En Serio - Alex, Luke y Leia" />
+    </a>
+  {% endcapture %}
+  
+  {% include home_section.html title="Some time later" content=later gallery=gallery %}
+</section>
+
+<section class="section" data-scroll-trigger="{{ page.options }}">
   {% capture beyond %}
   {% include_relative _home/4-beyond.markdown %}
   {% endcapture %}
@@ -56,14 +58,14 @@ options: "sectionOptions"
       something 3
     </div>
   </script>
-</div>
+</section>
 
-<div class="section" data-scroll-trigger="{{ page.options }}">
+<section class="section" data-scroll-trigger="{{ page.options }}">
   {% capture beyond %}
   {% include_relative _home/4-beyond.markdown %}
   {% endcapture %}
   {% include home_section.html title="Finish" content=beyond action=page.options %}
-</div>
+</section>
 
 <div class="bg-line">
   <svg class="bg-line__svg" viewBox="0 0 100 250" width="100%" height="100%" preserveAspectRatio="none" >
@@ -78,12 +80,4 @@ options: "sectionOptions"
   <button class="bg-line__point bg-line__point--3" data-index="2"></button>
   <button class="bg-line__point bg-line__point--4" disabled="disabled"></button>
   <button class="bg-line__point bg-line__point--5" disabled="disabled"></button>
-</div>
-
-<div id="content-slider" class="content-slider">
-  <button class="content-slider__button-close button button--close">
-    <span class="button__icon">&times;</span>
-    <span class="button__text button__text--hidden">Close</span>
-  </button>
-  <div class="content-slider__content"></div>
 </div>

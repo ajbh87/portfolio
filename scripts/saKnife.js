@@ -40,15 +40,11 @@ const saKnife = {
         };
     },
     hasClass: (el, className) => {
-        let response = false;
-    
         if (el.classList)
-            response = el.classList.contains(className);
+            return el.classList.contains(className);
         else
-            response = new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-    
-        return response;
+            return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
     },
-    round: (value, decimals) => Number(Math.round(value+'e'+decimals)+'e-'+decimals)
+    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals )
 };
 export default saKnife;
