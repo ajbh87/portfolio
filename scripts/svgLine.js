@@ -3,7 +3,10 @@ class svgLine {
     constructor(options) {
         const _this = this,
             style = getComputedStyle(options.path);
-
+        if (Array.isArray(_this.el.path.points) === false) {
+            _this.error = true;
+            return;
+        }
         _this.svgEvent = {
             active: 0
         };
@@ -18,6 +21,7 @@ class svgLine {
             triggers: {},
             triggerPad: 0
         }, options);
+        
         _this.el.triggers.lengths = [];
 
         if (_this.el.triggers.points != null) {

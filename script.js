@@ -22,21 +22,22 @@ function onLoad() {
         }),
         markers = container.querySelectorAll('.bg-line__point');
     let sectionsSizes = getSectionRatios();
+    if (line.error !== true) {
+        line.setRatios(sectionsSizes.ratios);
+        line.el.path.addEventListener('svgTrigger', (event) => {
+            let point = null;
+            if (event.detail.active != null) {
+                point = container.querySelector('.bg-line__point--' + event.detail.active);
+                point.classList.add('bg-line__point--active');
+            } 
+            else if (event.detail.inactive != null) {
+                point = container.querySelector('.bg-line__point--' + event.detail.inactive);
+                point.classList.remove('bg-line__point--active');
+            }
+        });
 
-    line.setRatios(sectionsSizes.ratios);
-    line.el.path.addEventListener('svgTrigger', (event) => {
-        let point = null;
-        if (event.detail.active != null) {
-            point = container.querySelector('.bg-line__point--' + event.detail.active);
-            point.classList.add('bg-line__point--active');
-        } 
-        else if (event.detail.inactive != null) {
-            point = container.querySelector('.bg-line__point--' + event.detail.inactive);
-            point.classList.remove('bg-line__point--active');
-        }
-    });
-
-    window.addEventListener('resize', debounce(onResize, 250));
+        window.addEventListener('resize', debounce(onResize, 250));
+    }
   
     function onResize() {
         sectionsSizes = getSectionRatios();
