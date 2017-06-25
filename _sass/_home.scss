@@ -48,7 +48,7 @@ $slide-width: 15%; // 15% ~ 7.5rem
 .section-container {
   overflow: hidden;
   position: relative;
-  
+
   &.closed {
     .section-content {
       animation-name: collapse;
@@ -113,10 +113,10 @@ $slide-width: 15%; // 15% ~ 7.5rem
 }
 @keyframes lineGrow {
   0% {
-    stroke-dashoffset: 250;
+    transform: scaleY(0);
   }
   100% {
-    stroke-dashoffset: 0;
+    transform: scaleY(1);
   }
 }
 .bg-line {
@@ -139,8 +139,7 @@ $slide-width: 15%; // 15% ~ 7.5rem
     fill: none;
     stroke: $grey-color-dark;
     stroke-miterlimit: 10;
-    stroke-dasharray: 250; // SVG ViewBox height
-    stroke-dashoffset: 0;
+    transform: scaleY(1);
     animation: 3s ease(in-cubic) 0s lineGrow;
     animation-iteration-count: 1;
   }

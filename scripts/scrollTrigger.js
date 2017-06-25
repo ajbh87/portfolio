@@ -48,15 +48,15 @@ class scrollTrigger {
                 },{
                     threshold
                 });
-            elements.forEach((element, index) => {
-                inObserver.observe(element);      
-                //outObserver.observe(element);    
+            let index = 0;
+            for (index = 0; index < elements.length; index ++) {
+                inObserver.observe(elements[index]); 
                 st.elements.push({
-                    el: element,
+                    el: elements[index],
                     active: false,
                     index
                 });
-            });
+            }
         }
         function onScrollProbe() {
             let percentScrolled = 0;

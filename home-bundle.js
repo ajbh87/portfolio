@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -504,7 +504,7 @@ function toNumber(value) {
 
 module.exports = debounce;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
 /* 2 */
@@ -514,7 +514,7 @@ module.exports = debounce;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(0);
-__webpack_require__(6);
+__webpack_require__(4);
 
 
 
@@ -564,15 +564,15 @@ class scrollTrigger {
                 },{
                     threshold
                 });
-            elements.forEach((element, index) => {
-                inObserver.observe(element);      
-                //outObserver.observe(element);    
+            let index = 0;
+            for (index = 0; index < elements.length; index ++) {
+                inObserver.observe(elements[index]); 
                 st.elements.push({
-                    el: element,
+                    el: elements[index],
                     active: false,
                     index
                 });
-            });
+            }
         }
         function onScrollProbe() {
             let percentScrolled = 0;
@@ -600,17 +600,12 @@ class svgLine {
     constructor(options) {
         const _this = this,
             style = getComputedStyle(options.path);
-        if (Array.isArray(_this.el.path.points) === false) {
-            _this.error = true;
-            return;
-        }
         _this.svgEvent = {
             active: 0
         };
         _this.triggerEvent = new CustomEvent('svgTrigger', {
             detail: _this.svgEvent
         });
-
         _this.el = Object.assign({
             length: parseFloat(style['stroke-dasharray']),
             height: options.path.viewportElement.viewBox.baseVal.height,
@@ -625,37 +620,40 @@ class svgLine {
             _this.el.ratios = _this.getRatios(_this.el.triggers.points);
         }
     }
+
     pathLength(percent){
         const _this = this,
-            l = _this.el.length.val,
+            l = _this.el.length,
             offset = l * percent,
             newLength = l - offset;
-        this.el.path.style.strokeDashoffset = newLength;
 
-        this.el.triggers.lengths.forEach((length, index) => {
-            if (offset >= (length.val - _this.el.triggerPad)) {
-                if (length.active !== true) {
-                    _this.svgEvent.active = index + 1;
-                    length.active = true;
-                    delete _this.svgEvent.inactive;
+            _this.el.path.style.strokeDashoffset = newLength;
+            _this.el.triggers.lengths.forEach((length, index) => {
+                if (offset >= (length.val - _this.el.triggerPad)) {
+                    if (length.active !== true) {
+                        _this.svgEvent.active = index + 1;
+                        length.active = true;
+                        delete _this.svgEvent.inactive;
+                    }
+                } else {
+                    if (length.active !== false) {
+                        _this.svgEvent.inactive = index + 1;
+                        length.active = false;
+                        delete _this.svgEvent.active;
+                    }
                 }
-            } else {
-                if (length.active !== false) {
-                    _this.svgEvent.inactive = index + 1;
-                    length.active = false;
-                    delete _this.svgEvent.active;
-                }
-            }
+            });
             _this.el.path.dispatchEvent(_this.triggerEvent);
-        });
+        
         return newLength;
     }
     getRatios(triggerPoints) {
-        const _this = this;
+        const _this = this,
+            points = _this.el.path.points;
         let ratios = [],
             ys = [];
         triggerPoints.forEach((triggerPoint, index) => {
-            let y = _this.el.path.points[triggerPoint].y,
+            let y = points.getItem(triggerPoint).y,
                 newRatio = 0;
             ys.push(y);
 
@@ -672,18 +670,18 @@ class svgLine {
         const _this = this,
             triggerPoints = _this.el.triggers.points,
             oldRatios = _this.el.ratios;
-        let points = this.el.path.points,
+        let points = _this.el.path.points,
             diffs = [],
             pointIndex = 0,
             triggerLengths = [];
 
         if (triggerPoints != null) {
             ratios.forEach((ratio, i) => {
-                let y = points[triggerPoints[i]].y,
+                let y = points.getItem(triggerPoints[i]).y,
                     ratioDiff = ratio / oldRatios[i],
                     newY = 0;
                 if (i > 0) {
-                    y = y - points[triggerPoints[i - 1]].y;
+                    y = y - points.getItem(triggerPoints[i - 1]).y;
                 }
                 newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((y * ratioDiff) - y, 4);
 
@@ -695,10 +693,9 @@ class svgLine {
 
             _this.el.ratios = ratios;
             triggerPoints.forEach((triggerIndex, index) => {
-                const trigger = points[triggerIndex];
+                const trigger = points.getItem(triggerIndex);
                 let lastTrigger = null,
                     point = null,
-                    //children = [],
                     lengths = [],
                     length = 0,
                     triggerLength = 0;
@@ -706,13 +703,14 @@ class svgLine {
                     lastTrigger = triggerPoints[index - 1];
                 }
 
-                for (pointIndex = 1; pointIndex < points.length; pointIndex++) {
-                    point = points[pointIndex];
-                    length = calculateLength(points[pointIndex - 1], point);
+                for (pointIndex = 1; pointIndex < points.numberOfItems; pointIndex++) {
+                    point = points.getItem(pointIndex);
+                    debugger;
+                    length = calculateLength(points.getItem(pointIndex - 1), point);
 
                     if (point.y <= trigger.y) {
                         if (lastTrigger != null) {
-                            if (point.y > points[lastTrigger].y) {
+                            if (point.y > points.getItem(lastTrigger).y) {
                                 point.y = changeY(point);
                             }
                         }
@@ -720,9 +718,9 @@ class svgLine {
                             point.y = changeY(point);
                         }
                     }
-          
+                    debugger;
                     if (pointIndex <= triggerIndex) {
-                        length = calculateLength(points[pointIndex - 1], point);
+                        length = calculateLength(points.getItem(pointIndex - 1), point);
                         lengths.push(length);
                     }
                 }
@@ -738,7 +736,7 @@ class svgLine {
 
                 function changeY(point) {
                     let newY = 0;
-                    if (index < (points.length - 1)) {
+                    if (index < (points.numberOfItems - 1)) {
                         newY = point.y + diffs[index];
                     } else {
                         newY = point.y;
@@ -748,7 +746,7 @@ class svgLine {
         
             });
             _this.el.triggers.lengths = triggerLengths;
-            _this.el.length = triggerLengths[triggerLengths.length - 1];
+            _this.el.length = triggerLengths[triggerLengths.length - 1].val;
         }
 
         function calculateLength(pointSet1, pointSet2) {
@@ -762,124 +760,6 @@ class svgLine {
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__);
-
-
-
-
-
-window.addEventListener('load', onLoad);  
-
-function onLoad() {
-    'use strict';
-    const container = document.querySelector('.bg-line'),
-        line = new __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__["a" /* default */]({
-            svg: container.querySelector('.bg-line__svg'),
-            path: container.querySelector('.bg-line__path'),
-            pathSelector: '.bg-line__path',
-            triggers: {
-                points: [2, 4, 8, 10, 11]
-            }
-        }),
-        triggers = new __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__["a" /* default */]({
-            active: sectionAct,
-            probe: bindScrollToLine
-        }),
-        markers = container.querySelectorAll('.bg-line__point');
-    let sectionsSizes = getSectionRatios();
-    if (line.error !== true) {
-        line.setRatios(sectionsSizes.ratios);
-        line.el.path.addEventListener('svgTrigger', (event) => {
-            let point = null;
-            if (event.detail.active != null) {
-                point = container.querySelector('.bg-line__point--' + event.detail.active);
-                point.classList.add('bg-line__point--active');
-            } 
-            else if (event.detail.inactive != null) {
-                point = container.querySelector('.bg-line__point--' + event.detail.inactive);
-                point.classList.remove('bg-line__point--active');
-            }
-        });
-
-        window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));
-    }
-  
-    function onResize() {
-        sectionsSizes = getSectionRatios();
-        line.setRatios(sectionsSizes.ratios);
-    }
-
-    function getSectionRatios() {
-        let cHeight = container.offsetHeight,
-            posArr = [], // top position array
-            ratios = [], // ratio calculation array
-            topArr = []; // top calculation array
-
-        triggers.elements.forEach((element, index) => {
-            let marker = markers[index + 1],
-                ratio = element.el.offsetHeight / cHeight,
-                lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
-                top = (ratio * 100) + lastTop; // top calculation
-            
-            marker.style.top = top + '%';
-            posArr.push(element.el.getBoundingClientRect());
-            topArr.push(top);
-            ratios.push(__WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].round(ratio, 6));
-        });
-
-        return { cHeight, posArr, ratios, topArr };
-    }
-    function bindScrollToLine(percent) {      
-        line.pathLength(percent);
-    }
-
-    function sectionAct(el) {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                el.classList.add('focused');
-            });
-        });
-    }
-}
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports) {
 
 /**
@@ -1577,6 +1457,123 @@ window.IntersectionObserver = IntersectionObserver;
 window.IntersectionObserverEntry = IntersectionObserverEntry;
 
 }(window, document));
+
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__);
+
+
+
+
+
+window.addEventListener('load', onLoad);  
+
+function onLoad() {
+    'use strict';
+    const container = document.querySelector('.bg-line'),
+        line = new __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__["a" /* default */]({
+            svg: container.querySelector('.bg-line__svg'),
+            path: container.querySelector('.bg-line__path'),
+            pathSelector: '.bg-line__path',
+            triggers: {
+                points: [2, 4, 8, 10, 11]
+            }
+        }),
+        triggers = new __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__["a" /* default */]({
+            active: sectionAct,
+            probe: bindScrollToLine
+        }),
+        markers = container.querySelectorAll('.bg-line__point');
+    let sectionsSizes = getSectionRatios();
+    
+    line.setRatios(sectionsSizes.ratios);
+    line.el.path.addEventListener('svgTrigger', (event) => {
+        let point = null;
+        if (event.detail.active != null) {
+            point = container.querySelector('.bg-line__point--' + event.detail.active);
+            point.classList.add('bg-line__point--active');
+        } 
+        else if (event.detail.inactive != null) {
+            point = container.querySelector('.bg-line__point--' + event.detail.inactive);
+            point.classList.remove('bg-line__point--active');
+        }
+    });
+
+    window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));
+  
+    function onResize() {
+        sectionsSizes = getSectionRatios();
+        line.setRatios(sectionsSizes.ratios);
+    }
+
+    function getSectionRatios() {
+        let cHeight = container.offsetHeight,
+            posArr = [], // top position array
+            ratios = [], // ratio calculation array
+            topArr = []; // top calculation array
+
+        triggers.elements.forEach((element, index) => {
+            let marker = markers[index + 1],
+                ratio = element.el.offsetHeight / cHeight,
+                lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
+                top = (ratio * 100) + lastTop; // top calculation
+            
+            marker.style.top = top + '%';
+            posArr.push(element.el.getBoundingClientRect());
+            topArr.push(top);
+            ratios.push(__WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].round(ratio, 6));
+        });
+
+        return { cHeight, posArr, ratios, topArr };
+    }
+    function bindScrollToLine(percent) {      
+        line.pathLength(percent);
+    }
+
+    function sectionAct(el) {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                el.classList.add('focused');
+            });
+        });
+    }
+}
 
 
 /***/ })
