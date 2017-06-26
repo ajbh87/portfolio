@@ -1,4 +1,6 @@
-
+---
+title: "A few centuries ago"
+---
 I was a teen with somewhat developed art skills and a penchant for computers. During these turbulent and stormy times, I built my first PC from spare parts and installed a pirated* copy of Photoshop 6. I started meddling with digital art and photo manipulation and decided that I could do this during “flexible” work hours as a career. So the logical step was to become a graphic designer. 
 
 Or so I thought.
