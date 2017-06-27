@@ -7,68 +7,60 @@ $slide-width: 15%; // 15% ~ 7.5rem
 }
 
 @include clipAnimation(0, 1, 'expand', 'collapse', 100, $prop);
-@keyframes addBorderRadius {
-  0% {
-    border-radius: 0%;
-  }
-  40% {
-    border-radius: 50%;
-  }
-  100% {
-    border-radius: 50%;
-  }
-}
-@keyframes removeBorderRadius {
-  0% {
-    border-radius: 50%;
-  }
-  60% {
-    border-radius: 50%;
-  }
-  100% {
-    border-radius: 0%;
-  }
-}
 
 .section {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: flex-end;
   width: $sec-width;
   min-height: 50vh;
   z-index: 1;
+  padding: $spacing-unit * 3 0;
+  border-bottom: $double-border;
+
+  transition: opacity .8s ease(out-quad);
+  opacity: 0;
+  &.focused {
+    opacity: 1;
+  }
   
-  @include media-query($media-min){
-    width: #{$sec-width - $slide-width};
-  };
   &__title {
-    position: sticky;
-    top: -1px;
     z-index: 1;
     width: 100%;
-    
+    max-width: $content-max;
+    float: right;
     padding: ($spacing-unit / 2) $spacing-unit;
-    
-    background: $background-color;
+
+    text-align: left;
     color: #fff;
-    
-    transition: opacity .8s ease(out-quad);
-    opacity: 0;
-    
-    &.focused {
-      opacity: 1;
+  }
+  &.open {
+    .section-content {
+      animation-name: collapse;
+      @extend %default-animation;
+      transform: $prop + "(0)";
     }
-    
-    &--animate {
-      transition: transform .8s ease(out-quad);
-      transform: translate(0, -50%);
-      .focused & {
-        transform: translate(0,0);
-      }
+
+    .section-content__content {
+      animation-name: collapseInverse;
+      @extend %default-animation;
+      transform: $prop + "(0)";
     }
-    
+  }
+  &.close {
+    .section-content {
+      animation-name: expand;
+      @extend %default-animation;
+      transform: $prop + "(1)";
+    }
+
+    .section-content__content {
+      animation-name: expandInverse;
+      @extend %default-animation;
+      transform: $prop + "(1)";
+    }
   }
 }
 
@@ -79,50 +71,100 @@ $slide-width: 15%; // 15% ~ 7.5rem
   animation-iteration-count: 1;
   animation-timing-function: linear;
 }
+.section-container {
+  overflow: hidden;
+  position: relative;
+
+}
 .section-content {
   $origin: left center;
+  position: relative;
   box-sizing: border-box;
   float: left;
   width: 100%;
   overflow: hidden;
   
-  background: #fff;
-  
-  margin-bottom: $spacing-unit;
+  background: $grey-color;
+  color: #fff;
 
   transform-origin: $origin;
-  transform: $prop + "(0)";
-  will-change: transform;
-  
-  &.unfocused {
-    animation-name: collapse;
-    @extend %default-animation;
-    transform: $prop + "(0)";
-  }
-  &.focused {
-    animation-name: expand;
-    @extend %default-animation;
-    transform: $prop + "(1)";
-  }
+  // will-change: transform;
+  z-index: 10;
   
   &__content {
     clear: both;
-    
     padding: $spacing-unit;
-
+    float: right;
+    max-width: $content-max;
     transform-origin: $origin;
-    transform: $prop + "(1000)";
-    &.unfocused {
-      animation-name: collapseInverse;
-      @extend %default-animation;
-      transform: $prop + "(1000)";
   }
-    &.focused {
-      animation-name: expandInverse;
-      @extend %default-animation;
-      transform: $prop + "(1)";
+  
+}
+.section-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 2fr;
+  //grid-gap: 5px;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 0;
+  //background: $grey-color-lighter;
+  padding: $spacing-unit;
+  overflow: auto;
+  &__item {
+    overflow: hidden;
+    &:nth-child(3n + 1) {
+      grid-column: span 1;
+    }
+    &:nth-child(3n + 2) {
+      grid-column: span 2;
+    }
+    &:nth-child(3n) {
+      grid-column: span 3;
     }
   }
+  &__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: scale(1.25);
+    opacity: 0.6666;
+    transition: 
+      opacity 0.2s ease(out-cubic),
+      transform 0.2s ease(out-cubic);
+    
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    &:hover {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.section-button {
+  position: absolute;
+  top: 50%;
+  right: -12.3vw;
+  transform: translateX(50%);
+  z-index: 20;
+  padding: 0.2rem 0.6rem;
+  border: 0;
+  background: $grey-color-dark;
+  color: #fff;
+  font-size: 1.15rem;
+  text-transform: uppercase;
 }
 
 @keyframes pulsate {
@@ -131,12 +173,20 @@ $slide-width: 15%; // 15% ~ 7.5rem
     opacity: 0;
   }
   50% {
-    opacity: .8;
+    opacity: 0.8;
   }
   100% {
     transform: scale(2);
     opacity: 0;
     
+  }
+}
+@keyframes lineGrow {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
   }
 }
 .bg-line {
@@ -159,6 +209,9 @@ $slide-width: 15%; // 15% ~ 7.5rem
     fill: none;
     stroke: $grey-color-dark;
     stroke-miterlimit: 10;
+    transform: scaleY(1);
+    animation: 3s ease(in-cubic) 0s lineGrow;
+    animation-iteration-count: 1;
   }
   &__path {
     $length: 285; // pre calculated unsing  path.getTotalLength() in chrome
@@ -253,143 +306,5 @@ $slide-width: 15%; // 15% ~ 7.5rem
       $step: 5;
       top: (($step * $eHeight) / $height * 100) * 1%;
     }
-  }
-}
-
-.content-slider {
-  $button-s: 1rem;
-  
-  position: fixed;
-  top: 0;
-  right: 0;
-  height: 80%;
-  height: calc(100% - #{$spacing-unit * 2});
-  width: 80%;
-  width: calc(100% - #{$spacing-unit * 2});
-  overflow: visible;
-  z-index: 5;
-
-  margin: $spacing-unit;
-  
-  background: $primary;
-  color: #fff;
-  
-  opacity: 0;
-  transition: opacity .5s ease(out-quad);
-  
-  @include media-query($media-min){
-    right: 25%;
-    height: 100%;
-    width: $slide-width;
-    margin: 0;
-  }
-  
-  &.focused {
-    opacity: 1;
-  }
-  
-  &__button-close {
-    display: none;
-    position: absolute; 
-    top: 0;
-    left: 0;
-    width: $button-s;
-    height: $button-s;
-    
-    line-height: $button-s;
-    
-    background: transparent;
-    color: #fff;
-    
-    transition: background .5s ease(out-quad);
-    
-    &:hover {
-      background: $primary-dark;
-    }
-    &:focus {
-      border: 1px solid $primary-dark;
-      outline: 0px;
-    }
-  }  
-  &__content {
-    overflow: visible;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    
-    padding: ($spacing-unit * 2) $spacing-unit-sm;
-    
-    font-size: .8rem;
-    line-height: 1rem;
-    
-    transition: 
-      opacity .5s ease(out-quad),
-      transform .25s ease(out-quad);
-    opacity: 1;
-    
-    &.fade {
-      opacity: 0;
-    }
-  }
-  $vw-width: strip-unit($slide-width) * 1vw;
-  &__element {
-    position: relative;
-    width: 6rem;
-    height: 6rem;
-    z-index: 10;
-
-    margin: $spacing-unit-sm;
-    padding: .25rem;
-    
-    transform: translate(0, 0) scale(1);
-    transform-origin: center right;
-    
-    background: $grey-color-lighter;
-    border: 1px solid transparent;
-    
-    transition: 
-      background .25s ease(out-quad),
-      z-index .5s ease(in-out-sine),
-      transform .5s ease(in-out-sine);
-    transition-delay: 0s;
-    cursor: pointer;
-    
-    &:focus {
-      border: 1px solid $secondary;
-      outline: 0;
-    }
-    
-    > * {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: auto;
-      height: auto;
-      max-height: 100%;
-      max-height: calc(100% - .5rem);
-      max-width: 100%;
-      max-width: calc(100% - .5rem);
-    }
-    &.active {
-      transition-delay: .25s;
-      transform: translate(-105%, 0) scale(4);
-      background: #fff;
-      z-index: 500;
-      box-shadow: 0 2px 5px rgba(0,0,0,.2);
-      border: 1px solid $grey-color-lighter;
-      &:focus {
-        background: #fff;
-        outline: 0;
-        border: 1px solid $secondary;
-      }
-    }
-
-    @include media-query($media-min){
-      margin: 0 0 $spacing-unit 0;
-      &:last-child {
-        margin: 0 0 ($spacing-unit * 2) 0;
-      }
-    };        
   }
 }

@@ -4,12 +4,22 @@
   "description": "personal website for alfredo bermudez",
   "main": "index.js",
   "scripts": {
-    "webpack": "webpack --config webpack.config.js"
+    "webpack-dev": "cross-env NODE_ENV=dev webpack --config webpack.config.js",
+    "webpack-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js"
   },
   "author": "ALfredo J Bermudez",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "intersection-observer": "^0.3.1",
+    "lodash.debounce": "^4.0.8"
+  },
   "devDependencies": {
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.0",
+    "babel-preset-env": "^1.5.2",
+    "babel-preset-es2016": "^6.24.1",
+    "compression-webpack-plugin": "^0.4.0",
+    "cross-env": "^5.0.1",
     "webpack": "^2.4.1"
   }
 }

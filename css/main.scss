@@ -2,9 +2,11 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 @charset "utf-8";
+
 @import "mixins";
 
 $base-font-family: 'Quicksand', Helvetica, Helvetica Neue, Arial, sans-serif;
+$font-code: monaco, Consolas, "Lucida Console", monospace;
 $media-min: 800px;
 
 $base-font-size-fixed: 16px;
@@ -22,6 +24,8 @@ $font-weight-bold: 700;
 
 $spacing-unit: 1.5rem;
 $spacing-unit-sm: ($spacing-unit / 2);
+$content-max: 32rem;
+
 
 // colors
 $grey-color-lighter: #f5f1f1;
@@ -35,8 +39,10 @@ $primary-dark: #E3591E;
 $secondary: #00B29A;
 $secondary-light: #30FFE3;
 
-$text-color: $grey-color-dark;
+$text-color: #fff;
 $background-color: $grey-color;
+
+$double-border: 6px double $grey-color-lighter;
 
 // Width of the content area
 $content-width: 1200px;

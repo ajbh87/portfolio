@@ -1,37 +1,36 @@
-%content-padding {
+%container {
+  overflow: hidden;
+  width: 75%;
+}
+%content {
+  display: block;
+  clear: both;
+  float: right;
+  width: 100%;
+  max-width: $content-max;
   padding: $spacing-unit;
-//  @include media-query($media-min) {
-//    padding: ($spacing-unit / 2) $spacing-unit;
-//  }
 }
 
 //----------------------- Site header
 .header {
-  @extend %content-padding;
-  display: flex;
+  @extend %container;
+  border-bottom: $double-border;
   &__title {
+    @extend %content;
     color: $primary;
-    display: block;
-    float: left;
-    flex: 0 1 auto;
     
     &:visited {
       color: $primary;
     }
-    
-    @include media-query($media-min){
-      width: 75vw;
-    }
   }
   &__nav {
-    float: right;
-    flex: 0 0 auto;
+
   }
 }
 
 //----------------------------- Page content
 .content {
-  @extend %content-padding;
+  @extend %container;
   position: relative;
 }
 
@@ -39,6 +38,10 @@
     margin-bottom: $spacing-unit;
 }
 
+// Blog
+.posts {
+  @extend %content;
+}
 .post-list {
   margin-left: 0;
   list-style: none;
@@ -55,12 +58,13 @@
 
 .post-link {
   display: block;
-  font-size: 24px;
 }
 
 
 //----------------------- Posts
-
+.post {
+  @extend %content;
+}
 .post-header {
   margin-bottom: $spacing-unit;
 }
@@ -78,5 +82,8 @@
 
 //---------------------- Footer
 .footer {
-  @extend %content-padding;
+  @extend %container;
+}
+.footer-content {
+  @extend %content;
 }
