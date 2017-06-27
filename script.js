@@ -19,10 +19,11 @@ function onLoad() {
         triggers = new scrollTrigger({
             active: sectionAct,
             probe: bindScrollToLine
-        }),
-        markers = container.querySelectorAll('.bg-line__point');
-    let sectionsSizes = getSectionRatios();
-    
+        });
+    let markers = container.querySelectorAll('.bg-line__point'), // need 5
+        galleryButtons = document.querySelectorAll('[data-open-close]'),
+        sectionsSizes = getSectionRatios();
+
     line.setRatios(sectionsSizes.ratios);
     line.el.path.addEventListener('svgTrigger', (event) => {
         let point = null;
@@ -34,6 +35,20 @@ function onLoad() {
             point = container.querySelector('.bg-line__point--' + event.detail.inactive);
             point.classList.remove('bg-line__point--active');
         }
+    });
+
+    saKnife.forEach(galleryButtons, (button) => {
+        button.addEventListener('click', function() {
+            const targetSelector = this.attributes['data-open-close'].value,
+                target = document.querySelector(targetSelector);
+            if (target.hasClass('open')) {
+                target.classList.remove('open');
+                target.classList.add('close');
+            } else {
+                target.classList.remove('close');
+                target.classList.add('open');
+            }
+        });
     });
 
     window.addEventListener('resize', debounce(onResize, 250));
@@ -50,7 +65,7 @@ function onLoad() {
             topArr = []; // top calculation array
 
         triggers.elements.forEach((element, index) => {
-            let marker = markers[index + 1],
+            let marker = markers[index],
                 ratio = element.el.offsetHeight / cHeight,
                 lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
                 top = (ratio * 100) + lastTop; // top calculation
@@ -63,6 +78,7 @@ function onLoad() {
 
         return { cHeight, posArr, ratios, topArr };
     }
+
     function bindScrollToLine(percent) {      
         line.pathLength(percent);
     }

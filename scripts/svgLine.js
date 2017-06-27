@@ -108,7 +108,7 @@ class svgLine {
 
                 for (pointIndex = 1; pointIndex < points.numberOfItems; pointIndex++) {
                     point = points.getItem(pointIndex);
-                    debugger;
+                    
                     length = calculateLength(points.getItem(pointIndex - 1), point);
 
                     if (point.y <= trigger.y) {
@@ -121,7 +121,7 @@ class svgLine {
                             point.y = changeY(point);
                         }
                     }
-                    debugger;
+                    
                     if (pointIndex <= triggerIndex) {
                         length = calculateLength(points.getItem(pointIndex - 1), point);
                         lengths.push(length);

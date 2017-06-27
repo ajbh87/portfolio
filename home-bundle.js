@@ -87,39 +87,68 @@ function whichTransitionEvent(){
         }
     }
 }
+function forEach(elements, fn) {
+    const total = elements.length;
+    let index = 0;
+    for (index = 0; index < total; index++) {
+        fn(elements[index]);
+    }
+}
+function hasClass(el, className) {
+    if (el.classList)
+        return el.classList.contains(className);
+    else
+        return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+}
+function offset(el) {
+    const rect = el.getBoundingClientRect(),
+        body = document.body.getBoundingClientRect();
+
+    return {
+        top: Math.abs(body.top) + rect.top,
+        left: Math.abs(body.left) + rect.left
+    };
+}
+function winSize() {
+    const e = document.documentElement,
+        g = document.querySelector('body'),
+        width = e.clientWidth||g.clientWidth,
+        height = e.clientHeight||g.clientHeight;
+    return {
+        width,
+        height,
+        vCenter: height / 2,
+        hCenter: width / 2,
+        documentHeight: g.offsetHeight,
+        documentWidth: g.offsetWidth
+    };
+}
+
 const saKnife = {
     transitionEvent: whichTransitionEvent(),
-    offset: (el) => {
-        const rect = el.getBoundingClientRect(),
-            body = document.body.getBoundingClientRect();
-
-        return {
-            top: Math.abs(body.top) + rect.top,
-            left: Math.abs(body.left) + rect.left
-        };
-    },
-    winSize: () => {
-        const e = document.documentElement,
-            g = document.querySelector('body'),
-            width = e.clientWidth||g.clientWidth,
-            height = e.clientHeight||g.clientHeight;
-        return {
-            width,
-            height,
-            vCenter: height / 2,
-            hCenter: width / 2,
-            documentHeight: g.offsetHeight,
-            documentWidth: g.offsetWidth
-        };
-    },
-    hasClass: (el, className) => {
-        if (el.classList)
-            return el.classList.contains(className);
-        else
-            return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-    },
-    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals )
+    offset,
+    winSize,
+    hasClass,
+    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals ),
+    forEach
 };
+
+if (NodeList.forEach == null) {
+    NodeList.prototype.forEach = function(fn) {
+        forEach(this, fn);
+    };
+}
+if (HTMLElement.hasClass == null) {
+    HTMLElement.prototype.hasClass = function(className) {
+        return hasClass(this, className);
+    };
+}
+if (HTMLElement.getOffset == null) {
+    HTMLElement.prototype.getOffset = function() {
+        return offset(this);
+    };
+}
+
 /* harmony default export */ __webpack_exports__["a"] = (saKnife);
 
 /***/ }),
@@ -705,7 +734,7 @@ class svgLine {
 
                 for (pointIndex = 1; pointIndex < points.numberOfItems; pointIndex++) {
                     point = points.getItem(pointIndex);
-                    debugger;
+                    
                     length = calculateLength(points.getItem(pointIndex - 1), point);
 
                     if (point.y <= trigger.y) {
@@ -718,7 +747,7 @@ class svgLine {
                             point.y = changeY(point);
                         }
                     }
-                    debugger;
+                    
                     if (pointIndex <= triggerIndex) {
                         length = calculateLength(points.getItem(pointIndex - 1), point);
                         lengths.push(length);
@@ -1518,10 +1547,11 @@ function onLoad() {
         triggers = new __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__["a" /* default */]({
             active: sectionAct,
             probe: bindScrollToLine
-        }),
-        markers = container.querySelectorAll('.bg-line__point');
-    let sectionsSizes = getSectionRatios();
-    
+        });
+    let markers = container.querySelectorAll('.bg-line__point'), // need 5
+        galleryButtons = document.querySelectorAll('[data-open-close]'),
+        sectionsSizes = getSectionRatios();
+
     line.setRatios(sectionsSizes.ratios);
     line.el.path.addEventListener('svgTrigger', (event) => {
         let point = null;
@@ -1533,6 +1563,20 @@ function onLoad() {
             point = container.querySelector('.bg-line__point--' + event.detail.inactive);
             point.classList.remove('bg-line__point--active');
         }
+    });
+
+    __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].forEach(galleryButtons, (button) => {
+        button.addEventListener('click', function() {
+            const targetSelector = this.attributes['data-open-close'].value,
+                target = document.querySelector(targetSelector);
+            if (target.hasClass('open')) {
+                target.classList.remove('open');
+                target.classList.add('close');
+            } else {
+                target.classList.remove('close');
+                target.classList.add('open');
+            }
+        });
     });
 
     window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));
@@ -1549,7 +1593,7 @@ function onLoad() {
             topArr = []; // top calculation array
 
         triggers.elements.forEach((element, index) => {
-            let marker = markers[index + 1],
+            let marker = markers[index],
                 ratio = element.el.offsetHeight / cHeight,
                 lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
                 top = (ratio * 100) + lastTop; // top calculation
@@ -1562,6 +1606,7 @@ function onLoad() {
 
         return { cHeight, posArr, ratios, topArr };
     }
+
     function bindScrollToLine(percent) {      
         line.pathLength(percent);
     }

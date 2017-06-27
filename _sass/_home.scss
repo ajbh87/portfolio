@@ -36,6 +36,32 @@ $slide-width: 15%; // 15% ~ 7.5rem
     text-align: left;
     color: #fff;
   }
+  &.open {
+    .section-content {
+      animation-name: collapse;
+      @extend %default-animation;
+      transform: $prop + "(0)";
+    }
+
+    .section-content__content {
+      animation-name: collapseInverse;
+      @extend %default-animation;
+      transform: $prop + "(0)";
+    }
+  }
+  &.close {
+    .section-content {
+      animation-name: expand;
+      @extend %default-animation;
+      transform: $prop + "(1)";
+    }
+
+    .section-content__content {
+      animation-name: expandInverse;
+      @extend %default-animation;
+      transform: $prop + "(1)";
+    }
+  }
 }
 
 %default-animation {
@@ -49,35 +75,9 @@ $slide-width: 15%; // 15% ~ 7.5rem
   overflow: hidden;
   position: relative;
 
-  &.open {
-    .section-content {
-      animation-name: collapseInverse;
-      @extend %default-animation;
-      transform: $prop + "(1000)";
-    }
-
-    .section-content__content {
-      animation-name: collapse;
-      @extend %default-animation;
-      transform: $prop + "(0)";
-    }
-  }
-  &.close {
-    .section-content {
-      animation-name: collapse;
-      @extend %default-animation;
-      transform: $prop + "(0)";
-    }
-
-    .section-content__content {
-      animation-name: collapseInverse;
-      @extend %default-animation;
-      transform: $prop + "(1000)";
-    }
-  }
 }
 .section-content {
-  $origin: center top;
+  $origin: left center;
   position: relative;
   box-sizing: border-box;
   float: left;
@@ -101,13 +101,70 @@ $slide-width: 15%; // 15% ~ 7.5rem
   
 }
 .section-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 2fr;
+  //grid-gap: 5px;
+
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
-  background: #fff;
   z-index: 0;
+  //background: $grey-color-lighter;
+  padding: $spacing-unit;
+  overflow: auto;
+  &__item {
+    overflow: hidden;
+    &:nth-child(3n + 1) {
+      grid-column: span 1;
+    }
+    &:nth-child(3n + 2) {
+      grid-column: span 2;
+    }
+    &:nth-child(3n) {
+      grid-column: span 3;
+    }
+  }
+  &__link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transform: scale(1.25);
+    opacity: 0.6666;
+    transition: 
+      opacity 0.2s ease(out-cubic),
+      transform 0.2s ease(out-cubic);
+    
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-color: #fff;
+    &:hover {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  &__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+}
+
+.section-button {
+  position: absolute;
+  top: 50%;
+  right: -12.3vw;
+  transform: translateX(50%);
+  z-index: 20;
+  padding: 0.2rem 0.6rem;
+  border: 0;
+  background: $grey-color-dark;
+  color: #fff;
+  font-size: 1.15rem;
+  text-transform: uppercase;
 }
 
 @keyframes pulsate {

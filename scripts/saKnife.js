@@ -14,37 +14,66 @@ function whichTransitionEvent(){
         }
     }
 }
+function forEach(elements, fn) {
+    const total = elements.length;
+    let index = 0;
+    for (index = 0; index < total; index++) {
+        fn(elements[index]);
+    }
+}
+function hasClass(el, className) {
+    if (el.classList)
+        return el.classList.contains(className);
+    else
+        return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+}
+function offset(el) {
+    const rect = el.getBoundingClientRect(),
+        body = document.body.getBoundingClientRect();
+
+    return {
+        top: Math.abs(body.top) + rect.top,
+        left: Math.abs(body.left) + rect.left
+    };
+}
+function winSize() {
+    const e = document.documentElement,
+        g = document.querySelector('body'),
+        width = e.clientWidth||g.clientWidth,
+        height = e.clientHeight||g.clientHeight;
+    return {
+        width,
+        height,
+        vCenter: height / 2,
+        hCenter: width / 2,
+        documentHeight: g.offsetHeight,
+        documentWidth: g.offsetWidth
+    };
+}
+
 const saKnife = {
     transitionEvent: whichTransitionEvent(),
-    offset: (el) => {
-        const rect = el.getBoundingClientRect(),
-            body = document.body.getBoundingClientRect();
-
-        return {
-            top: Math.abs(body.top) + rect.top,
-            left: Math.abs(body.left) + rect.left
-        };
-    },
-    winSize: () => {
-        const e = document.documentElement,
-            g = document.querySelector('body'),
-            width = e.clientWidth||g.clientWidth,
-            height = e.clientHeight||g.clientHeight;
-        return {
-            width,
-            height,
-            vCenter: height / 2,
-            hCenter: width / 2,
-            documentHeight: g.offsetHeight,
-            documentWidth: g.offsetWidth
-        };
-    },
-    hasClass: (el, className) => {
-        if (el.classList)
-            return el.classList.contains(className);
-        else
-            return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-    },
-    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals )
+    offset,
+    winSize,
+    hasClass,
+    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals ),
+    forEach
 };
+
+if (NodeList.forEach == null) {
+    NodeList.prototype.forEach = function(fn) {
+        forEach(this, fn);
+    };
+}
+if (HTMLElement.hasClass == null) {
+    HTMLElement.prototype.hasClass = function(className) {
+        return hasClass(this, className);
+    };
+}
+if (HTMLElement.getOffset == null) {
+    HTMLElement.prototype.getOffset = function() {
+        return offset(this);
+    };
+}
+
 export default saKnife;

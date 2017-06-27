@@ -144,6 +144,7 @@ a {
 }
 
 button {
+  line-height: $base-line-height;
   &:not([disabled]) {
     cursor: pointer;
   }

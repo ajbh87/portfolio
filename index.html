@@ -4,33 +4,36 @@ isHome: true
 options: "sectionOptions"
 ---
 {% for section in site.home %}
-  <section class="section" data-scroll-trigger="{{ page.options }}">
+  <section id="{{ section.title | slugify }}" class="section" data-scroll-trigger="{{ page.options }}">
     <div class="section__title">
       <h2 class="section__title--animate">{{ section.title }}</h2>
     </div>
+    {% if section.gallery %}
+    <button 
+      class="section-button" 
+      data-open-close="#{{ section.title | slugify }}">
+      Gallery
+    </button>
+    {% endif %}
     <div class="section-container">
       <div class="section-content">
         <div class="section-content__content">
           {{ section.content }}
         </div>
       </div>
+      {% if section.gallery %}
       <div class="section-gallery">
+        {% for image in section.gallery %}
+        <div class="section-gallery__item">
+          <a href="{{ image.url }}" alt="{{ image.name }}" 
+            class="section-gallery__link" style="background-image: url({{ image.url }})">
+          </a>
+        </div>
+        {% endfor %}
       </div>
+      {% endif %}
     </div>
   </section>
 {% endfor %}
+{% include line.html %}
 
-<div class="bg-line">
-  <svg class="bg-line__svg" viewBox="0 0 100 250" width="100%" height="100%" preserveAspectRatio="none" >
-    <title>Background Line</title>
-    <line class="bg-line__straight" x1="87.5" y1="0" x2="87.5" y2="250"/>
-    <polyline class="bg-line__path" points="87.5,0 87.5,50 95,60 95,90 87.5,100 80,90 80,110 80,140 95,160 95,190 87.5,200 
-		87.5,250"/>
-  </svg>
-  <button class="bg-line__point bg-line__point--0" disabled="disabled"></button>
-  <button class="bg-line__point bg-line__point--1" data-index="1"></button>
-  <button class="bg-line__point bg-line__point--2" data-index="2"></button>
-  <button class="bg-line__point bg-line__point--3" data-index="2"></button>
-  <button class="bg-line__point bg-line__point--4" disabled="disabled"></button>
-  <button class="bg-line__point bg-line__point--5" disabled="disabled"></button>
-</div>
