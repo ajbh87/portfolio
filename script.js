@@ -29,11 +29,11 @@ function onLoad() {
         let point = null;
         if (event.detail.active != null) {
             point = container.querySelector('.bg-line__point--' + event.detail.active);
-            point.classList.add('bg-line__point--active');
+            point != null ? point.classList.add('bg-line__point--active') : null;
         } 
         else if (event.detail.inactive != null) {
             point = container.querySelector('.bg-line__point--' + event.detail.inactive);
-            point.classList.remove('bg-line__point--active');
+            point != null ? point.classList.remove('bg-line__point--active') : null;
         }
     });
 

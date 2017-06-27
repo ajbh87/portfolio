@@ -68,91 +68,6 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function whichTransitionEvent(){
-    const el = document.createElement('fakeelement'),
-        transitions = {
-            transition: 'transitionend',
-            OTransition: 'oTransitionEnd',
-            MozTransition: 'transitionend',
-            WebkitTransition: 'webkitTransitionEnd'
-        };
-    let t;
-
-    for(t in transitions){
-        if( el.style[t] !== undefined ){
-            return transitions[t];
-        }
-    }
-}
-function forEach(elements, fn) {
-    const total = elements.length;
-    let index = 0;
-    for (index = 0; index < total; index++) {
-        fn(elements[index]);
-    }
-}
-function hasClass(el, className) {
-    if (el.classList)
-        return el.classList.contains(className);
-    else
-        return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-}
-function offset(el) {
-    const rect = el.getBoundingClientRect(),
-        body = document.body.getBoundingClientRect();
-
-    return {
-        top: Math.abs(body.top) + rect.top,
-        left: Math.abs(body.left) + rect.left
-    };
-}
-function winSize() {
-    const e = document.documentElement,
-        g = document.querySelector('body'),
-        width = e.clientWidth||g.clientWidth,
-        height = e.clientHeight||g.clientHeight;
-    return {
-        width,
-        height,
-        vCenter: height / 2,
-        hCenter: width / 2,
-        documentHeight: g.offsetHeight,
-        documentWidth: g.offsetWidth
-    };
-}
-
-const saKnife = {
-    transitionEvent: whichTransitionEvent(),
-    offset,
-    winSize,
-    hasClass,
-    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals ),
-    forEach
-};
-
-if (NodeList.forEach == null) {
-    NodeList.prototype.forEach = function(fn) {
-        forEach(this, fn);
-    };
-}
-if (HTMLElement.hasClass == null) {
-    HTMLElement.prototype.hasClass = function(className) {
-        return hasClass(this, className);
-    };
-}
-if (HTMLElement.getOffset == null) {
-    HTMLElement.prototype.getOffset = function() {
-        return offset(this);
-    };
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (saKnife);
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -536,13 +451,98 @@ module.exports = debounce;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function whichTransitionEvent(){
+    const el = document.createElement('fakeelement'),
+        transitions = {
+            transition: 'transitionend',
+            OTransition: 'oTransitionEnd',
+            MozTransition: 'transitionend',
+            WebkitTransition: 'webkitTransitionEnd'
+        };
+    let t;
+
+    for(t in transitions){
+        if( el.style[t] !== undefined ){
+            return transitions[t];
+        }
+    }
+}
+function forEach(elements, fn) {
+    const total = elements.length;
+    let index = 0;
+    for (index = 0; index < total; index++) {
+        fn(elements[index]);
+    }
+}
+function hasClass(el, className) {
+    if (el.classList)
+        return el.classList.contains(className);
+    else
+        return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+}
+function offset(el) {
+    const rect = el.getBoundingClientRect(),
+        body = document.body.getBoundingClientRect();
+
+    return {
+        top: Math.abs(body.top) + rect.top,
+        left: Math.abs(body.left) + rect.left
+    };
+}
+function winSize() {
+    const e = document.documentElement,
+        g = document.querySelector('body'),
+        width = e.clientWidth||g.clientWidth,
+        height = e.clientHeight||g.clientHeight;
+    return {
+        width,
+        height,
+        vCenter: height / 2,
+        hCenter: width / 2,
+        documentHeight: g.offsetHeight,
+        documentWidth: g.offsetWidth
+    };
+}
+
+const saKnife = {
+    transitionEvent: whichTransitionEvent(),
+    offset,
+    winSize,
+    hasClass,
+    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals ),
+    forEach
+};
+
+if (NodeList.forEach == null) {
+    NodeList.prototype.forEach = function(fn) {
+        forEach(this, fn);
+    };
+}
+if (HTMLElement.hasClass == null) {
+    HTMLElement.prototype.hasClass = function(className) {
+        return hasClass(this, className);
+    };
+}
+if (HTMLElement.getOffset == null) {
+    HTMLElement.prototype.getOffset = function() {
+        return offset(this);
+    };
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (saKnife);
+
+/***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(1);
 __webpack_require__(4);
 
 
@@ -623,7 +623,7 @@ class scrollTrigger {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(1);
 
 class svgLine {
     constructor(options) {
@@ -648,6 +648,7 @@ class svgLine {
         if (_this.el.triggers.points != null) {
             _this.el.ratios = _this.getRatios(_this.el.triggers.points);
         }
+
     }
 
     pathLength(percent){
@@ -656,7 +657,14 @@ class svgLine {
             offset = l * percent,
             newLength = l - offset;
 
+        requestAnimationFrame(() => changePath());
+        
+        return newLength;
+        function changePath() {
             _this.el.path.style.strokeDashoffset = newLength;
+            requestAnimationFrame(() => recalculate());
+        }
+        function recalculate() {
             _this.el.triggers.lengths.forEach((length, index) => {
                 if (offset >= (length.val - _this.el.triggerPad)) {
                     if (length.active !== true) {
@@ -673,8 +681,7 @@ class svgLine {
                 }
             });
             _this.el.path.dispatchEvent(_this.triggerEvent);
-        
-        return newLength;
+        }
     }
     getRatios(triggerPoints) {
         const _this = this,
@@ -759,8 +766,8 @@ class svgLine {
 
                 triggerLengths.push({
                     val: triggerLength,
-                    active: -1,
-                    inactive: -1
+                    active: false,
+                    inactive: true
                 });
 
                 function changeY(point) {
@@ -1523,8 +1530,8 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__);
 
 
@@ -1557,11 +1564,11 @@ function onLoad() {
         let point = null;
         if (event.detail.active != null) {
             point = container.querySelector('.bg-line__point--' + event.detail.active);
-            point.classList.add('bg-line__point--active');
+            point != null ? point.classList.add('bg-line__point--active') : null;
         } 
         else if (event.detail.inactive != null) {
             point = container.querySelector('.bg-line__point--' + event.detail.inactive);
-            point.classList.remove('bg-line__point--active');
+            point != null ? point.classList.remove('bg-line__point--active') : null;
         }
     });
 

@@ -22,6 +22,7 @@ class svgLine {
         if (_this.el.triggers.points != null) {
             _this.el.ratios = _this.getRatios(_this.el.triggers.points);
         }
+
     }
 
     pathLength(percent){
@@ -30,7 +31,14 @@ class svgLine {
             offset = l * percent,
             newLength = l - offset;
 
+        requestAnimationFrame(() => changePath());
+        
+        return newLength;
+        function changePath() {
             _this.el.path.style.strokeDashoffset = newLength;
+            requestAnimationFrame(() => recalculate());
+        }
+        function recalculate() {
             _this.el.triggers.lengths.forEach((length, index) => {
                 if (offset >= (length.val - _this.el.triggerPad)) {
                     if (length.active !== true) {
@@ -47,8 +55,7 @@ class svgLine {
                 }
             });
             _this.el.path.dispatchEvent(_this.triggerEvent);
-        
-        return newLength;
+        }
     }
     getRatios(triggerPoints) {
         const _this = this,
@@ -133,8 +140,8 @@ class svgLine {
 
                 triggerLengths.push({
                     val: triggerLength,
-                    active: -1,
-                    inactive: -1
+                    active: false,
+                    inactive: true
                 });
 
                 function changeY(point) {
