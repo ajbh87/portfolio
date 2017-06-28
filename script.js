@@ -3,11 +3,17 @@ import svgLine from './scripts/svgLine.js';
 import saKnife from './scripts/saKnife.js';
 import debounce from './node_modules/lodash.debounce/index.js';
 
-document.addEventListener('DOMContentLoaded', onLoad);  
+window.addEventListener('load', onLoad);  
 
 function onLoad() {
     'use strict';
     const container = document.querySelector('.bg-line'),
+        triggers = new scrollTrigger({
+            activeFn: sectionAct,
+            inactiveFn: sectionInact,
+            probe: bindScrollToLine,
+            position: 'center'
+        }),
         line = new svgLine({
             svg: container.querySelector('.bg-line__svg'),
             path: container.querySelector('.bg-line__path'),
@@ -15,10 +21,6 @@ function onLoad() {
             triggers: {
                 points: [2, 4, 8, 10, 11]
             }
-        }),
-        triggers = new scrollTrigger({
-            active: sectionAct,
-            probe: bindScrollToLine
         });
     let markers = container.querySelectorAll('.bg-line__point'), // need 5
         sectionsSizes = getSectionRatios();
@@ -60,7 +62,6 @@ function onLoad() {
             topArr.push(top);
             ratios.push(saKnife.round(ratio, 6));
         });
-
         return { cHeight, posArr, ratios, topArr };
     }
 
@@ -68,10 +69,17 @@ function onLoad() {
         line.pathLength(percent);
     }
 
-    function sectionAct(el) {
+    function sectionAct(obj) {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
-                el.classList.add('focused');
+                obj.el.classList.add('focused');
+            });
+        });
+    }
+    function sectionInact(obj) {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                obj.el.classList.remove('focused');
             });
         });
     }
