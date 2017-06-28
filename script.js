@@ -3,7 +3,7 @@ import svgLine from './scripts/svgLine.js';
 import saKnife from './scripts/saKnife.js';
 import debounce from './node_modules/lodash.debounce/index.js';
 
-window.addEventListener('load', onLoad);  
+document.addEventListener('DOMContentLoaded', onLoad);  
 
 function onLoad() {
     'use strict';
@@ -21,7 +21,6 @@ function onLoad() {
             probe: bindScrollToLine
         });
     let markers = container.querySelectorAll('.bg-line__point'), // need 5
-        galleryButtons = document.querySelectorAll('[data-open-close]'),
         sectionsSizes = getSectionRatios();
 
     line.setRatios(sectionsSizes.ratios);
@@ -35,20 +34,6 @@ function onLoad() {
             point = container.querySelector('.bg-line__point--' + event.detail.inactive);
             point != null ? point.classList.remove('bg-line__point--active') : null;
         }
-    });
-
-    saKnife.forEach(galleryButtons, (button) => {
-        button.addEventListener('click', function() {
-            const targetSelector = this.attributes['data-open-close'].value,
-                target = document.querySelector(targetSelector);
-            if (target.hasClass('open')) {
-                target.classList.remove('open');
-                target.classList.add('close');
-            } else {
-                target.classList.remove('close');
-                target.classList.add('open');
-            }
-        });
     });
 
     window.addEventListener('resize', debounce(onResize, 250));

@@ -8,30 +8,8 @@ options: "sectionOptions"
     <div class="section__title">
       <h2 class="section__title--animate">{{ section.title }}</h2>
     </div>
-    {% if section.gallery %}
-    <button 
-      class="section-button" 
-      data-open-close="#{{ section.title | slugify }}">
-      Gallery
-    </button>
-    {% endif %}
-    <div class="section-container">
-      <div class="section-content">
-        <div class="section-content__content">
-          {{ section.content }}
-        </div>
-      </div>
-      {% if section.gallery %}
-      <div class="section-gallery">
-        {% for image in section.gallery %}
-        <div class="section-gallery__item">
-          <a href="{{ image.url }}" alt="{{ image.name }}" 
-            class="section-gallery__link" style="background-image: url({{ image.url }})">
-          </a>
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
+    <div class="section-content">
+      {{ section.content }}
     </div>
   </section>
 {% endfor %}

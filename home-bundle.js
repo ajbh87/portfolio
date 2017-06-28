@@ -68,6 +68,91 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function whichTransitionEvent(){
+    const el = document.createElement('fakeelement'),
+        transitions = {
+            transition: 'transitionend',
+            OTransition: 'oTransitionEnd',
+            MozTransition: 'transitionend',
+            WebkitTransition: 'webkitTransitionEnd'
+        };
+    let t;
+
+    for(t in transitions){
+        if( el.style[t] !== undefined ){
+            return transitions[t];
+        }
+    }
+}
+function forEach(elements, fn) {
+    const total = elements.length;
+    let index = 0;
+    for (index = 0; index < total; index++) {
+        fn(elements[index]);
+    }
+}
+function hasClass(el, className) {
+    if (el.classList)
+        return el.classList.contains(className);
+    else
+        return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+}
+function offset(el) {
+    const rect = el.getBoundingClientRect(),
+        body = document.body.getBoundingClientRect();
+
+    return {
+        top: Math.abs(body.top) + rect.top,
+        left: Math.abs(body.left) + rect.left
+    };
+}
+function winSize() {
+    const e = document.documentElement,
+        g = document.querySelector('body'),
+        width = e.clientWidth||g.clientWidth,
+        height = e.clientHeight||g.clientHeight;
+    return {
+        width,
+        height,
+        vCenter: height / 2,
+        hCenter: width / 2,
+        documentHeight: g.offsetHeight,
+        documentWidth: g.offsetWidth
+    };
+}
+
+const saKnife = {
+    transitionEvent: whichTransitionEvent(),
+    offset,
+    winSize,
+    hasClass,
+    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals ),
+    forEach
+};
+
+if (NodeList.forEach == null) {
+    NodeList.prototype.forEach = function(fn) {
+        forEach(this, fn);
+    };
+}
+if (HTMLElement.hasClass == null) {
+    HTMLElement.prototype.hasClass = function(className) {
+        return hasClass(this, className);
+    };
+}
+if (HTMLElement.getOffset == null) {
+    HTMLElement.prototype.getOffset = function() {
+        return offset(this);
+    };
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (saKnife);
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -451,98 +536,13 @@ module.exports = debounce;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ }),
-/* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function whichTransitionEvent(){
-    const el = document.createElement('fakeelement'),
-        transitions = {
-            transition: 'transitionend',
-            OTransition: 'oTransitionEnd',
-            MozTransition: 'transitionend',
-            WebkitTransition: 'webkitTransitionEnd'
-        };
-    let t;
-
-    for(t in transitions){
-        if( el.style[t] !== undefined ){
-            return transitions[t];
-        }
-    }
-}
-function forEach(elements, fn) {
-    const total = elements.length;
-    let index = 0;
-    for (index = 0; index < total; index++) {
-        fn(elements[index]);
-    }
-}
-function hasClass(el, className) {
-    if (el.classList)
-        return el.classList.contains(className);
-    else
-        return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-}
-function offset(el) {
-    const rect = el.getBoundingClientRect(),
-        body = document.body.getBoundingClientRect();
-
-    return {
-        top: Math.abs(body.top) + rect.top,
-        left: Math.abs(body.left) + rect.left
-    };
-}
-function winSize() {
-    const e = document.documentElement,
-        g = document.querySelector('body'),
-        width = e.clientWidth||g.clientWidth,
-        height = e.clientHeight||g.clientHeight;
-    return {
-        width,
-        height,
-        vCenter: height / 2,
-        hCenter: width / 2,
-        documentHeight: g.offsetHeight,
-        documentWidth: g.offsetWidth
-    };
-}
-
-const saKnife = {
-    transitionEvent: whichTransitionEvent(),
-    offset,
-    winSize,
-    hasClass,
-    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals ),
-    forEach
-};
-
-if (NodeList.forEach == null) {
-    NodeList.prototype.forEach = function(fn) {
-        forEach(this, fn);
-    };
-}
-if (HTMLElement.hasClass == null) {
-    HTMLElement.prototype.hasClass = function(className) {
-        return hasClass(this, className);
-    };
-}
-if (HTMLElement.getOffset == null) {
-    HTMLElement.prototype.getOffset = function() {
-        return offset(this);
-    };
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (saKnife);
-
-/***/ }),
 /* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(0);
 __webpack_require__(4);
 
 
@@ -623,7 +623,7 @@ class scrollTrigger {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(0);
 
 class svgLine {
     constructor(options) {
@@ -1530,15 +1530,15 @@ module.exports = g;
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__);
 
 
 
 
 
-window.addEventListener('load', onLoad);  
+document.addEventListener('DOMContentLoaded', onLoad);  
 
 function onLoad() {
     'use strict';
@@ -1556,7 +1556,6 @@ function onLoad() {
             probe: bindScrollToLine
         });
     let markers = container.querySelectorAll('.bg-line__point'), // need 5
-        galleryButtons = document.querySelectorAll('[data-open-close]'),
         sectionsSizes = getSectionRatios();
 
     line.setRatios(sectionsSizes.ratios);
@@ -1570,20 +1569,6 @@ function onLoad() {
             point = container.querySelector('.bg-line__point--' + event.detail.inactive);
             point != null ? point.classList.remove('bg-line__point--active') : null;
         }
-    });
-
-    __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].forEach(galleryButtons, (button) => {
-        button.addEventListener('click', function() {
-            const targetSelector = this.attributes['data-open-close'].value,
-                target = document.querySelector(targetSelector);
-            if (target.hasClass('open')) {
-                target.classList.remove('open');
-                target.classList.add('close');
-            } else {
-                target.classList.remove('close');
-                target.classList.add('open');
-            }
-        });
     });
 
     window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));

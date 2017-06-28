@@ -5,9 +5,6 @@ $slide-width: 15%; // 15% ~ 7.5rem
 .home {
   position: relative;
 }
-
-@include clipAnimation(0, 1, 'expand', 'collapse', 100, $prop);
-
 .section {
   position: relative;
   display: flex;
@@ -71,104 +68,10 @@ $slide-width: 15%; // 15% ~ 7.5rem
   animation-iteration-count: 1;
   animation-timing-function: linear;
 }
-.section-container {
-  overflow: hidden;
-  position: relative;
-
-}
 .section-content {
-  $origin: left center;
-  position: relative;
-  box-sizing: border-box;
-  float: left;
-  width: 100%;
-  overflow: hidden;
-  
-  background: $grey-color;
-  color: #fff;
-
-  transform-origin: $origin;
-  // will-change: transform;
-  z-index: 10;
-  
-  &__content {
-    clear: both;
-    padding: $spacing-unit;
-    float: right;
-    max-width: $content-max;
-    transform-origin: $origin;
-  }
-  
-}
-.section-gallery {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 1fr 1.5fr;
-  //grid-gap: 1rem;
-
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 0;
-  //background: $grey-color-dark;
-  padding: 0 $spacing-unit;
-  overflow: auto;
-  &__item {
-    overflow: hidden;
-    &:nth-child(3n + 1) {
-      grid-column: span 1;
-    }
-    &:nth-child(3n + 2) {
-      grid-column: span 1;
-    }
-    &:nth-child(3n) {
-      grid-column: span 2;
-    }
-  }
-  &__link {
-    display: block;
-    width: 100%;
-    height: 100%;
-    transform: scale(2.333);
-    //opacity: 0.6666;
-    filter: grayscale(100%);
-    transition: 
-      filter 0.2s ease(out-cubic),
-      opacity 0.2s ease(out-cubic),
-      transform 0.2s ease(out-cubic);
-    
-    background-size: 70% auto;
-    background-position: center center;
-    background-repeat: no-repeat;
-    //background-color: $grey-color-dark;
-
-    &:hover {
-      filter: grayscale(0%);
-      transform: scale(1);
-      opacity: 1;
-    }
-  }
-  &__image {
-    display: block;
-    width: 100%;
-    height: auto;
-  }
-}
-
-.section-button {
-  position: absolute;
-  top: 50%;
-  right: -12.3vw;
-  transform: translateX(50%);
-  z-index: 20;
-  padding: 0.2rem 0.6rem;
-  border: 0;
-  background: $grey-color-dark;
-  color: #fff;
-  font-size: 1.15rem;
-  text-transform: uppercase;
+  padding: $spacing-unit;
+  float: right;
+  max-width: $content-max;
 }
 
 @keyframes pulsate {
@@ -211,7 +114,7 @@ $slide-width: 15%; // 15% ~ 7.5rem
   }
   &__straight {
     fill: none;
-    stroke: $grey-color-dark;
+    stroke: #fff;
     stroke-miterlimit: 10;
     transform: scaleY(1);
     animation: 3s ease(in-cubic) 0s lineGrow;
