@@ -4,7 +4,7 @@ isHome: true
 options: "sectionOptions"
 ---
 {% for section in site.home %}
-  <section id="{{ section.title | slugify }}" class="section" data-scroll-trigger="{{ page.options }}">
+  <section id="{{ section.title | slugify }}" class="section" data-trigger-sections>
     <div class="section__title">
       <h2 class="section__title--animate">{{ section.title }}</h2>
     </div>

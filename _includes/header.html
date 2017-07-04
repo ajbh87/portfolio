@@ -1,12 +1,15 @@
 <header class="header">
-  <a class="header__title" href="{{ site.baseurl }}/">
-    <h1 class="title">
-      <span class="title__main">{{ site.title }}</span>
-      <span class="title__subtitle font--smaller">{{ site.sub-title }}</span>
-    </h1>
-  </a>
+	<a class="header__title" href="{{ site.baseurl | prepend: site.url }}/">
+		<h1 class="title">
+			<span class="title__main">{{ site.title }}</span>
+			<span class="title__subtitle font--smaller">{{ site.sub-title }}</span>
+		</h1>
+	</a>
 
-  <nav class="header__nav">
-
-  </nav>
+	<nav class="header__nav">
+		{% if page.isHome != true %}
+		<a href="{{ site.baseurl | prepend: site.url }}" title="Home">only me</a>
+		{% endif %}
+		<a href="{{ "/blog" | prepend: site.baseurl | prepend: site.url }}" title="Blog">musings</a>
+	</nav>
 </header>

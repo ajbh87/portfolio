@@ -13,25 +13,34 @@
 
 //----------------------- Site header
 .header {
-  @extend %container;
-  border-bottom: $double-border;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  overflow: auto;
   &__title {
-    @extend %content;
-    color: $primary;
-    
-    &:visited {
-      color: $primary;
-    }
+    flex: 0 0 auto;
+    width: 75%;
+    border-bottom: $double-border;
   }
   &__nav {
-
+    //flex: 1 1 auto;
+    padding: $spacing-unit;
+    a {
+      display: block;
+      text-align: right;
+    }
   }
+}
+.title {
+  @extend %content;
 }
 
 //----------------------------- Page content
 .content {
   @extend %container;
   position: relative;
+  border-bottom: $double-border;
 }
 
 .page-heading {
@@ -53,7 +62,6 @@
 
 .post-meta {
   font-size: $small-font-size;
-  color: $grey-color;
 }
 
 .post-link {

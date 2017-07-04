@@ -2,85 +2,120 @@ import scrollTrigger from './scripts/scrollTrigger.js';
 import svgLine from './scripts/svgLine.js';
 import saKnife from './scripts/saKnife.js';
 import debounce from './node_modules/lodash.debounce/index.js';
+import before from './node_modules/lodash.before/index.js';
+
+//import Rx from './node_modules/rxjs/Rx';
+import { Observable } from './node_modules/rxjs/Observable';
+import './node_modules/rxjs/add/observable/fromEvent';
+
+
 
 window.addEventListener('load', onLoad);  
 
 function onLoad() {
     'use strict';
-    const container = document.querySelector('.bg-line'),
-        triggers = new scrollTrigger({
-            activeFn: sectionAct,
-            inactiveFn: sectionInact,
-            probe: bindScrollToLine,
-            position: 'center'
+    const BODY = document.querySelector('body'),
+        CONTAINER = document.querySelector('.bg-line'),
+        SECTIONS = document.querySelectorAll('.section'),
+        ST = new scrollTrigger({
+            dataName: 'data-trigger-sections',
+            event: true,
+            positionFn: 'center',
+            probeFn: bindScrollToLine,
+            offset: 0
         }),
-        line = new svgLine({
-            svg: container.querySelector('.bg-line__svg'),
-            path: container.querySelector('.bg-line__path'),
+        LINE = new svgLine({
+            svg: CONTAINER.querySelector('.bg-line__svg'),
+            path: CONTAINER.querySelector('.bg-line__path'),
             pathSelector: '.bg-line__path',
             triggers: {
                 points: [2, 4, 8, 10, 11]
             }
-        });
-    let markers = container.querySelectorAll('.bg-line__point'), // need 5
-        sectionsSizes = getSectionRatios();
+        }),
+        MARKERS = CONTAINER.querySelectorAll('.bg-line__point'); // needs same # of trigger points
 
-    line.setRatios(sectionsSizes.ratios);
-    line.el.path.addEventListener('svgTrigger', (event) => {
-        let point = null;
-        if (event.detail.active != null) {
-            point = container.querySelector('.bg-line__point--' + event.detail.active);
-            point != null ? point.classList.add('bg-line__point--active') : null;
-        } 
-        else if (event.detail.inactive != null) {
-            point = container.querySelector('.bg-line__point--' + event.detail.inactive);
-            point != null ? point.classList.remove('bg-line__point--active') : null;
-        }
+    let sectionRation = getSectionRatios(),
+        addPrevious = before(2, function (active) {
+            let index = 1;
+            if (active > 1) {
+                for (index = 1; index < active; index ++) {
+                    MARKERS[index - 1].classList.add('bg-line__point--active');
+                }
+            }
+        }),
+        observeLine = Observable.fromEvent(LINE.el.path, 'svgTrigger'),
+        observeScroll = Observable.fromEvent(window, 'scrollTrigger');
+
+    observeLine.subscribe((event) => {
+        dispatcher(() => {
+            event.detail.forEach((eventMark) => {
+                let marker = MARKERS[eventMark.index];
+                if (eventMark.active === true) {
+                    addPrevious(eventMark.index);
+                    marker.classList.add('bg-line__point--active');
+                } 
+                else {
+                    marker.classList.remove('bg-line__point--active');
+                }
+            });
+        });
+    });
+    observeScroll.subscribe((event) => {
+        dispatcher(() => {
+            event.detail.forEach((trigger) => {
+                if (trigger.active === true) {
+                    sectionActive(trigger);
+                } else {
+                    sectionInactive(trigger);
+                }
+            });
+        });
     });
 
-    window.addEventListener('resize', debounce(onResize, 250));
-  
-    function onResize() {
-        sectionsSizes = getSectionRatios();
-        line.setRatios(sectionsSizes.ratios);
-    }
+    LINE.setRatios(sectionRation.ratios);
 
+    ST.onScrollTrigger();
+    ST.onScrollProbe();
+
+    window.addEventListener('resize', debounce(onResize, 250));
+
+    function onResize() {
+        sectionRation = getSectionRatios();
+        LINE.setRatios(sectionRation.ratios);
+    }
     function getSectionRatios() {
-        let cHeight = container.offsetHeight,
+        let cHeight = CONTAINER.offsetHeight,
             posArr = [], // top position array
             ratios = [], // ratio calculation array
             topArr = []; // top calculation array
 
-        triggers.elements.forEach((element, index) => {
-            let marker = markers[index],
-                ratio = element.el.offsetHeight / cHeight,
+        SECTIONS.forEach((element, index) => {
+            let marker = MARKERS[index],
+                ratio = element.offsetHeight / cHeight,
                 lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
                 top = (ratio * 100) + lastTop; // top calculation
             
             marker.style.top = top + '%';
-            posArr.push(element.el.getBoundingClientRect());
+            posArr.push(element.getBoundingClientRect());
             topArr.push(top);
             ratios.push(saKnife.round(ratio, 6));
         });
         return { cHeight, posArr, ratios, topArr };
     }
-
     function bindScrollToLine(percent) {      
-        line.pathLength(percent);
+        LINE.pathLength(percent);
     }
-
-    function sectionAct(obj) {
+    function dispatcher(fn) {
         requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                obj.el.classList.add('focused');
-            });
+            requestAnimationFrame(fn);
         });
     }
-    function sectionInact(obj) {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                obj.el.classList.remove('focused');
-            });
-        });
+    function sectionActive(obj) {
+        obj.el.classList.add('focused');
+        BODY.classList.add(`section-${obj.index}`);    
+    }
+    function sectionInactive(obj) {
+        obj.el.classList.remove('focused');
+        BODY.classList.remove(`section-${obj.index}`);
     }
 }

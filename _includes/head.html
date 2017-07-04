@@ -10,6 +10,6 @@
 	<link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
 	<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
 	{% if page.isHome %}
- 		<script src="{{ "/home-bundle.js?v=1.1" | prepend: site.baseurl }}"></script>
+	<script src="{{ "/home-bundle.js?v=1.1"  | prepend: site.baseurl | prepend: site.url }}"></script>
  	{% endif %}
 </head>

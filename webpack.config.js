@@ -15,7 +15,8 @@ const productionRules = [
         use: {
             loader: 'babel-loader',
             options: {
-                presets: ['env']
+                presets: ['env', { modules: false }],
+
             }
         }
     }
@@ -25,8 +26,7 @@ const productionPlugins = devPlugins.concat([
     new webpack.optimize.UglifyJsPlugin({
         mangle: {
             except: []
-        },
-        sourceMap: true
+        }
     }),
     new CompressionPlugin({
         asset: '[path].gz[query]',
@@ -48,6 +48,7 @@ module.exports = {
     module: {
         rules: isDev ? [] : productionRules
     },
+    devtool: isDev ? 'source-map' : '',
     plugins: isDev ? devPlugins : productionPlugins,
     watch: isDev
 };

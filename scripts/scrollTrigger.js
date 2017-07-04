@@ -5,27 +5,39 @@ class scrollTrigger {
         'use strict';
         const options =  Object.assign({
                 activeFn: false,
-                inactiveFn: false,
+                beforeActiveFn: false,
                 dataName: 'data-scroll-trigger',
-                probe: false,
-                position: 'center'
+                event: false,
+                eventName: 'scrollTrigger',
+                inactiveFn: false,
+                position: 'center',
+                probeFn: false,
+                offset: 0,
+                scope: {}
             }, override),
             st = this;
+
         st.elements = [];
         st.window = saKnife.winSize();
 
+        [
+            options.activeFn, 
+            options.inactiveFn, 
+            options.beforeActiveFn,
+            options.probeFn
+        ].forEach( fn => fn = checkFunction(fn));
+
         options.scrollOffset = getScrollOffset(options.position);
-        options.activeFn = checkFunction(options.activeFn);
-        options.inactiveFn = checkFunction(options.inactiveFn);
-        options.probe = checkFunction(options.probe);
         options.selector = '[' + options.dataName + ']';
 
         generateElementsObj();
         onScrollResize();
-        onScrollTrigger();
+
+        st.onScrollTrigger = onScrollTrigger;
+        st.onScrollProbe = onScrollProbe;
     
         window.addEventListener('scroll', debounce(onScrollTrigger, 100));
-        if (options.probe !== false) {
+        if (options.probeFn !== false) {
             window.addEventListener('scroll', onScrollProbe);
         }
         window.addEventListener('resize', debounce(onScrollResize, 200));
@@ -43,33 +55,53 @@ class scrollTrigger {
                 st.elements.push(newElement);
             });
         }
-    
         function onScrollTrigger() {
-            st.elements.forEach(element => {
+            let changed = [];
+            st.elements.filter(element => {
                 const scrolled = window.scrollY + options.scrollOffset,
                     bottomTrigger = element.offset.top + element.el.offsetHeight,
                     checks = {
                         afterTop: element.offset.top <= scrolled,
                         beforeBottom: scrolled <= bottomTrigger
                     };
+                let elChanged = null;
                 // active | inactive
                 if (checks.afterTop && checks.beforeBottom) {
-                    if (element.active === false) {
-                        options.activeFn !== false ? options.activeFn(element) : null;
-
-                        element.active = true;
-                    }
+                    elChanged = toggleActiveInactive(element, true);
                 }
                 else if (element.active === true) {
-                    options.inactiveFn !== false ? options.inactiveFn(element) : null;
-
-                    element.active = false;
-                }        
+                    elChanged = toggleActiveInactive(element, false);
+                }
+                elChanged != null ? changed.push(elChanged) : null;  
             });
+            if (options.event && changed.length > 0) {
+                window.dispatchEvent(new CustomEvent(options.eventName, {
+                    detail: changed
+                }));
+            }
+        }
+        function toggleActiveInactive(element, active) {
+            // set active
+            if (element.active === false && active === true) {
+                (options.event !== true && options.activeFn !== false) ? 
+                    options.activeFn(element) : null;
+                
+                element.active = true;
+                return element;
+            }
+            // set inactive
+            else if (element.active === true && active === false) {
+                (options.event !== true && options.inactiveFn !== false) ? 
+                    options.inactiveFn(element) : null;
+                
+                element.active = false;
+                return element;
+            }
+            return null;
         }
         function onScrollProbe() {
             let percentScrolled = saKnife.round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
-            options.probe(percentScrolled);
+            options.probeFn(percentScrolled);
         }
         function onScrollResize() {
             st.window = saKnife.winSize();
@@ -85,7 +117,7 @@ class scrollTrigger {
                 if (typeof(possibleFunc) === 'function') {  
                     return possibleFunc;
                 }
-                else if (typeof(options.scope[possibleFunc]) === 'function') {
+                if (typeof(options.scope[possibleFunc]) === 'function') {
                     return options.scope[possibleFunc];
                 }
                 return false;            

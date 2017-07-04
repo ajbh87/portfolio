@@ -2,19 +2,38 @@ title: A Strange Path to Becoming a Web Developer
 sub-title: The Story of Alfredo J. Bermúdez
 email: alfredo@ajbermudez.com
 description: > # this means to ignore newlines until "baseurl:"
-  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive knowledge of HTML, CSS, Javascript. Experience with several frameworks including JQuery, Bootstrap, DevExtreme, AngularJS and REACT.
+  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive knowledge of HTML,
+  CSS, Vanilla Javascript, and experience with several Javascript frameworks including AngularJS and REACT.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://ajbermudez.com" # the base hostname & protocol for your site
-github_username:  ajbh87
+url: "http://alfredo.xyz" # the base hostname & protocol for your site
+github_username:  alfredo-xyz
 
 # Build settings
+plugins:
+  - octopress-paginate
 markdown: kramdown
 exclude: [README.md, script.js, webpack.config.js, package.json, node_modules, scripts]
 sass:
   sourcemap: true
+
 
 collections:
   home:
     defaults:
     - values:
         layout: page
+
+excerpt_separator: <!--more-->
+
+paginate:
+  collection:   posts
+  per_page:     5             # maximum number of items per page
+  limit:        false              # Maximum number of pages to paginate (false for unlimited)
+  permalink:    /page:num/     # pagination path (relative to template page)
+  title_suffix: " - page :num" # Append to template's page title
+  category:     ''             # Paginate items in this category
+  categories:   []             # Paginate items in any of these categories
+  tag:          ''             # Paginate items tagged with this tag
+  tags:         []             # Paginate items tagged with any of these tags
+  reversed:     false          # Reverse the order of the documents
+

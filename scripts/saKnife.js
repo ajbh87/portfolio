@@ -1,3 +1,12 @@
+const saKnife = {
+    forEach,
+    hasClass,
+    offset,
+    round,
+    transitionEvent: whichTransitionEvent(),
+    winSize
+};
+
 function whichTransitionEvent(){
     const el = document.createElement('fakeelement'),
         transitions = {
@@ -18,7 +27,7 @@ function forEach(elements, fn) {
     const total = elements.length;
     let index = 0;
     for (index = 0; index < total; index++) {
-        fn(elements[index]);
+        fn(elements[index], index);
     }
 }
 function hasClass(el, className) {
@@ -50,16 +59,9 @@ function winSize() {
         documentWidth: g.offsetWidth
     };
 }
-
-const saKnife = {
-    transitionEvent: whichTransitionEvent(),
-    offset,
-    winSize,
-    hasClass,
-    round: (value, decimals) => Number( Math.round(value + 'e' + decimals) + 'e-' + decimals ),
-    forEach
-};
-
+function round(value, decimals) {
+    return Number( Math.round(value + 'e' + decimals) + 'e-' + decimals );
+}
 if (NodeList.forEach == null) {
     NodeList.prototype.forEach = function(fn) {
         forEach(this, fn);

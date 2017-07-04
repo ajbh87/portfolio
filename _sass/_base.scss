@@ -7,7 +7,6 @@ dl, dd, ol, ul, figure {
   margin: 0;
   padding: 0;
 }
-
 /**
  * Basic styling
  */
@@ -21,8 +20,9 @@ html {
   }
 }
 body {
-  color: $text-color;
-  background-color: $background-color;
+  @include cssVar(color, --text, $text-color);
+  @include cssVar(background-color, --bg, $background-color);
+
   -webkit-text-size-adjust: 100%;
   -webkit-font-feature-settings: "kern" 1;
   -moz-font-feature-settings: "kern" 1;
@@ -89,11 +89,9 @@ h6, .h6 {
  * Images
  */
 img {
-    max-width: 100%;
-    vertical-align: middle;
+  max-width: 100%;
+  vertical-align: middle;
 }
-
-
 
 /**
  * Figures
@@ -114,10 +112,10 @@ ul, ol {
 }
 
 li {
-    > ul,
-    > ol {
-         margin-bottom: 0;
-    }
+  > ul,
+  > ol {
+       margin-bottom: 0;
+  }
 }
 
 /**
@@ -131,15 +129,15 @@ h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
  * Links
  */
 a {
-  color: $primary;
+  @include cssVar(color, --primary, $primary);
   text-decoration: none;
-
+  transition: color .2s ease(out-cubic);
   &:visited {
-    color: darken($primary-dark, 10%);
+    @include cssVar(color, --primary-hue-1, $primary-hue-1);
   }
 
-  &:hover,  {
-    color: $primary-dark;
+  &:hover, &:focus {
+    @include cssVar(color, --secondary, $secondary);
   }
 }
 
@@ -157,8 +155,8 @@ blockquote {
   color: $grey-color;
   border-left: 4px solid $grey-color-light;
   padding-left: $spacing-unit / 2;
-  font-size: 18px;
-  letter-spacing: -1px;
+  //font-size: 18px;
+  //letter-spacing: -1px;
   font-style: italic;
 
   > :last-child {
@@ -178,9 +176,9 @@ pre,
 code {
   font-family: $font-code;
   font-size: 0.9em;
-  border: 1px solid $grey-color-light;
+  //border: 1px solid $grey-color-light;
   border-radius: 3px;
-  background-color: $grey-color-dark;
+  //background-color: $grey-color-dark;
 }
 
 code {
@@ -253,19 +251,15 @@ pre {
 // Buttons
 .button {
   border: 1px solid transparent;
-  background: #fff;
+  @include cssVar(background-color, --text, $text-color);
+  @include cssVar(color, --bg, $background-color);
+
   &:hover {
-    
-  }
-  
-  &__text {
-    &--hidden {
-      display: none;
-    }
+    // ToDO 
   }
   &__icon {
     position: relative;
-    top: -.125rem;;
+    top: -0.125rem;;
   } 
 }
 

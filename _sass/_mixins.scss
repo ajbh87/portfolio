@@ -3,7 +3,6 @@
     @content; 
   }
 }
-
 @mixin color-mix($c1, $c2, $t, $a: "color", $s: "", $o: 0, $repeat: 1) {
   $p: 100 / ($t - 1);
   $r: $repeat + 'n + ';
@@ -16,7 +15,6 @@
     }
   }
 }
-
 @mixin attr-iterator($attr, $size, $prefix: $attr) {
   $dirs: all, top, right, bottom, left;
   @each $dir in $dirs {
@@ -32,6 +30,26 @@
     }
   }
 }
+@function ease($key) {
+  @if map-has-key($ease, $key) {
+    @return map-get($ease, $key);
+  }
+
+  @warn "Unkown '#{$key}' in $ease.";
+  @return null;
+}
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return $number / ($number * 0 + 1);
+  }
+
+  @return $number;
+}
+@mixin cssVar($prop, $var, $def) {
+  #{$prop}: $def;
+  #{$prop}: var($var);
+}
+
 
 //---------------- Clip Animation
 @function generateValues ($from, $to, $steps){
@@ -68,25 +86,12 @@
 @mixin clipAnimation($from: 0, $to: 1, $name: 'someting', $name2: 'anotherThing', $steps: 100, $prop: scale ) {
   $valuesList: generateValues($from, $to, $steps);
   $inverseValuesList: generateInverseValues($from, $to, $steps, $valuesList);
-  
   $percentList: 0%;
   $percentListEaseOut: $percentList;
   @for $i from 1 through $steps {
     $t: $i / $steps;
-    //quadratic easing in
+
     $v:  ($t * $t) * 100; 
-    //quadratic easing out
-    //$v:  (-1 * $t * ($t - 2)) * 100; 
-        
-    //$t: $i / ($steps / 2);
-    //$v: 0;
-//    @if $t < 1 {
-//      $v: ((1 / 2) * $t * $t) * 100;
-//    }
-//    @else {
-//      $t: $t - 1;
-//      $v: ((-1 / 2) * ($t * ($t - 2) - 1)) * 100;
-//    }
     
     $text: $v + '%';
     $percentListEaseOut: append($percentListEaseOut, $text);
@@ -129,23 +134,4 @@
       $i: $i - 1;
     }
   }
-}
-
-
-
-@function ease($key) {
-  @if map-has-key($ease, $key) {
-    @return map-get($ease, $key);
-  }
-
-  @warn "Unkown '#{$key}' in $ease.";
-  @return null;
-}
-
-@function strip-unit($number) {
-  @if type-of($number) == 'number' and not unitless($number) {
-    @return $number / ($number * 0 + 1);
-  }
-
-  @return $number;
 }
