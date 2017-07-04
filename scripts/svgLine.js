@@ -3,12 +3,6 @@ class svgLine {
     constructor(options) {
         const _this = this,
             style = getComputedStyle(options.path);
-        _this.svgEvent = {
-            active: 0
-        };
-        _this.triggerEvent = new CustomEvent('svgTrigger', {
-            detail: _this.svgEvent
-        });
         _this.el = Object.assign({
             length: parseFloat(style['stroke-dasharray']),
             height: options.path.viewportElement.viewBox.baseVal.height,
@@ -22,40 +16,48 @@ class svgLine {
         if (_this.el.triggers.points != null) {
             _this.el.ratios = _this.getRatios(_this.el.triggers.points);
         }
-
     }
 
     pathLength(percent){
-        const _this = this,
-            l = _this.el.length,
+        const l = this.el.length,
             offset = l * percent,
-            newLength = l - offset;
-
-        requestAnimationFrame(() => changePath());
-        
-        return newLength;
-        function changePath() {
-            _this.el.path.style.strokeDashoffset = newLength;
-            requestAnimationFrame(() => recalculate());
-        }
-        function recalculate() {
-            _this.el.triggers.lengths.forEach((length, index) => {
-                if (offset >= (length.val - _this.el.triggerPad)) {
-                    if (length.active !== true) {
-                        _this.svgEvent.active = index + 1;
-                        length.active = true;
-                        delete _this.svgEvent.inactive;
+            newLength = l - offset,
+            changePath = () => {
+                requestAnimationFrame(() => {
+                    this.el.path.style.strokeDashoffset = newLength;
+                });
+                recalculate();
+            },
+            recalculate = () => {
+                var changed = [];
+                this.el.triggers.lengths.forEach((length, index) => {
+                    if (offset >= (length.val - this.el.triggerPad)) {
+                        if (length.active !== true) {
+                            length.active = true;
+                            changed.push({
+                                index: index,
+                                active: true
+                            });
+                        }
+                    } else {
+                        if (length.active !== false) {
+                            length.active = false;
+                            changed.push({
+                                index: index,
+                                active: false
+                            });
+                        }
                     }
-                } else {
-                    if (length.active !== false) {
-                        _this.svgEvent.inactive = index + 1;
-                        length.active = false;
-                        delete _this.svgEvent.active;
-                    }
+                });
+                if (changed.length > 0) {
+                    this.el.path.dispatchEvent(new CustomEvent('svgTrigger', {
+                        detail: changed
+                    }));
                 }
-            });
-            _this.el.path.dispatchEvent(_this.triggerEvent);
-        }
+            };
+
+        changePath();
+        return newLength;
     }
     getRatios(triggerPoints) {
         const _this = this,
