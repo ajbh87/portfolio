@@ -1,4 +1,4 @@
 ---
-title: "Beyond the Frontend of the Web"
+title: Beyond the Frontend of the <a tabindex="0" data-content="And what I found there.">Web</a>
 ---
-For my final project I decided to make an interactive webcomic. In my webcomic, the reader/user would become my co-author. Yet, how to make sure their work wouldn’t be lost and refreshed, to never be seen again? For that I would need to learn how to make a database and actually know how to interact with it. Due to my familiarity with Wordpress, I settled for programming it with PHP and MySQL in the backend.
+For my final project I decided to make an interactive webcomic. In my webcomic, the reader/user would become my co-author. Yet, how to make sure their work wouldn’t be lost and refreshed, to never be seen again? For that I would need to learn how to make a database and actually know how to interact with it. Due to my familiarity with Wordpress, I settled for programming it with PHP and MySQL in the backend. After months of scouring documentation I finished the project, which can be found in <a href="http://www.alfredounapseudobiografia.com" tabindex="0" data-content="Spanish only.">AlfredoUna<wbr>PseudoBiografia.com</a>.

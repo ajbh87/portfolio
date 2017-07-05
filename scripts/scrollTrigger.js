@@ -35,8 +35,9 @@ class scrollTrigger {
 
         st.onScrollTrigger = onScrollTrigger;
         st.onScrollProbe = onScrollProbe;
-    
-        window.addEventListener('scroll', debounce(onScrollTrigger, 100));
+        if (st.elements.length > 0) {
+            window.addEventListener('scroll', debounce(onScrollTrigger, 100));
+        }
         if (options.probeFn !== false) {
             window.addEventListener('scroll', onScrollProbe);
         }

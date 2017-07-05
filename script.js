@@ -17,13 +17,7 @@ function onLoad() {
     const BODY = document.querySelector('body'),
         CONTAINER = document.querySelector('.bg-line'),
         SECTIONS = document.querySelectorAll('.section'),
-        ST = new scrollTrigger({
-            dataName: 'data-trigger-sections',
-            event: true,
-            positionFn: 'center',
-            probeFn: bindScrollToLine,
-            offset: 0
-        }),
+        ST = new scrollTrigger({ probeFn: bindScrollToLine }),
         LINE = new svgLine({
             svg: CONTAINER.querySelector('.bg-line__svg'),
             path: CONTAINER.querySelector('.bg-line__path'),
@@ -33,7 +27,6 @@ function onLoad() {
             }
         }),
         MARKERS = CONTAINER.querySelectorAll('.bg-line__point'); // needs same # of trigger points
-
     let sectionRation = getSectionRatios(),
         addPrevious = before(2, function (active) {
             let index = 1;
@@ -44,38 +37,35 @@ function onLoad() {
             }
         }),
         observeLine = Observable.fromEvent(LINE.el.path, 'svgTrigger'),
-        observeScroll = Observable.fromEvent(window, 'scrollTrigger');
+        activeEvent = null;
 
     observeLine.subscribe((event) => {
-        dispatcher(() => {
-            event.detail.forEach((eventMark) => {
-                let marker = MARKERS[eventMark.index];
-                if (eventMark.active === true) {
-                    addPrevious(eventMark.index);
-                    marker.classList.add('bg-line__point--active');
-                } 
-                else {
-                    marker.classList.remove('bg-line__point--active');
-                }
-            });
-        });
-    });
-    observeScroll.subscribe((event) => {
-        dispatcher(() => {
-            event.detail.forEach((trigger) => {
-                if (trigger.active === true) {
-                    sectionActive(trigger);
-                } else {
-                    sectionInactive(trigger);
-                }
-            });
+        activeEvent = event;
+
+        event.detail.forEach((eventMark) => {
+            let marker = MARKERS[eventMark.index];
+            if (eventMark.active === true) {
+                sectionInactive(eventMark.index);
+                sectionActive(eventMark.index + 1);
+
+                addPrevious(eventMark.index);
+                marker.classList.add('bg-line__point--active');
+            } 
+            else {
+                sectionInactive(eventMark.index + 1);
+                sectionActive(eventMark.index);
+
+                marker.classList.remove('bg-line__point--active');
+            }
         });
     });
 
     LINE.setRatios(sectionRation.ratios);
 
-    ST.onScrollTrigger();
     ST.onScrollProbe();
+
+    if (activeEvent === null)
+        sectionActive(0);
 
     window.addEventListener('resize', debounce(onResize, 250));
 
@@ -110,12 +100,16 @@ function onLoad() {
             requestAnimationFrame(fn);
         });
     }
-    function sectionActive(obj) {
-        obj.el.classList.add('focused');
-        BODY.classList.add(`section-${obj.index}`);    
+    function sectionActive(index) {
+        if (index >= 0 && index < SECTIONS.length) {
+            SECTIONS[index].classList.add('focused');
+            BODY.classList.add(`section-${index}`);    
+        }
     }
-    function sectionInactive(obj) {
-        obj.el.classList.remove('focused');
-        BODY.classList.remove(`section-${obj.index}`);
+    function sectionInactive(index) {
+        if (index >= 0 && index < SECTIONS.length) {
+            SECTIONS[index].classList.remove('focused');
+            BODY.classList.remove(`section-${index}`);
+        }
     }
 }

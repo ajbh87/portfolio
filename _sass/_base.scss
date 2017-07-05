@@ -23,6 +23,10 @@ body {
   @include cssVar(color, --text, $text-color);
   @include cssVar(background-color, --bg, $background-color);
 
+  transition: 0.2s background-color ease(out-cubic);
+  //background: linear-gradient(135deg, $background-color 0%,$background-color-2 100%);
+  //background: linear-gradient(135deg, var(--bg) 0%,var(--bg-2) 100%);
+
   -webkit-text-size-adjust: 100%;
   -webkit-font-feature-settings: "kern" 1;
   -moz-font-feature-settings: "kern" 1;
@@ -35,7 +39,7 @@ body {
  * Set `margin-bottom` to maintain vertical rhythm
  */
 h1, h2, h3, h4, h5, h6,
-p, blockquote, pre,
+p, blockquote, pre, hr,
 ul, ol, dl, figure,
 %vertical-rhythm {
   margin-bottom: $spacing-unit;
@@ -138,6 +142,46 @@ a {
 
   &:hover, &:focus {
     @include cssVar(color, --secondary, $secondary);
+  }
+
+  &[data-content] {
+    position: relative;
+    cursor: pointer;
+    &:after {
+      content: attr(data-content);
+      display: block;
+      position: absolute;
+      overflow: hidden;
+
+      left: 0;
+      top: 0;
+      min-width: 10rem;
+      padding: 0.25rem;
+
+      font-size: $small-font-size;
+      line-height: 1.2;
+      font-style: normal;
+      font-weight: 700;
+      //text-align: center;
+      
+      transform: translate(0%, -100%);
+      transition: 
+        visibility 0.2s ease(out-cubic)
+        opacity 0.2s ease(out-cubic);
+
+      visibility: hidden;
+      opacity: 0;
+      
+      border-radius: 3px;
+      @include cssVar('background-color', --secondary, $secondary);
+    }
+  }
+  &:hover, &:focus {
+    &:after {
+      @include cssVar('color', --bg, $background-color); 
+      visibility: visible;
+      opacity: 1;
+    }
   }
 }
 

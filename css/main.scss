@@ -17,7 +17,7 @@ $base-font-size: strip-unit($base-font-size-fixed / $media-min) * 100vw;
 $media-max: $max-font-size-fixed * ( 1 /strip-unit($base-font-size/100));
 
 $base-font-weight: 400;
-$small-font-size: $base-font-size * 0.875;
+$small-font-size: 1rem * 0.875;
 $base-line-height: 1.4em;
 $font-weight-light: 300;
 $font-weight-bold: 700;
@@ -33,7 +33,7 @@ $grey-color-light: lighten($grey-color, 50%);
 $grey-color-dark: #1C1919;
 $grey-color-dark-t: transparentize($grey-color-dark, 0.1);
 
-$primary: #4795FF;
+$primary: #5AACFF;
 $primary-hue-1: #94C1FF;
 $primary-hue-2: #2E71EA; // Dark
 $secondary: #C1E829;
@@ -46,8 +46,9 @@ $tertiary-hue-2: #D14642; // dark
 
 $text-color: #fff;
 $background-color: $grey-color;
+$background-color-2: $grey-color-light;
 
-$double-border: 6px double $grey-color-lighter;
+$default-border: 1px solid $grey-color-lighter;
 
 // Width of the content area
 $content-width: 1200px;
@@ -83,10 +84,11 @@ $ease: (
 
 :root {
   --bg: #{$background-color};
+  --bg-2: #{$background-color-2};
   --text: #{$text-color};
   --primary: #{$primary};
   --primary-hue-1: #{$primary-hue-1};
-  --primary-hue-1: #{$primary-hue-2};
+  --primary-hue-2: #{$primary-hue-2};
   --secondary: #{$secondary};
   --secondary-hue-1: #{$secondary-hue-1};
   --secondary-hue-2: #{$secondary-hue-2};
@@ -94,26 +96,13 @@ $ease: (
   --tertiary-hue-1: #{$tertiary-hue-1};
   --tertiary-hue-2: #{$tertiary-hue-2};
 }
-
-// .section-0 {
-//   --bg: #{$background-color};
-//   --text: #{$text-color};
-//   --primary: #{$primary};
-//   --primary-hue-1: #{$primary-hue-1};
-//   --primary-hue-1: #{$primary-hue-2};
-//   --secondary: #{$secondary};
-//   --secondary-hue-1: #{$secondary-hue-1};
-//   --secondary-hue-2: #{$secondary-hue-2};
-//   --tertiary: #{$tertiary};
-//   --tertiary-hue-1: #{$tertiary-hue-1};
-//   --tertiary-hue-2: #{$tertiary-hue-2};
-// }
 .section-1 {
-  --bg: #{$background-color};
+  --bg: #{darken($background-color, 4)};
+  --bg-2: #{darken($background-color-2, 4)};
   --text: #{$text-color};
   --primary: #{$secondary};
   --primary-hue-1: #{$secondary-hue-1};
-  --primary-hue-1: #{$secondary-hue-2};
+  --primary-hue-2: #{$secondary-hue-2};
   --secondary: #{$primary};
   --secondary-hue-1: #{$primary-hue-1};
   --secondary-hue-2: #{$primary-hue-2};
@@ -122,11 +111,12 @@ $ease: (
   --tertiary-hue-2: #{$tertiary-hue-2};
 }
 .section-2 {
-  --bg: #{$background-color};
+  --bg: #{darken($background-color, 8)};
+  --bg-2: #{darken($background-color-2, 8)};
   --text: #{$text-color};
   --primary: #{$tertiary};
   --primary-hue-1: #{$tertiary-hue-1};
-  --primary-hue-1: #{$tertiary-hue-2};
+  --primary-hue-2: #{$tertiary-hue-2};
   --secondary: #{$secondary};
   --secondary-hue-1: #{$secondary-hue-1};
   --secondary-hue-2: #{$secondary-hue-2};
@@ -135,30 +125,32 @@ $ease: (
   --tertiary-hue-2: #{$primary-hue-2};
 }
 .section-3 {
-  --bg: #{$background-color};
+  --bg: #{darken($background-color, 12)};
+  --bg-2: #{darken($background-color-2, 12)};
   --text: #{$text-color};
   --primary: #{$primary};
   --primary-hue-1: #{$primary-hue-1};
-  --primary-hue-1: #{$primary-hue-2};
-  --secondary: #{$secondary};
-  --secondary-hue-1: #{$secondary-hue-1};
-  --secondary-hue-2: #{$secondary-hue-2};
-  --tertiary: #{$tertiary};
-  --tertiary-hue-1: #{$tertiary-hue-1};
-  --tertiary-hue-2: #{$tertiary-hue-2};
+  --primary-hue-2: #{$primary-hue-2};
+  --secondary: #{$tertiary};
+  --secondary-hue-1: #{$tertiary-hue-1};
+  --secondary-hue-2: #{$tertiary-hue-2};
+  --tertiary: #{$secondary};
+  --tertiary-hue-1: #{$secondary-hue-1};
+  --tertiary-hue-2: #{$secondary-hue-2};
 }
 .section-4 {
-  --bg: #{$background-color};
+  --bg: #{darken($background-color, 16)};
+  --bg-2: #{darken($background-color-2, 16)};
   --text: #{$text-color};
-  --primary: #{$primary};
-  --primary-hue-1: #{$primary-hue-1};
-  --primary-hue-1: #{$primary-hue-2};
-  --secondary: #{$secondary};
-  --secondary-hue-1: #{$secondary-hue-1};
-  --secondary-hue-2: #{$secondary-hue-2};
-  --tertiary: #{$tertiary};
-  --tertiary-hue-1: #{$tertiary-hue-1};
-  --tertiary-hue-2: #{$tertiary-hue-2};
+  --primary: #{$tertiary};
+  --primary-hue-1: #{$tertiary-hue-1};
+  --primary-hue-2: #{$tertiary-hue-2};
+  --secondary: #{$primary};
+  --secondary-hue-1: #{$primary-hue-1};
+  --secondary-hue-2: #{$primary-hue-2};
+  --tertiary: #{$secondary};
+  --tertiary-hue-1: #{$secondary-hue-1};
+  --tertiary-hue-2: #{$secondary-hue-2};
 }
 
 // Import partials from `sass_dir` (defaults to `_sass`)

@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
-    {% include head.html %}
-    <body>
-      {% include header.html %}
-      <div class="home">
-        {{ content }}
+  {% include head.html %}
+  <body>
+    {% include header.html %}
+
+    {% if page.summary %}
+    <div class="summary">
+      <div class="summary__content">
+        {{ page.summary | markdownify }}
       </div>
-      {% include footer.html %}
-    </body>
+    </div>
+    {% endif %}
+
+    <div class="home">
+      {{ content }}
+    </div>
+  {% include footer.html %}
+  </body>
 </html>

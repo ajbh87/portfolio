@@ -1,17 +1,7 @@
 ---
-title: "A few centuries ago"
-gallery: 
-- 
-    name: "Logo Fundación Nilita Vientós Gastón - B&W"
-    url: "./images/nilitaBW.svg"
-- 
-    name: "Logo Fundación Nilita Vientós Gastón - Color"
-    url: "./images/nilitaColor.svg"
-- 
-    name: "Gyro Pack"
-    url: "./images/gyro-pack.svg"
+title: A few <a tabindex="0" data-content="Timeline may be slightly wrong.">centuries ago*</a>
 ---
-I was a teen with somewhat developed art skills and a penchant for computers. During these turbulent and stormy times, I built my first PC from spare parts and installed a pirated* copy of Photoshop 6. I started meddling with digital art and photo manipulation and decided that I could do this during “flexible” work hours as a career. So the logical step was to become a graphic designer. 
+I was a teen with somewhat developed art skills and a penchant for computers. During these turbulent and stormy times, I built my first PC from spare parts and installed a <a tabindex="0" data-content="Adobe please don’t sue me. Since you made your transition from Adobe products to services, I’ve been a faithful subscriber and proselytizer.">pirated\*</a> copy of Photoshop 6. I started meddling with digital art and photo manipulation and decided that I could do this during “flexible” work hours as a career. So the logical step was to become a graphic designer. 
 
 Or so I thought.
 

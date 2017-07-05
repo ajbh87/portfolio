@@ -1,34 +1,59 @@
 %container {
   overflow: hidden;
-  width: 75%;
+  width: 100%;
+  @include media-query($media-min) {
+    width: 75%;
+  }
 }
 %content {
   display: block;
   clear: both;
-  float: right;
   width: 100%;
-  max-width: $content-max;
   padding: $spacing-unit;
+  @include media-query($media-min) {
+    float: right;
+    max-width: $content-max;
+  }
 }
 
 //----------------------- Site header
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
   width: 100%;
-  overflow: auto;
+  overflow: hidden;
+  @include media-query($media-min) {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
   &__title {
-    flex: 0 0 auto;
-    width: 75%;
-    border-bottom: $double-border;
+    display: block;
+    overflow: hidden;
+    border-bottom: $default-border;
+    @include cssVar(border-color, --primary, $primary);
+
+    @include media-query($media-min) {
+      flex: 0 0 auto;
+      width: 75%;
+    }
   }
   &__nav {
-    //flex: 1 1 auto;
-    padding: $spacing-unit;
+    padding: $spacing-unit $spacing-unit-sm;
+    text-align: right;
     a {
-      display: block;
-      text-align: right;
+      display: inline-block;
+      margin-right: $spacing-unit-sm;
+      &:last-child {
+        margin-right: 0;
+      }
+      @include media-query($media-min) {
+        display: block;
+        margin-right: 0;
+        margin-bottom: $spacing-unit / 4;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
   }
 }
@@ -40,7 +65,8 @@
 .content {
   @extend %container;
   position: relative;
-  border-bottom: $double-border;
+  border-bottom: $default-border;
+  @include cssVar(border-color, --primary, $primary);
 }
 
 .page-heading {

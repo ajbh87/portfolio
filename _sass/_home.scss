@@ -1,8 +1,14 @@
 $prop: scaleX;
 $sec-width: 75%;
-$slide-width: 15%; // 15% ~ 7.5rem
+
 $time: 0.6s;
 //----------------------- Home Page
+.summary {
+  @extend %container;
+  &__content {
+    @extend %content;
+  }
+}
 .home {
   position: relative;
 }
@@ -12,33 +18,41 @@ $time: 0.6s;
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-  width: $sec-width;
+  width: 80%;
   min-height: 50vh;
   z-index: 1;
   padding: $spacing-unit * 3 0;
-  border-bottom: $double-border;
+  border-bottom: $default-border;
+  @include cssVar(border-color, --primary, $primary);
+  @include media-query($media-min) {
+    width: $sec-width;
+  }
 
   transition: opacity $time ease(out-cubic);
   opacity: 0;
   &.focused {
     opacity: 1;
   }
-  
-  &__title {
-    z-index: 1;
-    width: 100%;
-    max-width: $content-max;
+  &__content {
+    padding: $spacing-unit;
     float: right;
-    padding: ($spacing-unit / 2) $spacing-unit;
-
-    text-align: left;
-    @include cssVar(color, --secondary, $secondary);
+    max-width: $content-max;
   }
-}
-.section-content {
-  padding: $spacing-unit;
-  float: right;
-  max-width: $content-max;
+  &__title {
+    @include cssVar(color, --secondary, $secondary);
+    a[data-content] {
+      @include cssVar(color, --secondary, $secondary);
+      border-bottom: 1px solid $secondary;
+      @include cssVar(border-color, --secondary, $secondary);
+      &:hover, &:focus {
+        @include cssVar(color, --tertiary, $tertiary);
+        @include cssVar(border-color, --tertiary, $tertiary);
+      }
+      &:after {
+        @include cssVar('background-color', --tertiary, $tertiary);
+      }
+    }
+  }
 }
 
 @keyframes pulsate {
@@ -81,20 +95,14 @@ $time: 0.6s;
   }
   &__straight {
     fill: none;
-    
-    transition: stroke $time ease(out-cubic);
     @include cssVar(stroke, --text, $text-color);
-    
     stroke-miterlimit: 10;
-    transform: scaleY(1);
-    animation: 3s ease(in-cubic) 0s lineGrow;
-    animation-iteration-count: 1;
   }
   &__path {
     $length: 285; // pre calculated unsing  path.getTotalLength() in chrome
     fill: none;
 
-    transition: stroke $time ease(out-cubic);
+    //transition: stroke $time ease(out-cubic);
     @include cssVar(stroke, --primary, $primary);
 
     stroke-miterlimit: 1;

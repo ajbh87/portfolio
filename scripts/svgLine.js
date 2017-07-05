@@ -1,9 +1,9 @@
 import saKnife from './saKnife.js';
 class svgLine {
     constructor(options) {
-        const _this = this,
-            style = getComputedStyle(options.path);
-        _this.el = Object.assign({
+        const style = getComputedStyle(options.path);
+        
+        this.el = Object.assign({
             length: parseFloat(style['stroke-dasharray']),
             height: options.path.viewportElement.viewBox.baseVal.height,
             ratios: [],
@@ -11,10 +11,10 @@ class svgLine {
             triggerPad: 0
         }, options);
         
-        _this.el.triggers.lengths = [];
+        this.el.triggers.lengths = [];
 
-        if (_this.el.triggers.points != null) {
-            _this.el.ratios = _this.getRatios(_this.el.triggers.points);
+        if (this.el.triggers.points != null) {
+            this.el.ratios = this.getRatios(this.el.triggers.points);
         }
     }
 
@@ -60,8 +60,7 @@ class svgLine {
         return newLength;
     }
     getRatios(triggerPoints) {
-        const _this = this,
-            points = _this.el.path.points;
+        const points = this.el.path.points;
         let ratios = [],
             ys = [];
         triggerPoints.forEach((triggerPoint, index) => {
@@ -70,19 +69,18 @@ class svgLine {
             ys.push(y);
 
             if (index === 0) {
-                newRatio = y / _this.el.height;
+                newRatio = y / this.el.height;
             } else {
-                newRatio = (y - ys[index - 1]) / _this.el.height;
+                newRatio = (y - ys[index - 1]) / this.el.height;
             }
             ratios.push(newRatio);
         });
         return ratios;
     }
     setRatios(ratios) {
-        const _this = this,
-            triggerPoints = _this.el.triggers.points,
-            oldRatios = _this.el.ratios;
-        let points = _this.el.path.points,
+        const triggerPoints = this.el.triggers.points,
+            oldRatios = this.el.ratios;
+        let points = this.el.path.points,
             diffs = [],
             pointIndex = 0,
             triggerLengths = [];
@@ -103,7 +101,7 @@ class svgLine {
                 diffs.push(newY);
             });
 
-            _this.el.ratios = ratios;
+            this.el.ratios = ratios;
             triggerPoints.forEach((triggerIndex, index) => {
                 const trigger = points.getItem(triggerIndex);
                 let lastTrigger = null,
@@ -155,10 +153,9 @@ class svgLine {
                     }
                     return newY;
                 }
-        
             });
-            _this.el.triggers.lengths = triggerLengths;
-            _this.el.length = triggerLengths[triggerLengths.length - 1].val;
+            this.el.triggers.lengths = triggerLengths;
+            this.el.length = triggerLengths[triggerLengths.length - 1].val;
         }
 
         function calculateLength(pointSet1, pointSet2) {

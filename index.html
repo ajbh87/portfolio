@@ -5,10 +5,8 @@ options: "sectionOptions"
 ---
 {% for section in site.home %}
   <section id="{{ section.title | slugify }}" class="section" data-trigger-sections>
-    <div class="section__title">
-      <h2 class="section__title--animate">{{ section.title }}</h2>
-    </div>
-    <div class="section-content">
+    <div class="section__content">
+      <h2 class="section__title">{{ section.title }}</h2>
       {{ section.content }}
     </div>
   </section>
