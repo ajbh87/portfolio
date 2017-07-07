@@ -48,8 +48,8 @@ function offset(el) {
 function winSize() {
     const e = document.documentElement,
         g = document.querySelector('body'),
-        width = e.clientWidth||g.clientWidth,
-        height = e.clientHeight||g.clientHeight;
+        width = window.innerWidth||e.clientWidth||g.clientWidth,
+        height = window.innerHeight||e.clientHeight||g.clientHeight;
     return {
         width,
         height,
