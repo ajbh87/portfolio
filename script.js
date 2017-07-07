@@ -72,6 +72,7 @@ function onLoad() {
     function onResize() {
         sectionRation = getSectionRatios();
         LINE.setRatios(sectionRation.ratios);
+        ST.onScrollProbe();
     }
     function getSectionRatios() {
         let cHeight = CONTAINER.offsetHeight,
@@ -94,11 +95,6 @@ function onLoad() {
     }
     function bindScrollToLine(percent) {      
         LINE.pathLength(percent);
-    }
-    function dispatcher(fn) {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(fn);
-        });
     }
     function sectionActive(index) {
         if (index >= 0 && index < SECTIONS.length) {

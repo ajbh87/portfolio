@@ -383,8 +383,8 @@ function offset(el) {
 function winSize() {
     const e = document.documentElement,
         g = document.querySelector('body'),
-        width = e.clientWidth||g.clientWidth,
-        height = e.clientHeight||g.clientHeight;
+        width = window.innerWidth||e.clientWidth||g.clientWidth,
+        height = window.innerHeight||e.clientHeight||g.clientHeight;
     return {
         width,
         height,
@@ -1655,7 +1655,7 @@ class svgLine {
         let points = this.el.path.points,
             diffs = [],
             pointIndex = 0,
-            triggerLengths = [];
+            triggerLengths = this.el.triggers.lengths;
 
         if (triggerPoints != null) {
             ratios.forEach((ratio, i) => {
@@ -1680,7 +1680,8 @@ class svgLine {
                     point = null,
                     lengths = [],
                     length = 0,
-                    triggerLength = 0;
+                    triggerLength = 0,
+                    obj = triggerLengths[index] != null ? triggerLengths[index] : {};
                 if (index > 0) {
                     lastTrigger = triggerPoints[index - 1];
                 }
@@ -1710,12 +1711,12 @@ class svgLine {
                     triggerLength = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(triggerLength + length, 4);
                 });
 
-                triggerLengths.push({
-                    val: triggerLength,
+                triggerLengths[index] = Object.assign({
                     active: false,
                     inactive: true
-                });
-
+                }, obj);
+                triggerLengths[index].val = triggerLength;
+                
                 function changeY(point) {
                     let newY = 0;
                     if (index < (points.numberOfItems - 1)) {
@@ -1726,7 +1727,7 @@ class svgLine {
                     return newY;
                 }
             });
-            this.el.triggers.lengths = triggerLengths;
+            //this.el.triggers.lengths = triggerLengths;
             this.el.length = triggerLengths[triggerLengths.length - 1].val;
         }
 
@@ -2366,6 +2367,7 @@ function onLoad() {
     function onResize() {
         sectionRation = getSectionRatios();
         LINE.setRatios(sectionRation.ratios);
+        ST.onScrollProbe();
     }
     function getSectionRatios() {
         let cHeight = CONTAINER.offsetHeight,
@@ -2388,11 +2390,6 @@ function onLoad() {
     }
     function bindScrollToLine(percent) {      
         LINE.pathLength(percent);
-    }
-    function dispatcher(fn) {
-        requestAnimationFrame(() => {
-            requestAnimationFrame(fn);
-        });
     }
     function sectionActive(index) {
         if (index >= 0 && index < SECTIONS.length) {

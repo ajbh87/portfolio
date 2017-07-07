@@ -83,7 +83,7 @@ class svgLine {
         let points = this.el.path.points,
             diffs = [],
             pointIndex = 0,
-            triggerLengths = [];
+            triggerLengths = this.el.triggers.lengths;
 
         if (triggerPoints != null) {
             ratios.forEach((ratio, i) => {
@@ -108,7 +108,8 @@ class svgLine {
                     point = null,
                     lengths = [],
                     length = 0,
-                    triggerLength = 0;
+                    triggerLength = 0,
+                    obj = triggerLengths[index] != null ? triggerLengths[index] : {};
                 if (index > 0) {
                     lastTrigger = triggerPoints[index - 1];
                 }
@@ -138,12 +139,12 @@ class svgLine {
                     triggerLength = saKnife.round(triggerLength + length, 4);
                 });
 
-                triggerLengths.push({
-                    val: triggerLength,
+                triggerLengths[index] = Object.assign({
                     active: false,
                     inactive: true
-                });
-
+                }, obj);
+                triggerLengths[index].val = triggerLength;
+                
                 function changeY(point) {
                     let newY = 0;
                     if (index < (points.numberOfItems - 1)) {
@@ -154,7 +155,7 @@ class svgLine {
                     return newY;
                 }
             });
-            this.el.triggers.lengths = triggerLengths;
+            //this.el.triggers.lengths = triggerLengths;
             this.el.length = triggerLengths[triggerLengths.length - 1].val;
         }
 
