@@ -1,7 +1,7 @@
 ---
 title: I build things for the <a tabindex="0" data-content="A web developer in other words.">web*</a>
 ---
-I have extensive knowledge of __Javascript__, __HTML__ and __CSS__. This includes frameworks and libraries like __Bootstrap__, __RxJS__, __AngularJS__ and __React__. In the back-end I've worked with __PHP__, __ASP.NET C#__ and __Node.js__.  If you want to get an idea of what I'm capable, this page is built with [Jekyll](https://jekyllrb.com/), [SASS](http://sass-lang.com/) and Vanilla ES6 JavaScript with a smidget of [lodash](http://www.lodash.com), bundled with [Webpack 2](https://webpack.github.io/). The code from this page, and other projects is in my [Github](https://www.github.com/alfredo-xyz "Alfredo's Github"), which by the way, is NOT well documented. If you'd like to read more of how I got here, just follow the path.
+I have extensive knowledge of __Javascript__, __HTML__ and __CSS__. This includes frameworks and libraries like __Bootstrap__, __RxJS__, __AngularJS__ and __React__. In the back-end I've worked with __PHP__, __ASP.NET C#__ and __Node.js__.  If you want to get an idea of what I'm capable, this page is built with [Jekyll](https://jekyllrb.com/), [SASS](http://sass-lang.com/) and Vanilla ES6 JavaScript with a smidget of [lodash](http://www.lodash.com), bundled with [Webpack 2](https://webpack.github.io/). The code from this page, and other projects is in my [Github](https://www.github.com/alfredo-xyz "Alfredo's Github"). If you'd like to read more of how I got here, just follow the path.
 
 ---
 

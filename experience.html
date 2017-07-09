@@ -1,0 +1,90 @@
+---
+layout: page
+skills: 
+  - name: HTML
+    percent: 85
+  - name: CSS
+    percent: 95
+    sub:
+      - name: Sass
+        percent: 95
+      - name: Less
+        percent: 95
+      - name: Bootstrap
+        percent: 90
+  - name: Javascript
+    percent: 90
+    sub:
+      - name: AngularJS
+        percent: 90
+      - name: React
+        percent: 65
+      - name: Webpack 2
+        percent: 80
+
+jobs:
+  - title: Web Developer
+    company: YCS PR Corp.
+    location: San Juan, PR
+    period: Jun 2016 - Present
+    description: >
+      - Worked tightly with a team of back-end developers to develop several web applications.
+      
+      - Created a medical oriented scheduler prototype in AngularJS and ASP.Net C#. 
+
+      - Crafted a front-end experience for a localized billing web app. 
+  - title: Freelance Web Developer / Designer
+    company: <a tabindex="0" data-content="A lot of stress!!!">Self-Employed*</a>
+    location: San Juan, PR
+    period: Dec 2012 - May 2016
+    description: >
+      - Developed custom and responsive wordpress themes.
+
+      - Worked with graphic designers transforming their designs into working web pages.
+  - title: Web Developer and Graphic Designer
+    company: Partido Puertorriqueños Por Puerto Rico.
+    location: San Juan, PR
+    period: Jan 2012 - Nov 2012
+    description: >
+      - TODO 
+---
+<section class="skills experience">
+  <h2>Skills</h2>
+  <dl class="skill">
+  {% for skill in page.skills %}
+    <dt class="skill__name">{{ skill.name }}</dt>
+    <dd class="skill__percent">{{ skill.percent }}</dd>
+    {% if skill.sub %}
+    <div class="skill__subskills">
+    {% for subskill in skill.sub %}
+      <dt class="skill__name skill__subskill">{{ subskill.name }}</dt>
+      <dd class="skill__percent skill__subskill">{{ subskill.percent }}</dd>
+    {% endfor %}
+    </div>
+    {% endif %}
+  {% endfor %}
+  </dl>
+</section>
+<section class="jobs experience">
+  <h2>Experience</h2>
+  {% for job in page.jobs %}
+  <dl class="job">
+    <div class="job__info">
+      <dt>Title</dt>
+      <dd class="job__title">{{ job.title }}</dd>
+      {% if job.company %}
+      <dt>Company</dt>
+      <dd class="job__company">{{ job.company }}</dd>
+      {% endif %}
+      <dt>Location</dt>
+      <dd class="job__location">{{ job.location }}</dd>
+      <dt>Period</dt>
+      <dd class="job__period">{{ job.period }}</dd>
+    </div>
+    <div class="job__description-cont">
+      <dt>Description</dt>
+      <dd class="job__description">{{ job.description | markdownify }}</dd>
+    </div>
+  </dl>
+  {% endfor %}
+</section>

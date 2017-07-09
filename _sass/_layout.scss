@@ -16,7 +16,7 @@
   }
 }
 
-//----------------------- Site header
+//----------------------------- Site header
 .header {
   width: 100%;
   overflow: hidden;
@@ -38,10 +38,18 @@
   }
   &__nav {
     padding: $spacing-unit $spacing-unit-sm;
-    text-align: right;
+    text-align: center;
+    @include media-query($media-min) {
+      text-align: right;
+    }
     a {
+      font-weight: 700;
       display: inline-block;
       margin-right: $spacing-unit-sm;
+
+      &.active {
+        @include cssVar(color, --tertiary, $tertiary);
+      } 
       &:last-child {
         margin-right: 0;
       }
@@ -57,11 +65,22 @@
     }
   }
 }
+
+//----------------------------- Title
 .title {
   @extend %content;
+  &__main {
+    &:after {
+      content: ":";
+    }
+  }
+  &__subtitle {
+    display: block;
+    // @include cssVar(color, --secondary, $secondary);
+  }
 }
 
-//----------------------------- Page content
+//----------------------------- Content
 .content {
   @extend %container;
   position: relative;
@@ -69,55 +88,113 @@
   @include cssVar(border-color, --primary, $primary);
 }
 
-.page-heading {
-    margin-bottom: $spacing-unit;
-}
 
-// Blog
+//----------------------------- Blog
 .posts {
   @extend %content;
-}
-.post-list {
-  margin-left: 0;
-  list-style: none;
 
-  > li {
+  &__heading {
+    @include cssVar(color, --secondary, $secondary);
     margin-bottom: $spacing-unit;
   }
-}
+  &__list {
+    margin-left: 0;
+    list-style: none;
 
-.post-meta {
-  font-size: $small-font-size;
-}
-
-.post-link {
-  display: block;
-}
-
-
-//----------------------- Posts
-.post {
-  @extend %content;
-}
-.post-header {
-  margin-bottom: $spacing-unit;
-}
-
-.post-title {
-
-}
-
-.post-content {
-  margin-bottom: $spacing-unit;
-  &:last-child {
-    margin-bottom: 0;
+    > li {
+      margin-bottom: $spacing-unit;
+    }
+  }
+  &__meta {
+    font-size: $small-font-size;
+  }
+  &__link {
+    display: block;
   }
 }
 
-//---------------------- Footer
+//----------------------------- Posts & Pages
+.post, .page {
+  @extend %content;
+
+  &__header {
+    margin-bottom: $spacing-unit-sm;
+  }
+  &__title {
+    @include cssVar(color, --secondary, $secondary);
+  }
+  &__content {
+
+  }
+}
+
+//----------------------------- Social Aside
+.social-aside {
+  text-align: center;
+  @include media-query($media-min) {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 15;
+    text-align: left;
+  }
+  &__list {
+    margin: 0;
+    list-style: none;
+    > li {
+      display: inline-block;
+      margin-right: $spacing-unit-sm;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    @include media-query($media-min) {
+      > li {
+        display: block;
+        margin-right: 0;
+      }
+      > li > a {
+        transition: 
+          background 0.2s ease(out-cubic),
+          transform 0.3s ease(out-cubic);
+
+        transform: translate(75%, 0);
+        transform: translate(calc(100% - 1.5em - 1rem), 0);
+        padding: 0.25rem 0.75rem;
+
+        &:hover, &:focus {
+          @include cssVar(background, --bg, $background-color);
+          transform: translate(0, 0);
+        }
+
+        .icon {
+          height: 1.5em;
+          width: 1.5em;
+        }
+      }
+    }
+  }
+}
+
+//----------------------------- Footer
 .footer {
   @extend %container;
-}
-.footer-content {
-  @extend %content;
+
+  &__content {
+    @extend %content;
+  }
+  &__social-list {
+    list-style: none;
+    padding: 0;
+    margin-left: 0;
+
+    li {
+      display: inline-block;
+      margin-right: $spacing-unit-sm;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
 }

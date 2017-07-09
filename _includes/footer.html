@@ -1,9 +1,14 @@
 <footer class="footer">
-  <div class="footer-content">
-  	<p>{{ site.description }}</p>
-	<h5>Contact me:</h5>
-	<ul>
-		<li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-	</ul>
-  </div>
+	<div class="footer__content">
+		{% capture experience %}
+		Learn more about my experiences <a href="{{ "/experience.html" | prepend: site.baseurl | prepend: site.url }}" title="Experience">here.</a>
+		{% endcapture %}
+		<p>{{ site.description | append: experience }}</p>
+		<ul class="footer__social-list">
+			{% include social-links.html %}
+		</ul>
+		<p>
+			powered by <a href="https://jekyllrb.com/" title="Jekyll">Jekyll</a> and <a tabindex="0" data-content="A.K.A. Me">Mr. Hyde*</a>.
+		</p>
+	</div>
 </footer>

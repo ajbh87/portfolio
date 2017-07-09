@@ -7,9 +7,14 @@
 	</a>
 
 	<nav class="header__nav">
-		{% if page.isHome != true %}
-		<a href="{{ site.baseurl | prepend: site.url }}" title="Home">a lot about me</a>
-		{% endif %}
-		<a href="{{ "/blog.html" | prepend: site.baseurl | prepend: site.url }}" title="Blog">musings</a>
+	{% for link in site.menuitems %}
+		<a href="{{ link.url | prepend: site.baseurl | prepend: site.url }}"
+			{% if link.url == page.url %}
+			class="active"
+			{% endif %}
+			title="{{ link.title }}">
+			{{ link.name }}
+		</a>
+	{% endfor %}
 	</nav>
 </header>

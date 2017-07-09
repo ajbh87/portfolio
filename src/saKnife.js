@@ -8,6 +8,7 @@ const saKnife = {
 };
 
 function whichTransitionEvent(){
+    /* From Modernizr via 'https://davidwalsh.name/css-animation-callback' */
     const el = document.createElement('fakeelement'),
         transitions = {
             transition: 'transitionend',

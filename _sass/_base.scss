@@ -1,15 +1,16 @@
-/**
- * Reset some basic elements
- */
+//----------------------------- Reset
 body, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, hr,
 dl, dd, ol, ul, figure {
   margin: 0;
   padding: 0;
 }
-/**
- * Basic styling
- */
+
+* {
+  box-sizing: border-box;
+}
+
+//-----------------------------  Basic styling
 html {
   font: $base-font-weight #{$base-font-size-fixed}/#{$base-line-height} $base-font-family;
   @include media-query($media-min) {
@@ -35,9 +36,7 @@ body {
   font-kerning: normal;
 }
 
-/**
- * Set `margin-bottom` to maintain vertical rhythm
- */
+//----------------------------- Vertical Rhythm
 h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, hr,
 ul, ol, dl, figure,
@@ -49,6 +48,7 @@ ul, ol, dl, figure,
   }
 }
 
+//----------------------------- Headings
 h1, .h1 {
   font-size: 2.25rem;
   line-height: 1.05em;
@@ -73,7 +73,10 @@ h6, .h6 {
   font-size: .8rem;
   line-height: 1.2em;
 }
-
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+  font-weight: $font-weight-light;
+}
+//----------------------------- Font
 .font {
   &--biggest {
     @extend .h3;
@@ -89,17 +92,13 @@ h6, .h6 {
   }
 }
 
-/**
- * Images
- */
+//----------------------------- Images
 img {
   max-width: 100%;
   vertical-align: middle;
 }
 
-/**
- * Figures
- */
+//----------------------------- Figures
 figure > img {
   display: block;
 }
@@ -108,9 +107,7 @@ figcaption {
   font-size: $small-font-size;
 }
 
-/**
- * Lists
- */
+//----------------------------- Lists
 ul, ol {
   margin-left: $spacing-unit;
 }
@@ -122,16 +119,7 @@ li {
   }
 }
 
-/**
- * Headings
- */
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
-  font-weight: $font-weight-light;
-}
-
-/**
- * Links
- */
+//----------------------------- Links
 a {
   @include cssVar(color, --primary, $primary);
   text-decoration: none;
@@ -184,17 +172,51 @@ a {
     }
   }
 }
+.link {
+  &:hover {
+    .link__icon {
+      fill: currentColor;
+    }
+  }
+  &--with-icon {
+    display: flex;
+    align-items: center;
+  }
+  &__icon {
+    margin-right: 0.25rem;
+  }
+}
 
+//----------------------------- Buttons
 button {
   line-height: $base-line-height;
   &:not([disabled]) {
     cursor: pointer;
   }
 }
+.button {
+  border: 1px solid transparent;
+  @include cssVar(background-color, --text, $text-color);
+  @include cssVar(color, --bg, $background-color);
 
-/**
- * Blockquotes
- */
+  &:hover {
+    // ToDO 
+  }
+  &__icon {
+    position: relative;
+    top: -0.125rem;;
+  } 
+}
+
+//----------------------------- Icons
+.icon {
+  height: 1em;
+  width: 1em;
+  @include cssVar(fill, --tertiary, $tertiary);
+  // transition: fill .2s ease(out-cubic);
+}
+
+//----------------------------- Blockquotes
 blockquote {
   color: $grey-color;
   border-left: 4px solid $grey-color-light;
@@ -208,14 +230,7 @@ blockquote {
   }
 }
 
-* {
-  box-sizing: border-box;
-}
-
-
-/**
- * Code formatting
- */
+//----------------------------- Code formatting
 pre,
 code {
   font-family: $font-code;
@@ -240,20 +255,7 @@ pre {
     }
 }
 
-/**
- * Wrapper
- */
-.wrapper {
-    max-width: $content-width;
-    margin-right: auto;
-    margin-left: auto;
-    padding: 0 $spacing-unit 0 $spacing-unit;
-    @extend %clearfix;
-}
-
-/**
- * Clearfix
- */
+//----------------------------- Clearfix
 %clearfix {
   &:after {
     content: "";
@@ -262,10 +264,10 @@ pre {
   }
 }
 
+//----------------------------- Hiddens
 .hidden {
   display: none;
 }
-
 .visually-hidden { 
   border: 0; 
   clip: rect(0 0 0 0); 
@@ -277,33 +279,6 @@ pre {
   width: 1px; 
 }
 
-// Title
-.title {
-  &__main {
-    &:after {
-      content: ":";
-    }
-  }
-  &__subtitle {
-    display: block;
-  }
-}
-
-// paddings and margins
+//----------------------------- Paddings and Margins
 @include attr-iterator(padding, $spacing-unit, pad);
-
-// Buttons
-.button {
-  border: 1px solid transparent;
-  @include cssVar(background-color, --text, $text-color);
-  @include cssVar(color, --bg, $background-color);
-
-  &:hover {
-    // ToDO 
-  }
-  &__icon {
-    position: relative;
-    top: -0.125rem;;
-  } 
-}
 

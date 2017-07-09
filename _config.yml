@@ -1,9 +1,9 @@
 title: A Strange Path to Becoming a Web Developer
 sub-title: The Story of Alfredo J. Bermúdez
 email: alfredo@ajbermudez.com
-description: > # this means to ignore newlines until "baseurl:"
-  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive knowledge of HTML,
-  CSS, Vanilla Javascript, and experience with several Javascript frameworks including AngularJS and REACT.
+description: >
+  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive 
+  knowledge of <b>HTML</b>, <b>CSS</b> and <b>Vanilla Javascript</b>.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://ajbermudez.com" # the base hostname & protocol for your site
 github_username:  alfredo-xyz
@@ -12,10 +12,19 @@ github_username:  alfredo-xyz
 plugins:
   - octopress-paginate
 markdown: kramdown
-exclude: [README.md, script.js, webpack.config.js, package.json, node_modules, scripts]
+exclude: [main.scss, README.md, home-init.js, webpack.config.js, package.json, node_modules, src]
 sass:
   sourcemap: true
 
+menuitems:
+  - 
+    name: musings
+    url: "/blog.html"
+    title: Blog
+  - 
+    name: experience
+    url: "/experience.html"
+    title: Experience
 
 collections:
   home:
@@ -27,13 +36,15 @@ excerpt_separator: <!--more-->
 
 paginate:
   collection:   posts
-  per_page:     5             # maximum number of items per page
-  limit:        false              # Maximum number of pages to paginate (false for unlimited)
-  permalink:    /page:num/     # pagination path (relative to template page)
-  title_suffix: " - page :num" # Append to template's page title
-  category:     ''             # Paginate items in this category
-  categories:   []             # Paginate items in any of these categories
-  tag:          ''             # Paginate items tagged with this tag
-  tags:         []             # Paginate items tagged with any of these tags
-  reversed:     false          # Reverse the order of the documents
+  per_page:     5               # maximum number of items per page
+  limit:        false           # Maximum number of pages to paginate (false for unlimited)
+  permalink:    /page:num/      # pagination path (relative to template page)
+  title_suffix: " - page :num"  # Append to template's page title
+  category:     ''              # Paginate items in this category
+  categories:   []              # Paginate items in any of these categories
+  tag:          ''              # Paginate items tagged with this tag
+  tags:         []              # Paginate items tagged with any of these tags
+  reversed:     false           # Reverse the order of the documents
 
+isDev: true
+version: 1.2

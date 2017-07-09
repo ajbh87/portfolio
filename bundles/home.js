@@ -1,80 +1,12 @@
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 23);
-/******/ })
-/************************************************************************/
-/******/ ([
+webpackJsonp([0],[
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var root_1 = __webpack_require__(4);
-var toSubscriber_1 = __webpack_require__(22);
-var observable_1 = __webpack_require__(18);
+var toSubscriber_1 = __webpack_require__(24);
+var observable_1 = __webpack_require__(20);
 /**
  * A representation of any set of values over any amount of time. This the most basic building block
  * of RxJS.
@@ -867,12 +799,12 @@ exports.empty = {
 
 "use strict";
 
-var isArray_1 = __webpack_require__(20);
-var isObject_1 = __webpack_require__(21);
+var isArray_1 = __webpack_require__(22);
+var isObject_1 = __webpack_require__(23);
 var isFunction_1 = __webpack_require__(3);
 var tryCatch_1 = __webpack_require__(9);
 var errorObject_1 = __webpack_require__(2);
-var UnsubscriptionError_1 = __webpack_require__(19);
+var UnsubscriptionError_1 = __webpack_require__(21);
 /**
  * Represents a disposable resource, such as the execution of an Observable. A
  * Subscription has one important method, `unsubscribe`, that takes no argument
@@ -1130,6 +1062,12 @@ module.exports = g;
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports) {
 
 /**
@@ -1407,18 +1345,18 @@ module.exports = before;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 var Observable_1 = __webpack_require__(0);
-var fromEvent_1 = __webpack_require__(17);
+var fromEvent_1 = __webpack_require__(19);
 Observable_1.Observable.fromEvent = fromEvent_1.fromEvent;
 //# sourceMappingURL=fromEvent.js.map
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1565,7 +1503,7 @@ class scrollTrigger {
 /* harmony default export */ __webpack_exports__["a"] = (scrollTrigger);
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1741,7 +1679,139 @@ class svgLine {
 /* harmony default export */ __webpack_exports__["a"] = (svgLine);
 
 /***/ }),
-/* 15 */
+/* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_scrollTrigger_js__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_svgLine_js__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_saKnife_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__node_modules_rxjs_Observable__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__node_modules_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__node_modules_rxjs_Observable__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__node_modules_rxjs_add_observable_fromEvent__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__node_modules_rxjs_add_observable_fromEvent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__node_modules_rxjs_add_observable_fromEvent__);
+__webpack_require__(11);
+
+
+
+
+
+
+
+//import Rx from './node_modules/rxjs/Rx';
+
+
+
+
+
+window.addEventListener('load', onLoad);  
+
+function onLoad() {
+    'use strict';
+    const BODY = document.querySelector('body'),
+        CONTAINER = document.querySelector('.bg-line'),
+        SECTIONS = document.querySelectorAll('.section'),
+        ST = new __WEBPACK_IMPORTED_MODULE_0__src_scrollTrigger_js__["a" /* default */]({ probeFn: bindScrollToLine }),
+        LINE = new __WEBPACK_IMPORTED_MODULE_1__src_svgLine_js__["a" /* default */]({
+            svg: CONTAINER.querySelector('.bg-line__svg'),
+            path: CONTAINER.querySelector('.bg-line__path'),
+            pathSelector: '.bg-line__path',
+            triggers: {
+                points: [2, 4, 8, 10, 11]
+            }
+        }),
+        MARKERS = CONTAINER.querySelectorAll('.bg-line__point'); // needs same # of trigger points
+    let sectionRation = getSectionRatios(),
+        addPrevious = __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js___default()(2, function (active) {
+            let index = 1;
+            if (active > 1) {
+                for (index = 1; index < active; index ++) {
+                    MARKERS[index - 1].classList.add('bg-line__point--active');
+                }
+            }
+        }),
+        observeLine = __WEBPACK_IMPORTED_MODULE_5__node_modules_rxjs_Observable__["Observable"].fromEvent(LINE.el.path, 'svgTrigger'),
+        activeEvent = null;
+
+    observeLine.subscribe((event) => {
+        activeEvent = event;
+
+        event.detail.forEach((eventMark) => {
+            let marker = MARKERS[eventMark.index];
+            if (eventMark.active === true) {
+                sectionInactive(eventMark.index);
+                sectionActive(eventMark.index + 1);
+
+                addPrevious(eventMark.index);
+                marker.classList.add('bg-line__point--active');
+            } 
+            else {
+                sectionInactive(eventMark.index + 1);
+                sectionActive(eventMark.index);
+
+                marker.classList.remove('bg-line__point--active');
+            }
+        });
+    });
+
+    LINE.setRatios(sectionRation.ratios);
+
+    ST.onScrollProbe();
+
+    if (activeEvent === null)
+        sectionActive(0);
+
+    window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));
+
+    function onResize() {
+        sectionRation = getSectionRatios();
+        LINE.setRatios(sectionRation.ratios);
+        ST.onScrollProbe();
+    }
+    function getSectionRatios() {
+        let cHeight = CONTAINER.offsetHeight,
+            posArr = [], // top position array
+            ratios = [], // ratio calculation array
+            topArr = []; // top calculation array
+
+        SECTIONS.forEach((element, index) => {
+            let marker = MARKERS[index],
+                ratio = element.offsetHeight / cHeight,
+                lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
+                top = (ratio * 100) + lastTop; // top calculation
+            
+            marker.style.top = top + '%';
+            posArr.push(element.getBoundingClientRect());
+            topArr.push(top);
+            ratios.push(__WEBPACK_IMPORTED_MODULE_2__src_saKnife_js__["a" /* default */].round(ratio, 6));
+        });
+        return { cHeight, posArr, ratios, topArr };
+    }
+    function bindScrollToLine(percent) {      
+        LINE.pathLength(percent);
+    }
+    function sectionActive(index) {
+        if (index >= 0 && index < SECTIONS.length) {
+            SECTIONS[index].classList.add('focused');
+            BODY.classList.add(`section-${index}`);    
+        }
+    }
+    function sectionInactive(index) {
+        if (index >= 0 && index < SECTIONS.length) {
+            SECTIONS[index].classList.remove('focused');
+            BODY.classList.remove(`section-${index}`);
+        }
+    }
+}
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2011,7 +2081,7 @@ var SafeSubscriber = (function (_super) {
 //# sourceMappingURL=Subscriber.js.map
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2157,17 +2227,17 @@ exports.FromEventObservable = FromEventObservable;
 //# sourceMappingURL=FromEventObservable.js.map
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var FromEventObservable_1 = __webpack_require__(16);
+var FromEventObservable_1 = __webpack_require__(18);
 exports.fromEvent = FromEventObservable_1.FromEventObservable.create;
 //# sourceMappingURL=fromEvent.js.map
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2199,7 +2269,7 @@ exports.$$observable = exports.observable;
 //# sourceMappingURL=observable.js.map
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2230,7 +2300,7 @@ exports.UnsubscriptionError = UnsubscriptionError;
 //# sourceMappingURL=UnsubscriptionError.js.map
 
 /***/ }),
-/* 20 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2239,7 +2309,7 @@ exports.isArray = Array.isArray || (function (x) { return x && typeof x.length =
 //# sourceMappingURL=isArray.js.map
 
 /***/ }),
-/* 21 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2251,12 +2321,12 @@ exports.isObject = isObject;
 //# sourceMappingURL=isObject.js.map
 
 /***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var Subscriber_1 = __webpack_require__(15);
+var Subscriber_1 = __webpack_require__(17);
 var rxSubscriber_1 = __webpack_require__(8);
 var Observer_1 = __webpack_require__(6);
 function toSubscriber(nextOrObserver, error, complete) {
@@ -2276,136 +2346,6 @@ function toSubscriber(nextOrObserver, error, complete) {
 exports.toSubscriber = toSubscriber;
 //# sourceMappingURL=toSubscriber.js.map
 
-/***/ }),
-/* 23 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__ = __webpack_require__(13);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__node_modules_rxjs_Observable__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__node_modules_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__node_modules_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__node_modules_rxjs_add_observable_fromEvent__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__node_modules_rxjs_add_observable_fromEvent___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__node_modules_rxjs_add_observable_fromEvent__);
-
-
-
-
-
-
-//import Rx from './node_modules/rxjs/Rx';
-
-
-
-
-
-window.addEventListener('load', onLoad);  
-
-function onLoad() {
-    'use strict';
-    const BODY = document.querySelector('body'),
-        CONTAINER = document.querySelector('.bg-line'),
-        SECTIONS = document.querySelectorAll('.section'),
-        ST = new __WEBPACK_IMPORTED_MODULE_0__scripts_scrollTrigger_js__["a" /* default */]({ probeFn: bindScrollToLine }),
-        LINE = new __WEBPACK_IMPORTED_MODULE_1__scripts_svgLine_js__["a" /* default */]({
-            svg: CONTAINER.querySelector('.bg-line__svg'),
-            path: CONTAINER.querySelector('.bg-line__path'),
-            pathSelector: '.bg-line__path',
-            triggers: {
-                points: [2, 4, 8, 10, 11]
-            }
-        }),
-        MARKERS = CONTAINER.querySelectorAll('.bg-line__point'); // needs same # of trigger points
-    let sectionRation = getSectionRatios(),
-        addPrevious = __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js___default()(2, function (active) {
-            let index = 1;
-            if (active > 1) {
-                for (index = 1; index < active; index ++) {
-                    MARKERS[index - 1].classList.add('bg-line__point--active');
-                }
-            }
-        }),
-        observeLine = __WEBPACK_IMPORTED_MODULE_5__node_modules_rxjs_Observable__["Observable"].fromEvent(LINE.el.path, 'svgTrigger'),
-        activeEvent = null;
-
-    observeLine.subscribe((event) => {
-        activeEvent = event;
-
-        event.detail.forEach((eventMark) => {
-            let marker = MARKERS[eventMark.index];
-            if (eventMark.active === true) {
-                sectionInactive(eventMark.index);
-                sectionActive(eventMark.index + 1);
-
-                addPrevious(eventMark.index);
-                marker.classList.add('bg-line__point--active');
-            } 
-            else {
-                sectionInactive(eventMark.index + 1);
-                sectionActive(eventMark.index);
-
-                marker.classList.remove('bg-line__point--active');
-            }
-        });
-    });
-
-    LINE.setRatios(sectionRation.ratios);
-
-    ST.onScrollProbe();
-
-    if (activeEvent === null)
-        sectionActive(0);
-
-    window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));
-
-    function onResize() {
-        sectionRation = getSectionRatios();
-        LINE.setRatios(sectionRation.ratios);
-        ST.onScrollProbe();
-    }
-    function getSectionRatios() {
-        let cHeight = CONTAINER.offsetHeight,
-            posArr = [], // top position array
-            ratios = [], // ratio calculation array
-            topArr = []; // top calculation array
-
-        SECTIONS.forEach((element, index) => {
-            let marker = MARKERS[index],
-                ratio = element.offsetHeight / cHeight,
-                lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
-                top = (ratio * 100) + lastTop; // top calculation
-            
-            marker.style.top = top + '%';
-            posArr.push(element.getBoundingClientRect());
-            topArr.push(top);
-            ratios.push(__WEBPACK_IMPORTED_MODULE_2__scripts_saKnife_js__["a" /* default */].round(ratio, 6));
-        });
-        return { cHeight, posArr, ratios, topArr };
-    }
-    function bindScrollToLine(percent) {      
-        LINE.pathLength(percent);
-    }
-    function sectionActive(index) {
-        if (index >= 0 && index < SECTIONS.length) {
-            SECTIONS[index].classList.add('focused');
-            BODY.classList.add(`section-${index}`);    
-        }
-    }
-    function sectionInactive(index) {
-        if (index >= 0 && index < SECTIONS.length) {
-            SECTIONS[index].classList.remove('focused');
-            BODY.classList.remove(`section-${index}`);
-        }
-    }
-}
-
-
 /***/ })
-/******/ ]);
-//# sourceMappingURL=home-bundle.js.map
+],[16]);
+//# sourceMappingURL=home.js.map

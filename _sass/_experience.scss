@@ -1,0 +1,59 @@
+.experience {
+  @extend %vertical-rhythm;
+}
+.jobs {
+
+}
+.job {
+	display: flex;
+  dt {
+    @extend .visually-hidden;
+  }
+  &__info {
+    flex: 0 1 10rem;
+    font-size: $spacing-unit-sm;
+
+    dd {
+      margin-bottom: 0.25rem;
+    }
+  }
+  &__description-cont {
+    flex: 2 1 80%;
+    ul {
+      list-style: circle; 
+    }
+  }
+
+  &__title {
+    font-weight: 700;
+  }
+  &__company {
+
+  }
+  &__location {
+    display: none;
+    font-size: 0.6rem;
+  }
+  &__period {
+    font-size: 0.6rem;
+    font-weight: 700;
+    @include cssVar(color, --tertiary, $tertiary);
+  }
+}
+
+.skill {
+  @extend %vertical-rhythm;
+  $s: 10rem;
+  display: grid;
+  grid-gap: 0.25rem;
+  grid-template-columns: $s 1fr;
+  &__subskills {
+    display: grid;
+    grid-gap: 0.25rem;
+    grid-template-columns: #{$s - $spacing-unit} 1fr;
+    
+    grid-column: span 2;
+
+    margin-left: $spacing-unit;
+  }
+}

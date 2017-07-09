@@ -21,7 +21,7 @@ $time: 0.6s;
   width: 80%;
   min-height: 50vh;
   z-index: 1;
-  padding: $spacing-unit * 3 0;
+  padding: $spacing-unit 0;
   border-bottom: $default-border;
   @include cssVar(border-color, --primary, $primary);
   @include media-query($media-min) {

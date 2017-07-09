@@ -1,6 +1,8 @@
-import scrollTrigger from './scripts/scrollTrigger.js';
-import svgLine from './scripts/svgLine.js';
-import saKnife from './scripts/saKnife.js';
+require('./main.scss');
+
+import scrollTrigger from './src/scrollTrigger.js';
+import svgLine from './src/svgLine.js';
+import saKnife from './src/saKnife.js';
 import debounce from './node_modules/lodash.debounce/index.js';
 import before from './node_modules/lodash.before/index.js';
 

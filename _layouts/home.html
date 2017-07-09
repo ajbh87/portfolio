@@ -3,7 +3,8 @@
   {% include head.html %}
   <body>
     {% include header.html %}
-
+    {% include icons.html %}
+    {% include social-aside.html %}
     {% if page.summary %}
     <div class="summary">
       <div class="summary__content">
@@ -11,10 +12,9 @@
       </div>
     </div>
     {% endif %}
-
     <div class="home">
       {{ content }}
     </div>
-  {% include footer.html %}
+    {% include footer.html %}
   </body>
 </html>
