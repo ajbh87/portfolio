@@ -1,4 +1,5 @@
 import saKnife from './saKnife.js';
+/** */
 class svgLine {
     constructor(options) {
         const style = getComputedStyle(options.path);
@@ -11,13 +12,12 @@ class svgLine {
             triggerPad: 0
         }, options);
         
-        this.el.triggers.lengths = [];
+        this.el.triggers.info = [];
 
         if (this.el.triggers.points != null) {
             this.el.ratios = this.getRatios(this.el.triggers.points);
         }
     }
-
     pathLength(percent){
         const l = this.el.length,
             offset = l * percent,
@@ -30,7 +30,7 @@ class svgLine {
             },
             recalculate = () => {
                 var changed = [];
-                this.el.triggers.lengths.forEach((length, index) => {
+                this.el.triggers.info.forEach((length, index) => {
                     if (offset >= (length.val - this.el.triggerPad)) {
                         if (length.active !== true) {
                             length.active = true;
@@ -63,16 +63,12 @@ class svgLine {
         const points = this.el.path.points;
         let ratios = [],
             ys = [];
-        triggerPoints.forEach((triggerPoint, index) => {
+        triggerPoints.forEach((triggerPoint) => {
             let y = points.getItem(triggerPoint).y,
                 newRatio = 0;
             ys.push(y);
 
-            if (index === 0) {
-                newRatio = y / this.el.height;
-            } else {
-                newRatio = (y - ys[index - 1]) / this.el.height;
-            }
+            newRatio = (y / this.el.height) * 100;
             ratios.push(newRatio);
         });
         return ratios;
@@ -82,87 +78,78 @@ class svgLine {
             oldRatios = this.el.ratios;
         let points = this.el.path.points,
             diffs = [],
-            pointIndex = 0,
-            triggerLengths = this.el.triggers.lengths;
-
+            triggerInfo = this.el.triggers.info;
+            
         if (triggerPoints != null) {
             ratios.forEach((ratio, i) => {
-                let y = points.getItem(triggerPoints[i]).y,
+                let triggerIndex = triggerPoints[i],
+                    y = points.getItem(triggerIndex).y,
                     ratioDiff = ratio / oldRatios[i],
                     newY = 0;
-                if (i > 0) {
-                    y = y - points.getItem(triggerPoints[i - 1]).y;
-                }
-                newY = saKnife.round((y * ratioDiff) - y, 4);
 
-                if (diffs.length > 0) {
-                    newY = saKnife.round(newY + diffs[diffs.length - 1], 4);
-                }
+                newY = saKnife.round((y * ratioDiff), 4);
+
+                changeTriggerPoint(triggerIndex, i, newY);
                 diffs.push(newY);
             });
 
             this.el.ratios = ratios;
-            triggerPoints.forEach((triggerIndex, index) => {
-                const trigger = points.getItem(triggerIndex);
-                let lastTrigger = null,
-                    point = null,
-                    lengths = [],
-                    length = 0,
-                    triggerLength = 0,
-                    obj = triggerLengths[index] != null ? triggerLengths[index] : {};
-                if (index > 0) {
-                    lastTrigger = triggerPoints[index - 1];
-                }
-
-                for (pointIndex = 1; pointIndex < points.numberOfItems; pointIndex++) {
-                    point = points.getItem(pointIndex);
-                    
-                    length = calculateLength(points.getItem(pointIndex - 1), point);
-
-                    if (point.y <= trigger.y) {
-                        if (lastTrigger != null) {
-                            if (point.y > points.getItem(lastTrigger).y) {
-                                point.y = changeY(point);
-                            }
-                        }
-                        else {
-                            point.y = changeY(point);
-                        }
-                    }
-                    
-                    if (pointIndex <= triggerIndex) {
-                        length = calculateLength(points.getItem(pointIndex - 1), point);
-                        lengths.push(length);
-                    }
-                }
-                lengths.forEach((length) => {
-                    triggerLength = saKnife.round(triggerLength + length, 4);
-                });
-
-                triggerLengths[index] = Object.assign({
-                    active: false,
-                    inactive: true
-                }, obj);
-                triggerLengths[index].val = triggerLength;
-                
-                function changeY(point) {
-                    let newY = 0;
-                    if (index < (points.numberOfItems - 1)) {
-                        newY = point.y + diffs[index];
-                    } else {
-                        newY = point.y;
-                    }
-                    return newY;
-                }
-            });
-            //this.el.triggers.lengths = triggerLengths;
-            this.el.length = triggerLengths[triggerLengths.length - 1].val;
+            this.el.length = triggerInfo[triggerInfo.length - 1].val;
         }
+        function changeTriggerPoint(triggerIndex, index, diff) {
+            const trigger = points.getItem(triggerIndex);
+            let prevTriggerIndex = index > 0 ? triggerPoints[index - 1] : 0,
+                prevPoint = ((triggerIndex - 1) >= 0) ? points.getItem(triggerIndex - 1) : null,
+                nextPoint = ((triggerIndex + 1) < points.numberOfItems - 1) ? points.getItem(triggerIndex + 1) : null,
+                info = triggerInfo[index] != null ? triggerInfo[index] : {};
 
-        function calculateLength(pointSet1, pointSet2) {
-            const lX = pointSet2.x - pointSet1.x, 
-                lY = pointSet2.y - pointSet1.y;
-            return saKnife.round(Math.sqrt((lX * lX) + (lY * lY)), 2);
+            if (info.prevOffset == null && prevPoint != null) {
+                if (prevTriggerIndex !== triggerIndex - 1)
+                    info.prevOffset = getOffset(prevPoint, trigger);
+                else 
+                    prevPoint = null;
+            }
+            if (info.nextOffset == null && nextPoint != null) {
+                info.nextOffset = getOffset(nextPoint, trigger);
+                if (info.nextOffset > Math.abs(info.prevOffset)) 
+                    nextPoint = null;
+            }
+
+            if (triggerIndex < (points.numberOfItems - 1))
+                trigger.y = diff;
+
+            if (prevPoint != null)
+                prevPoint.y = trigger.y + info.prevOffset;
+            if (nextPoint != null)
+                nextPoint.y = trigger.y + info.nextOffset;
+
+            triggerInfo[index] = Object.assign({
+                active: false,
+                inactive: true
+            }, info);
+            triggerInfo[index].val = calculateSectionLength();
+
+            function getOffset(point1, point2) {
+                return point1.y - point2.y;
+            }
+            function calculateSectionLength() {
+                let pointIndex = prevTriggerIndex + 1,
+                    length = 0;
+
+                for (pointIndex; pointIndex <= triggerIndex; pointIndex++) {                
+                    length += calculateLength(points.getItem(pointIndex - 1), points.getItem(pointIndex));
+                }
+                if (index > 0)
+                    length += triggerInfo[index - 1].val;
+
+                return length;
+
+                function calculateLength(pointSet1, pointSet2) {
+                    const lX = pointSet2.x - pointSet1.x, 
+                        lY = pointSet2.y - pointSet1.y;
+                    return saKnife.round(Math.sqrt((lX * lX) + (lY * lY)), 2);
+                }
+            }
         }
     }
 }

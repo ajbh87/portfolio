@@ -6,15 +6,7 @@ import saKnife from './src/saKnife.js';
 import debounce from './node_modules/lodash.debounce/index.js';
 import before from './node_modules/lodash.before/index.js';
 
-//import Rx from './node_modules/rxjs/Rx';
-import { Observable } from './node_modules/rxjs/Observable';
-import './node_modules/rxjs/add/observable/fromEvent';
-
-
-
-window.addEventListener('load', onLoad);  
-
-function onLoad() {
+window.addEventListener('load', () => {
     'use strict';
     const BODY = document.querySelector('body'),
         CONTAINER = document.querySelector('.bg-line'),
@@ -25,11 +17,11 @@ function onLoad() {
             path: CONTAINER.querySelector('.bg-line__path'),
             pathSelector: '.bg-line__path',
             triggers: {
-                points: [2, 4, 8, 10, 11]
+                points: [1, 4, 7, 10, 11]
             }
         }),
         MARKERS = CONTAINER.querySelectorAll('.bg-line__point'); // needs same # of trigger points
-    let sectionRation = getSectionRatios(),
+    let sectionRatios = getSectionRatios(),
         addPrevious = before(2, function (active) {
             let index = 1;
             if (active > 1) {
@@ -38,10 +30,9 @@ function onLoad() {
                 }
             }
         }),
-        observeLine = Observable.fromEvent(LINE.el.path, 'svgTrigger'),
         activeEvent = null;
 
-    observeLine.subscribe((event) => {
+    LINE.el.path.addEventListener('svgTrigger', (event) => {
         activeEvent = event;
 
         event.detail.forEach((eventMark) => {
@@ -62,7 +53,7 @@ function onLoad() {
         });
     });
 
-    LINE.setRatios(sectionRation.ratios);
+    LINE.setRatios(sectionRatios.topArr);
 
     ST.onScrollProbe();
 
@@ -72,8 +63,9 @@ function onLoad() {
     window.addEventListener('resize', debounce(onResize, 250));
 
     function onResize() {
-        sectionRation = getSectionRatios();
-        LINE.setRatios(sectionRation.ratios);
+        sectionRatios = getSectionRatios();
+
+        LINE.setRatios(sectionRatios.topArr);
         ST.onScrollProbe();
     }
     function getSectionRatios() {
@@ -93,6 +85,7 @@ function onLoad() {
             topArr.push(top);
             ratios.push(saKnife.round(ratio, 6));
         });
+        
         return { cHeight, posArr, ratios, topArr };
     }
     function bindScrollToLine(percent) {      
@@ -110,4 +103,4 @@ function onLoad() {
             BODY.classList.remove(`section-${index}`);
         }
     }
-}
+});

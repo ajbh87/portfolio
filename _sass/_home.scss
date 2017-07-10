@@ -175,7 +175,7 @@ $time: 0.6s;
     &--1 {
       $step: 1;
       top: (($step * $eHeight) / $height * 100) * 1%;
-      right: $offset-plus;
+      //right: $offset-plus;
     }
     &--2 {
       $step: 2;
@@ -184,7 +184,7 @@ $time: 0.6s;
     &--3 {
       $step: 3;
       top: (($step * $eHeight) / $height * 100) * 1%;
-      right: $offset-plus;
+      //right: $offset-plus;
     }
     &--4 {
       $step: 4;
