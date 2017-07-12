@@ -80,7 +80,8 @@ const productionPlugins = devPlugins.concat([
 
 module.exports = {
     entry: {
-        'home': './home-init.js'
+        home: './home-init.js',
+        exp: './exp-init.js'
     },
     output: {
         filename: isDev ? '[name].js' : '[name].min.js',

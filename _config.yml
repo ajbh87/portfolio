@@ -12,7 +12,7 @@ github_username:  alfredo-xyz
 plugins:
   - octopress-paginate
 markdown: kramdown
-exclude: [main.scss, README.md, home-init.js, webpack.config.js, package.json, node_modules, src]
+exclude: [ main.scss, README.md, home-init.js, webpack.config.js, package.json, node_modules, src, out ]
 sass:
   sourcemap: true
 

@@ -44,13 +44,8 @@ $time: 0.6s;
       @include cssVar(color, --secondary, $secondary);
       border-bottom: 1px solid $secondary;
       @include cssVar(border-color, --secondary, $secondary);
-      &:hover, &:focus {
-        @include cssVar(color, --tertiary, $tertiary);
-        @include cssVar(border-color, --tertiary, $tertiary);
-      }
-      &:after {
-        @include cssVar('background-color', --tertiary, $tertiary);
-      }
+
+      
     }
   }
 }

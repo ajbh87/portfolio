@@ -1,4 +1,3 @@
-import saKnife from './saKnife.js';
 /** */
 class svgLine {
     constructor(options) {
@@ -87,7 +86,7 @@ class svgLine {
                     ratioDiff = ratio / oldRatios[i],
                     newY = 0;
 
-                newY = saKnife.round((y * ratioDiff), 4);
+                newY = y * ratioDiff;
 
                 changeTriggerPoint(triggerIndex, i, newY);
                 diffs.push(newY);
@@ -137,20 +136,19 @@ class svgLine {
                     length = 0;
 
                 for (pointIndex; pointIndex <= triggerIndex; pointIndex++) {                
-                    length += calculateLength(points.getItem(pointIndex - 1), points.getItem(pointIndex));
+                    length += svgLine.distance(points.getItem(pointIndex - 1), points.getItem(pointIndex));
                 }
                 if (index > 0)
                     length += triggerInfo[index - 1].val;
 
                 return length;
-
-                function calculateLength(pointSet1, pointSet2) {
-                    const lX = pointSet2.x - pointSet1.x, 
-                        lY = pointSet2.y - pointSet1.y;
-                    return saKnife.round(Math.sqrt((lX * lX) + (lY * lY)), 2);
-                }
             }
         }
+    }
+    static distance(pointSet1, pointSet2) {
+        const dx = pointSet2.x - pointSet1.x, 
+            dy = pointSet2.y - pointSet1.y;
+        return Math.hypot(dx, dy);
     }
 }
 export default svgLine;

@@ -1,27 +1,31 @@
 ---
 layout: page
+isExp: true
 skills: 
-  - name: HTML
-    percent: 85
+  - name: Javascript
+    percent: 90
+    sub:
+      - name: AngularJS
+        percent: 85
+      - name: React
+        percent: 55
+      - name: Webpack 2
+        percent: 80
   - name: CSS
     percent: 95
     sub:
       - name: Sass
         percent: 95
       - name: Less
-        percent: 95
+        percent: 90
       - name: Bootstrap
-        percent: 90
-  - name: Javascript
-    percent: 90
-    sub:
-      - name: AngularJS
-        percent: 90
-      - name: React
-        percent: 65
-      - name: Webpack 2
         percent: 80
-
+  - name: HTML
+    percent: 85
+  - name: PHP
+    percent: 60
+  - name: ASP.Net C#
+    percent: 70
 jobs:
   - title: Web Developer
     company: YCS PR Corp.
@@ -49,24 +53,29 @@ jobs:
       - TODO 
 ---
 <section class="skills experience">
-  <h2>Skills</h2>
+  <h2 class="experience__title">Skills</h2>
   <dl class="skill">
   {% for skill in page.skills %}
-    <dt class="skill__name">{{ skill.name }}</dt>
-    <dd class="skill__percent">{{ skill.percent }}</dd>
+    <dt class="skill__name skill__name--main"><strong>{{ skill.name }}</strong></dt>
+    <dd class="skill__percent skill__percent--main">
+      <div class="skill__bar" data-value="{{ skill.percent }}"></div>
+      <span class="skill__value">{{ skill.percent }}</span>
+    </dd>
     {% if skill.sub %}
-    <div class="skill__subskills">
     {% for subskill in skill.sub %}
       <dt class="skill__name skill__subskill">{{ subskill.name }}</dt>
-      <dd class="skill__percent skill__subskill">{{ subskill.percent }}</dd>
+      <dd class="skill__percent skill__subskill">
+        <div class="skill__bar" data-value="{{ subskill.percent }}"></div>
+        <span class="skill__value">{{ subskill.percent }}</span>
+      </dd>
     {% endfor %}
-    </div>
     {% endif %}
   {% endfor %}
   </dl>
 </section>
+<hr />
 <section class="jobs experience">
-  <h2>Experience</h2>
+  <h2 class="experience__title">Experience</h2>
   {% for job in page.jobs %}
   <dl class="job">
     <div class="job__info">

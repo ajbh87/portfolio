@@ -15,11 +15,17 @@
 	{% if page.isHome %}
 	<script src="{{ "/home.js" | prepend: root | append: version }}"></script>
  	{% endif %}
+ 	{% if page.isExp %}
+	<script src="{{ "/exp.js" | prepend: root | append: version }}"></script>
+ 	{% endif %}
 	{% else %}
 	<link rel="stylesheet" href="{{ "/main.min.css" | prepend: root | append: version }}">
  	<script src="{{ "/common.min.js" | prepend: root | append: version }}"></script>
 	{% if page.isHome %}
 	<script src="{{ "/home.min.js" | prepend: root | append: version }}"></script>
+ 	{% endif %}
+ 	{% if page.isExp %}
+	<script src="{{ "/exp.min.js" | prepend: root | append: version }}"></script>
  	{% endif %}
 	{% else %}
 	{% endif %}

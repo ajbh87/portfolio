@@ -1,172 +1,6 @@
 webpackJsonp([0],[
 /* 0 */,
 /* 1 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/** @module src/saKnife */
-
-/** 
-* Exports saKnife methods.
-* @type {Object}
-* @property {function} forEach - {@link module:src/saKnife~forEach forEach}
-* @property {function} hasClass - {@link module:src/saKnife~hasClass hasClass}
-* @property {function} offset - {@link module:src/saKnife~offset offset}
-* @property {function} round - {@link module:src/saKnife~round round}
-* @property {string} transitionEvent - {@link module:src/saKnife~whichTransitionEvent whichTransitionEvent}
-* @property {function} winSize - {@link module:src/saKnife~winSize winSize}
-*/
-const saKnife = {
-    forEach,
-    hasClass,
-    offset,
-    round,
-    transitionEvent: whichTransitionEvent(),
-    winSize
-};
-
-if (NodeList.forEach == null) {
-    NodeList.prototype.forEach = function(fn) {
-        forEach(this, fn);
-    };
-}
-if (HTMLElement.hasClass == null) {
-    HTMLElement.prototype.hasClass = function(className) {
-        return hasClass(this, className);
-    };
-}
-if (HTMLElement.getOffset == null) {
-    HTMLElement.prototype.getOffset = function() {
-        return offset(this);
-    };
-}
-/* harmony default export */ __webpack_exports__["a"] = (saKnife);
-
-/**
-* Check the name of CSS transitionEnd Event
-* From Modernizr via 'https://davidwalsh.name/css-animation-callback'
-* @return {string} CSS transitionEnd Event name
-*/
-function whichTransitionEvent(){
-    const el = document.createElement('fakeelement'),
-        transitions = {
-            transition: 'transitionend',
-            OTransition: 'oTransitionEnd',
-            MozTransition: 'transitionend',
-            WebkitTransition: 'webkitTransitionEnd'
-        };
-    let t;
-
-    for(t in transitions){
-        if( el.style[t] !== undefined ){
-            return transitions[t];
-        }
-    }
-}
-/**
-* Iterate through NodeList
-* @param {NodeList} elements - a NodeList of Elements.
-* @param {function} fn - function to run for each element.
-* @example
-* const elements = document.querySelectorAll('.some-class');
-* saKnife.forEach(elements, function(el, index) {
-*     doSometing(el);
-* });
-*/
-function forEach(elements, fn) {
-    const total = elements.length;
-    let index = 0;
-    for (index = 0; index < total; index++) {
-        fn(elements[index], index);
-    }
-}
-/**
-* Check if 'element' has specified 'class'
-* @param {NodeElement} el - DOM Element
-* @param {string} className - CSS class name
-* @return {bool} true/false if 'el' has class 'className'
-* @example
-* const element = document.querySelector('.some-class');
-* saKnife.hasClass(element, 'some-class');
-* // returns true
-*/
-function hasClass(el, className) {
-    if (el.classList)
-        return el.classList.contains(className);
-    else
-        return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-}
-
-/**
-* @typedef {object} offsetObject
-* @property {number} top 
-* @property {number} left
-*/
-
-/**
-* Check 'element' position relative to 'body'
-* @param {NodeElement} el - DOM Element
-* @return {offsetObject}
-*       {@link module:src/saKnife~offsetObject offsetObject} - Element offest information
-*/
-function offset(el) {
-    const rect = el.getBoundingClientRect(),
-        body = document.body.getBoundingClientRect();
-
-    return {
-        top: Math.abs(body.top) + rect.top,
-        left: Math.abs(body.left) + rect.left
-    };
-}
-
-/**
-* @typedef {object} winSizeObject
-* @property {number} width 
-* @property {number} height
-* @property {number} vCenter
-* @property {number} hCenter
-* @property {number} documentHeight
-* @property {number} documentWidth
-*/
-
-/**
-* Check 'window' size
-* @example
-* saKnife.winSize();
-* // returns {width: 1920, height: 1080, ...}
-* @return {winSizeObject}
-*      {@link module:src/saKnife~winSizeObject winSizeObject} - Windows size information
-*/
-function winSize() {
-    const e = document.documentElement,
-        g = document.querySelector('body'),
-        width = window.innerWidth||e.clientWidth||g.clientWidth,
-        height = window.innerHeight||e.clientHeight||g.clientHeight;
-    return {
-        width,
-        height,
-        vCenter: height / 2,
-        hCenter: width / 2,
-        documentHeight: g.offsetHeight,
-        documentWidth: g.offsetWidth
-    };
-}
-/**
-* Round a number to specified decimals
-* @param {number} value
-* @param {number} decimals
-* @return {number}
-*/
-function round(value, decimals) {
-    return Number( Math.round(value + 'e' + decimals) + 'e-' + decimals );
-}
-
-
-/***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -550,44 +384,13 @@ module.exports = debounce;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(10)))
 
 /***/ }),
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 11 */
+/* 2 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 12 */
+/* 3 */
 /***/ (function(module, exports) {
 
 /**
@@ -865,160 +668,214 @@ module.exports = before;
 
 
 /***/ }),
-/* 13 */,
-/* 14 */
+/* 4 */,
+/* 5 */,
+/* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(0);
+/** 
+ * Exports scrollTrigger class.
+ * @module src/scrollTrigger
+ * @requires module:src/saKnife saKnife
+ */
 
 
+/** 
+ * Yet another scroll trigger js tool.
+ * When an element gets to a certain point in the viewport (crosses a trigger line) run a function.
+ * @class scrollTrigger
+ * @param {object} options
+ * @property {function|string} activeFn - null (default) | Function to run when 'element' becomes active.
+ * @property {string} eventName - Custom event name 
+ * @property {function|string} inactiveFn - null (default) | Function to run when 'element' becomes inactive.
+ * @property {string} position - 'center' (default), 'top', 'bottom' | Position of trigger line.
+ * @property {number} offset - Trigger line numerical offset.
+ * @property {function|string} probeFn - null (default) | Function to run on scroll.
+ * @property {object} scope - Object containing functions.
+ * @property {string} selector - 'Element' selector. Must be data-*.
+ * @example
+ * An example invocation showing default parameters, except the functions obviously.
+ * const ST = new scrollTrigger({
+    activeFn: (stElement) => { 
+        // Do something cool...
+    },
+    eventName: 'scrollTrigger',
+    inactiveFn: (stElement) => {
+        // Maybe do another thing that's also cool...
+    },
+    offset: 0,
+    position: 'center',
+    probeFn: (docScrolledPercent) => {
+        // You could do another thing. But beware this function will run on EACH scroll event.
+    },
+    scope: {} // If 
+ });
+ * 
+ */
 class scrollTrigger {
     constructor(override) {
-        'use strict';
-        const options =  Object.assign({
-                activeFn: false,
-                beforeActiveFn: false,
-                dataName: 'data-scroll-trigger',
-                event: false,
-                eventName: 'scrollTrigger',
-                inactiveFn: false,
-                position: 'center',
-                probeFn: false,
-                offset: 0,
-                scope: {}
-            }, override),
-            st = this;
+        // Merge overrides and defaults into options object
+        this.options =  Object.assign({
+            activeFn: null,
+            selector: '[data-scroll-trigger]',
+            eventName: 'scrollTrigger',
+            inactiveFn: null,
+            position: 'center',
+            probeFn: null,
+            offset: 0,
+            scope: {}
+        }, override);
+        // Get window and document size
+        this.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
+        this.options.triggerLine = this._getTriggerLine(this.options.position);
 
-        st.elements = [];
-        st.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
-
+        // Check if user provided functions are functions
         [
-            options.activeFn, 
-            options.inactiveFn, 
-            options.beforeActiveFn,
-            options.probeFn
-        ].forEach( fn => fn = checkFunction(fn));
-
-        options.scrollOffset = getScrollOffset(options.position);
-        options.selector = '[' + options.dataName + ']';
-
-        generateElementsObj();
-        onScrollResize();
-
-        st.onScrollTrigger = onScrollTrigger;
-        st.onScrollProbe = onScrollProbe;
-        if (st.elements.length > 0) {
-            window.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(onScrollTrigger, 100));
+            this.options.activeFn, 
+            this.options.inactiveFn, 
+            this.options.probeFn
+        ].forEach( fn => fn = this._checkFunction(fn));
+        // Find elements and add them to array
+        this.elements = scrollTrigger.generateElementsObj(this.options.selector);
+        this.onScrollResize();
+        if (this.elements.length > 0) {
+            window.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(() => {
+                this.onScrollTrigger();
+            }, 100));
         }
-        if (options.probeFn !== false) {
-            window.addEventListener('scroll', onScrollProbe);
+        if (this.options.probeFn !== false) {
+            window.addEventListener('scroll', () => {
+                this.onScrollProbe();
+            });
         }
-        window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(onScrollResize, 200));
-    
-        function generateElementsObj() {
-            const elements = document.querySelectorAll(options.selector);
-
-            elements.forEach((element, index) => {
-                let newElement = {
-                    el: element,
-                    offset: __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].offset(element),
-                    active: false,
-                    index
+        window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(() => {
+            this.onScrollResize();
+        }, 200));
+    }
+    /**
+     * Scroll Trigger Elements wrapper
+     * @typedef {object} stElement
+     * @property {NodeElement} el - Element
+     * @property {number} offset - Element offsetObject.
+     * @property {bool} active - True/False if is element is active.
+     * @property {number} index - Index. Nuff' said.
+     */
+    /**
+     * Generate elements array. Each element is wrapped in a an stElement object.
+     * The idea is to precalculate offset position, so that scrolling performance is not impacted
+     * by multiple calls to getBoundingClientRect().
+     * @param {string} selector - Elements selector.
+     * @returns {array} elementArray - An array of stElements
+     */
+    static generateElementsObj(selector) {
+        const elements = document.querySelectorAll(selector);
+        let elArray = [];
+        elements.forEach((element, index) => {
+            let newElement = {
+                el: element,
+                offset: __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].offset(element),
+                active: false,
+                index
+            };
+            elArray.push(newElement);
+        });
+        return elArray;
+    }
+    _checkFunction(possibleFunc) {
+        if (possibleFunc == null) {
+            return false;
+        } else  {
+            if (typeof(possibleFunc) === 'function') {  
+                return possibleFunc;
+            }
+            if (typeof(this.options.scope[possibleFunc]) === 'function') {
+                return this.options.scope[possibleFunc];
+            }
+            return false;            
+        }
+    }
+    _getTriggerLine(position) {
+        switch(position) {
+        case 'top':
+            return 0;
+        case 'bottom':
+            return this.window.height;
+        case 'center':
+        default:
+            return this.window.vCenter;
+        }
+    }
+    onScrollTrigger() {
+        let changed = [];
+        this.elements.forEach(element => {
+            const scrolled = window.scrollY + this.options.triggerLine,
+                bottomTrigger = element.offset.top + element.el.offsetHeight,
+                checks = {
+                    afterTop: element.offset.top <= scrolled,
+                    beforeBottom: scrolled <= bottomTrigger
                 };
-                st.elements.push(newElement);
-            });
-        }
-        function onScrollTrigger() {
-            let changed = [];
-            st.elements.filter(element => {
-                const scrolled = window.scrollY + options.scrollOffset,
-                    bottomTrigger = element.offset.top + element.el.offsetHeight,
-                    checks = {
-                        afterTop: element.offset.top <= scrolled,
-                        beforeBottom: scrolled <= bottomTrigger
-                    };
-                let elChanged = null;
-                // active | inactive
-                if (checks.afterTop && checks.beforeBottom) {
-                    elChanged = toggleActiveInactive(element, true);
-                }
-                else if (element.active === true) {
-                    elChanged = toggleActiveInactive(element, false);
-                }
-                elChanged != null ? changed.push(elChanged) : null;  
-            });
-            if (options.event && changed.length > 0) {
-                window.dispatchEvent(new CustomEvent(options.eventName, {
-                    detail: changed
-                }));
+            let elChanged = null;
+            // active | inactive
+            if (checks.afterTop && checks.beforeBottom) {
+                elChanged = this._toggleActiveInactive(element, true);
             }
-        }
-        function toggleActiveInactive(element, active) {
-            // set active
-            if (element.active === false && active === true) {
-                (options.event !== true && options.activeFn !== false) ? 
-                    options.activeFn(element) : null;
-                
-                element.active = true;
-                return element;
+            else if (element.active === true) {
+                elChanged = this._toggleActiveInactive(element, false);
             }
-            // set inactive
-            else if (element.active === true && active === false) {
-                (options.event !== true && options.inactiveFn !== false) ? 
-                    options.inactiveFn(element) : null;
-                
-                element.active = false;
-                return element;
-            }
-            return null;
+            elChanged != null ? changed.push(elChanged) : null;  
+        });
+        if (this.options.event && changed.length > 0) {
+            window.dispatchEvent(new CustomEvent(this.options.eventName, {
+                detail: changed
+            }));
         }
-        function onScrollProbe() {
-            let percentScrolled = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].round((window.scrollY) / (st.window.documentHeight - st.window.height), 4);
-            options.probeFn(percentScrolled);
+    }
+    onScrollProbe() {
+        let percentScrolled = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].round((window.scrollY) / 
+            (this.window.documentHeight - this.window.height), 4);
+        this.options.probeFn(percentScrolled);
+    }
+    onScrollResize() {
+        this.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
+        this.options.triggerLine = this._getTriggerLine(this.options.position);
+        this.elements.forEach(element => {
+            element.offset = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].offset(element.el);
+        });
+    }
+    /**
+     * @private
+     */
+    _toggleActiveInactive(element, active) {
+        // set active
+        if (element.active === false && active === true) {
+            if (this.options.event !== true && this.options.activeFn !== false)
+                this.options.activeFn(element);
+               
+            element.active = true;
+            return element;
         }
-        function onScrollResize() {
-            st.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
-            options.scrollOffset = getScrollOffset(options.position);
-            st.elements.forEach(element => {
-                element.offset = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].offset(element.el);
-            });
+        // set inactive
+        else if (element.active === true && active === false) {
+            if (this.options.event !== true && this.options.inactiveFn !== false)
+                this.options.inactiveFn(element);
+            
+            element.active = false;
+            return element;
         }
-        function checkFunction(possibleFunc) {
-            if (possibleFunc == null) {
-                return false;
-            } else  {
-                if (typeof(possibleFunc) === 'function') {  
-                    return possibleFunc;
-                }
-                if (typeof(options.scope[possibleFunc]) === 'function') {
-                    return options.scope[possibleFunc];
-                }
-                return false;            
-            }
-        }
-        function getScrollOffset(position) {
-            if (position === 'top') {
-                return 0;
-            } else if (position === 'bottom') {
-                return st.window.height;
-            } else {
-                return st.window.vCenter;
-            }
-        }
+        return null;
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = (scrollTrigger);
 
 /***/ }),
-/* 15 */
+/* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__saKnife_js__ = __webpack_require__(1);
-
 /** */
 class svgLine {
     constructor(options) {
@@ -1107,7 +964,7 @@ class svgLine {
                     ratioDiff = ratio / oldRatios[i],
                     newY = 0;
 
-                newY = __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round((y * ratioDiff), 4);
+                newY = y * ratioDiff;
 
                 changeTriggerPoint(triggerIndex, i, newY);
                 diffs.push(newY);
@@ -1157,39 +1014,43 @@ class svgLine {
                     length = 0;
 
                 for (pointIndex; pointIndex <= triggerIndex; pointIndex++) {                
-                    length += calculateLength(points.getItem(pointIndex - 1), points.getItem(pointIndex));
+                    length += svgLine.distance(points.getItem(pointIndex - 1), points.getItem(pointIndex));
                 }
                 if (index > 0)
                     length += triggerInfo[index - 1].val;
 
                 return length;
-
-                function calculateLength(pointSet1, pointSet2) {
-                    const lX = pointSet2.x - pointSet1.x, 
-                        lY = pointSet2.y - pointSet1.y;
-                    return __WEBPACK_IMPORTED_MODULE_0__saKnife_js__["a" /* default */].round(Math.sqrt((lX * lX) + (lY * lY)), 2);
-                }
             }
         }
+    }
+    static distance(pointSet1, pointSet2) {
+        const dx = pointSet2.x - pointSet1.x, 
+            dy = pointSet2.y - pointSet1.y;
+        return Math.hypot(dx, dy);
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = (svgLine);
 
 /***/ }),
-/* 16 */
+/* 8 */,
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_scrollTrigger_js__ = __webpack_require__(14);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_svgLine_js__ = __webpack_require__(15);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_saKnife_js__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__src_scrollTrigger_js__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__src_svgLine_js__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__src_saKnife_js__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__);
-__webpack_require__(11);
-
+/** 
+ * Home page scripts.
+ * @requires module:src/saKnife saKnife
+ * @requires module:src/scrollTrigger scrollTrigger
+ */
+__webpack_require__(2);
 
 
 
@@ -1296,6 +1157,33 @@ window.addEventListener('load', () => {
 });
 
 
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
 /***/ })
-],[16]);
+],[9]);
 //# sourceMappingURL=home.js.map

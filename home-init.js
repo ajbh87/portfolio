@@ -1,5 +1,9 @@
+/** 
+ * Home page scripts.
+ * @requires module:src/saKnife saKnife
+ * @requires module:src/scrollTrigger scrollTrigger
+ */
 require('./main.scss');
-
 import scrollTrigger from './src/scrollTrigger.js';
 import svgLine from './src/svgLine.js';
 import saKnife from './src/saKnife.js';

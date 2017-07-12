@@ -121,54 +121,52 @@ li {
 
 //----------------------------- Links
 a {
-  @include cssVar(color, --primary, $primary);
   text-decoration: none;
   transition: color .2s ease(out-cubic);
+  color: $primary;
   &:visited {
-    @include cssVar(color, --primary-hue-1, $primary-hue-1);
+    color: $primary-hue-1;
   }
 
   &:hover, &:focus {
-    @include cssVar(color, --secondary, $secondary);
+    color: $secondary;
   }
 
   &[data-content] {
     position: relative;
     cursor: pointer;
-    &:after {
-      content: attr(data-content);
-      display: block;
+    background: transparent;
+    &::before {
       position: absolute;
-      overflow: hidden;
+      content: attr(data-content);
 
       left: 0;
       top: 0;
       min-width: 10rem;
       padding: 0.25rem;
-
+      z-index: 0;
       font-size: $small-font-size;
       line-height: 1.2;
       font-style: normal;
       font-weight: 700;
-      //text-align: center;
+      visibility: hidden;
       
       transform: translate(0%, -100%);
       transition: 
-        visibility 0.2s ease(out-cubic)
+        visibility 0.2s ease(out-cubic), 
         opacity 0.2s ease(out-cubic);
-
-      visibility: hidden;
       opacity: 0;
       
       border-radius: 3px;
-      @include cssVar('background-color', --secondary, $secondary);
+      background: $secondary;
+      color: $background-color;  
     }
   }
   &:hover, &:focus {
-    &:after {
-      @include cssVar('color', --bg, $background-color); 
-      visibility: visible;
+    &::before {
       opacity: 1;
+      z-index: 10;
+      visibility: visible;
     }
   }
 }
