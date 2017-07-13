@@ -25,9 +25,9 @@ class svgLine {
                 requestAnimationFrame(() => {
                     this.el.path.style.strokeDashoffset = newLength;
                 });
-                recalculate();
+                reCheck();
             },
-            recalculate = () => {
+            reCheck = () => {
                 var changed = [];
                 this.el.triggers.info.forEach((length, index) => {
                     if (offset >= (length.val - this.el.triggerPad)) {

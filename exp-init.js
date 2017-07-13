@@ -2,7 +2,7 @@ import saKnife from './src/saKnife.js';
 import Animation from './node_modules/web-animations-js/web-animations.min.js';
 import Color from './src/color.js';
 
-window.addEventListener('load', () => {
+const expInit = () => {
     'use strict';
     const barCharts = document.querySelectorAll('.skill__percent');
     let delay = 0;
@@ -50,4 +50,5 @@ window.addEventListener('load', () => {
         }, delay);
         delay += 333;
     });
-});
+};
+window.addEventListener('load', expInit);

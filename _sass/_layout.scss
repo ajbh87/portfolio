@@ -10,6 +10,7 @@
   clear: both;
   width: 100%;
   padding: $spacing-unit;
+
   @include media-query($media-min) {
     float: right;
     max-width: $content-max;
@@ -82,15 +83,16 @@
 
 //----------------------------- Content
 .content {
+  flex: 1 0 auto;
   @extend %container;
   position: relative;
   border-bottom: $default-border;
   @include cssVar(border-color, --primary, $primary);
 }
 
-
 //----------------------------- Blog
 .posts {
+  @include cssVar(background-color, --bg, $background-color);
   @extend %content;
 
   &__heading {
@@ -115,6 +117,7 @@
 
 //----------------------------- Posts & Pages
 .post, .page {
+  @include cssVar(background-color, --bg, $background-color);
   @extend %content;
 
   &__header {

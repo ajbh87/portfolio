@@ -903,9 +903,9 @@ class svgLine {
                 requestAnimationFrame(() => {
                     this.el.path.style.strokeDashoffset = newLength;
                 });
-                recalculate();
+                reCheck();
             },
-            recalculate = () => {
+            reCheck = () => {
                 var changed = [];
                 this.el.triggers.info.forEach((length, index) => {
                     if (offset >= (length.val - this.el.triggerPad)) {
@@ -1045,19 +1045,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_before_index_js__);
-/** 
- * Home page scripts.
- * @requires module:src/saKnife saKnife
- * @requires module:src/scrollTrigger scrollTrigger
- */
 __webpack_require__(2);
 
 
 
 
 
-
-window.addEventListener('load', () => {
+/** 
+    Home page scripts.
+    @function 
+    @requires src/saKnife
+    @requires src/scrollTrigger    
+    @requires node_modules/lodash.debounce
+    @requires node_modules/lodash.before
+*/
+const homeInit = () => {
     'use strict';
     const BODY = document.querySelector('body'),
         CONTAINER = document.querySelector('.bg-line'),
@@ -1154,7 +1156,8 @@ window.addEventListener('load', () => {
             BODY.classList.remove(`section-${index}`);
         }
     }
-});
+};
+window.addEventListener('load', homeInit);
 
 
 /***/ }),

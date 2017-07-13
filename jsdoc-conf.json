@@ -1,10 +1,11 @@
 {
+    "package": "./package.json",
     "plugins": [],
     "recurseDepth": 2,
     "source": {
         "includePattern": ".+\\.js(doc|x)?$",
         "include": ["./" ],
-        "exclude": ["./node-modules/", "./bundles/"]
+        "exclude": ["./node-modules/", "./bundles/", "./webpack.config.js"]
     },
     "sourceType": "module",
     "tags": {

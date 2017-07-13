@@ -129,7 +129,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-window.addEventListener('load', () => {
+const expInit = () => {
     'use strict';
     const barCharts = document.querySelectorAll('.skill__percent');
     let delay = 0;
@@ -177,7 +177,8 @@ window.addEventListener('load', () => {
         }, delay);
         delay += 333;
     });
-});
+};
+window.addEventListener('load', expInit);
 
 /***/ })
 

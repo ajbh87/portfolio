@@ -1,16 +1,18 @@
-/** 
- * Home page scripts.
- * @requires module:src/saKnife saKnife
- * @requires module:src/scrollTrigger scrollTrigger
- */
 require('./main.scss');
 import scrollTrigger from './src/scrollTrigger.js';
 import svgLine from './src/svgLine.js';
 import saKnife from './src/saKnife.js';
 import debounce from './node_modules/lodash.debounce/index.js';
 import before from './node_modules/lodash.before/index.js';
-
-window.addEventListener('load', () => {
+/** 
+    Home page scripts.
+    @function 
+    @requires src/saKnife
+    @requires src/scrollTrigger    
+    @requires node_modules/lodash.debounce
+    @requires node_modules/lodash.before
+*/
+const homeInit = () => {
     'use strict';
     const BODY = document.querySelector('body'),
         CONTAINER = document.querySelector('.bg-line'),
@@ -107,4 +109,5 @@ window.addEventListener('load', () => {
             BODY.classList.remove(`section-${index}`);
         }
     }
-});
+};
+window.addEventListener('load', homeInit);
