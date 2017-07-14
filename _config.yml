@@ -11,18 +11,28 @@ github_username:  alfredo-xyz
 # Build settings
 plugins:
   - octopress-paginate
+excerpt_separator: <!--more-->
+
 markdown: kramdown
-exclude: [ main.scss, README.md, home-init.js, webpack.config.js, package.json, node_modules, src, out ]
+exclude: 
+  - '*.scss'
+  - '*-init.js'
+  - '*.json'
+  - node_modules
+  - src
+  - out
+  - README.md
+  - webpack.config.js
+
 sass:
   sourcemap: true
 
+# Site data
 menuitems:
-  - 
-    name: musings
+  - name: musings
     url: "/blog.html"
     title: Blog
-  - 
-    name: experience
+  - name: experience
     url: "/experience.html"
     title: Experience
 
@@ -32,7 +42,6 @@ collections:
     - values:
         layout: page
 
-excerpt_separator: <!--more-->
 
 paginate:
   collection:   posts

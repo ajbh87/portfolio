@@ -17,15 +17,6 @@ html {
   @include media-query($media-max) {
     font-size: $max-font-size-fixed;
   }
-  background: linear-gradient(160deg, 
-    #{$background-color-2} 0%,
-    #{$background-color} 25%,
-    #{$background-color} 75%,
-    #{$background-color-2} 100%);
-
-  background-size: 100vw 100vh;
-  background-attachment: fixed;
-  background-position: center center;
 }
 body {
   display: flex;
@@ -34,10 +25,10 @@ body {
   min-height: 100vh;
 
   @include cssVar(color, --text, $text-color);
-  background-image: $bg-pattern;
+  background: $bg-gradient;
+  background-size: 100vw 100vh;
   background-attachment: fixed;
-
-  transition: 0.2s background-color ease(out-cubic);
+  background-position: center center;
 
   -webkit-text-size-adjust: 100%;
   -webkit-font-feature-settings: "kern" 1;
@@ -45,13 +36,16 @@ body {
   -o-font-feature-settings: "kern" 1;
   font-feature-settings: "kern" 1;
   font-kerning: normal;
-
-  &.home {
-    @include cssVar(background-color, --bg, $background-color); 
-  }
-  &.section-0 {
-    background-color: transparent;
-  }
+}
+.map {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background-image: $bg-pattern;
+  background-attachment: fixed;
 }
 
 //----------------------------- Vertical Rhythm
