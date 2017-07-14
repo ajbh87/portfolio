@@ -30,6 +30,7 @@ html {
 body {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   min-height: 100vh;
 
   @include cssVar(color, --text, $text-color);
@@ -49,7 +50,7 @@ body {
     @include cssVar(background-color, --bg, $background-color); 
   }
   &.section-0 {
-    background-color: transparent !important;
+    background-color: transparent;
   }
 }
 

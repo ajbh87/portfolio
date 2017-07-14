@@ -1,4 +1,11 @@
-/** */
+/** 
+ * Exports svgLine class.
+ * @module src/svgLine 
+ */
+/** 
+ * A plugin-less way to manipulate the svg path in the home background.
+ * @class svgLine 
+ */
 class svgLine {
     constructor(options) {
         const style = getComputedStyle(options.path);
@@ -10,7 +17,7 @@ class svgLine {
             triggers: {},
             triggerPad: 0
         }, options);
-        
+        this.active = 0;
         this.el.triggers.info = [];
 
         if (this.el.triggers.points != null) {
@@ -25,38 +32,59 @@ class svgLine {
                 requestAnimationFrame(() => {
                     this.el.path.style.strokeDashoffset = newLength;
                 });
-                reCheck();
-            },
-            reCheck = () => {
-                var changed = [];
-                this.el.triggers.info.forEach((length, index) => {
-                    if (offset >= (length.val - this.el.triggerPad)) {
-                        if (length.active !== true) {
-                            length.active = true;
-                            changed.push({
-                                index: index,
-                                active: true
-                            });
+            };         
+        this.offset = offset;
+        changePath();
+
+        return newLength;
+    }
+    reCheck() {
+        const checkActive = (index) => {
+            const checkForward = (index) => {
+                    let nextTrigger = infoArray[index];
+                    if (index === infoArray.length) {
+                        return index;
+                    }
+                    if (this.offset === this.el.length) {
+                        return infoArray.length;
+                    }
+                    if (this.offset >= (nextTrigger.val - this.el.triggerPad)) {
+                        if (index < infoArray.length - 1) {
+                            return checkForward(index + 1);
+                        } else {
+                            return index;
                         }
                     } else {
-                        if (length.active !== false) {
-                            length.active = false;
-                            changed.push({
-                                index: index,
-                                active: false
-                            });
-                        }
+                        return index;
                     }
-                });
-                if (changed.length > 0) {
-                    this.el.path.dispatchEvent(new CustomEvent('svgTrigger', {
-                        detail: changed
-                    }));
-                }
-            };
-
-        changePath();
-        return newLength;
+                },
+                checkPrev = (index) => {
+                    let prevTrigger,
+                        prevIndex = index - 1;
+                    if (index > 0) {
+                        prevTrigger = infoArray[prevIndex];
+                        if (this.offset < (prevTrigger.val - this.el.triggerPad)) {
+                            if (prevIndex > 0)
+                                return checkPrev(index - 1);
+                            else 
+                                return prevIndex;
+                        } else {
+                            return index;
+                        }
+                    } else {
+                        return index;
+                    }
+                },
+                infoArray =  this.el.triggers.info;
+            let next = checkForward(index);
+            if (next !== index) {
+                return next;
+            } else {
+                return checkPrev(index);
+            }
+        };
+        this.active = checkActive(this.active);
+        return this.active;
     }
     getRatios(triggerPoints) {
         const points = this.el.path.points;
@@ -122,10 +150,7 @@ class svgLine {
             if (nextPoint != null)
                 nextPoint.y = trigger.y + info.nextOffset;
 
-            triggerInfo[index] = Object.assign({
-                active: false,
-                inactive: true
-            }, info);
+            triggerInfo[index] = info;
             triggerInfo[index].val = calculateSectionLength();
 
             function getOffset(point1, point2) {

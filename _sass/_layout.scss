@@ -1,46 +1,38 @@
 %container {
-  overflow: hidden;
   width: 100%;
-  @include media-query($media-min) {
-    width: 75%;
-  }
-}
-%content {
   display: block;
-  clear: both;
-  width: 100%;
   padding: $spacing-unit;
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  @include cssVar(border-color, --primary, $primary);
 
   @include media-query($media-min) {
-    float: right;
+    width: 75%;
     max-width: $content-max;
+    margin-right: 25%;
   }
 }
 
 //----------------------------- Site header
 .header {
   width: 100%;
-  overflow: hidden;
   @include media-query($media-min) {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: flex-end;
   }
   &__title {
-    display: block;
-    overflow: hidden;
-    border-bottom: $default-border;
-    @include cssVar(border-color, --primary, $primary);
-
+    @extend %container;
     @include media-query($media-min) {
-      flex: 0 0 auto;
-      width: 75%;
+      margin-right: 0;
     }
   }
   &__nav {
     padding: $spacing-unit $spacing-unit-sm;
     text-align: center;
     @include media-query($media-min) {
+      flex: 0 0 auto;
+      width: 25%;
       text-align: right;
     }
     a {
@@ -69,7 +61,6 @@
 
 //----------------------------- Title
 .title {
-  @extend %content;
   &__main {
     &:after {
       content: ":";
@@ -82,18 +73,12 @@
 }
 
 //----------------------------- Content
-.content {
-  flex: 1 0 auto;
-  @extend %container;
-  position: relative;
-  border-bottom: $default-border;
-  @include cssVar(border-color, --primary, $primary);
-}
+
 
 //----------------------------- Blog
 .posts {
   @include cssVar(background-color, --bg, $background-color);
-  @extend %content;
+  @extend %container;
 
   &__heading {
     @include cssVar(color, --secondary, $secondary);
@@ -118,7 +103,7 @@
 //----------------------------- Posts & Pages
 .post, .page {
   @include cssVar(background-color, --bg, $background-color);
-  @extend %content;
+  @extend %container;
 
   &__header {
     margin-bottom: $spacing-unit-sm;
@@ -181,11 +166,9 @@
 
 //----------------------------- Footer
 .footer {
+  //@extend %container;
   @extend %container;
 
-  &__content {
-    @extend %content;
-  }
   &__social-list {
     list-style: none;
     padding: 0;

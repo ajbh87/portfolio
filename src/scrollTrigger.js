@@ -10,30 +10,19 @@ import saKnife from './saKnife.js';
  * When an element gets to a certain point in the viewport (crosses a trigger line) run a function.
  * @class scrollTrigger
  * @param {object} options
- * @property {function|string} activeFn - null (default) | Function to run when 'element' becomes active.
  * @property {string} eventName - Custom event name 
- * @property {function|string} inactiveFn - null (default) | Function to run when 'element' becomes inactive.
- * @property {string} position - 'center' (default), 'top', 'bottom' | Position of trigger line.
  * @property {number} offset - Trigger line numerical offset.
- * @property {function|string} probeFn - null (default) | Function to run on scroll.
- * @property {object} scope - Object containing functions.
+ * @property {string} position - 'center' (default), 'top', 'bottom' | Position of trigger line.
+ * @property {bool} probe - false (default).
  * @property {string} selector - 'Element' selector. Must be data-*.
  * @example
  * An example invocation showing default parameters, except the functions obviously.
  * const ST = new scrollTrigger({
-    activeFn: (stElement) => { 
-        // Do something cool...
-    },
     eventName: 'scrollTrigger',
-    inactiveFn: (stElement) => {
-        // Maybe do another thing that's also cool...
-    },
     offset: 0,
     position: 'center',
-    probeFn: (docScrolledPercent) => {
-        // You could do another thing. But beware this function will run on EACH scroll event.
-    },
-    scope: {} // If 
+    probe: false,
+    selector: '[data-scroll-trigger]'
  });
  * 
  */
@@ -41,25 +30,17 @@ class scrollTrigger {
     constructor(override) {
         // Merge overrides and defaults into options object
         this.options =  Object.assign({
-            activeFn: null,
             selector: '[data-scroll-trigger]',
             eventName: 'scrollTrigger',
-            inactiveFn: null,
-            position: 'center',
-            probeFn: null,
+            eventNameProbe: 'scrollProbe',
             offset: 0,
-            scope: {}
+            position: 'center',
+            probe: false
         }, override);
         // Get window and document size
         this.window = saKnife.winSize();
         this.options.triggerLine = this._getTriggerLine(this.options.position);
 
-        // Check if user provided functions are functions
-        [
-            this.options.activeFn, 
-            this.options.inactiveFn, 
-            this.options.probeFn
-        ].forEach( fn => fn = this._checkFunction(fn));
         // Find elements and add them to array
         this.elements = scrollTrigger.generateElementsObj(this.options.selector);
         this.onScrollResize();
@@ -68,7 +49,7 @@ class scrollTrigger {
                 this.onScrollTrigger();
             }, 100));
         }
-        if (this.options.probeFn !== false) {
+        if (this.options.probe !== false) {
             window.addEventListener('scroll', () => {
                 this.onScrollProbe();
             });
@@ -105,19 +86,6 @@ class scrollTrigger {
             elArray.push(newElement);
         });
         return elArray;
-    }
-    _checkFunction(possibleFunc) {
-        if (possibleFunc == null) {
-            return false;
-        } else  {
-            if (typeof(possibleFunc) === 'function') {  
-                return possibleFunc;
-            }
-            if (typeof(this.options.scope[possibleFunc]) === 'function') {
-                return this.options.scope[possibleFunc];
-            }
-            return false;            
-        }
     }
     _getTriggerLine(position) {
         switch(position) {
@@ -158,7 +126,10 @@ class scrollTrigger {
     onScrollProbe() {
         let percentScrolled = saKnife.round((window.scrollY) / 
             (this.window.documentHeight - this.window.height), 4);
-        this.options.probeFn(percentScrolled);
+        
+        window.dispatchEvent(new CustomEvent(this.options.eventNameProbe, {
+            detail: percentScrolled
+        }));
     }
     onScrollResize() {
         this.window = saKnife.winSize();
@@ -172,18 +143,12 @@ class scrollTrigger {
      */
     _toggleActiveInactive(element, active) {
         // set active
-        if (element.active === false && active === true) {
-            if (this.options.event !== true && this.options.activeFn !== false)
-                this.options.activeFn(element);
-               
+        if (element.active === false && active === true) {               
             element.active = true;
             return element;
         }
         // set inactive
-        else if (element.active === true && active === false) {
-            if (this.options.event !== true && this.options.inactiveFn !== false)
-                this.options.inactiveFn(element);
-            
+        else if (element.active === true && active === false) {         
             element.active = false;
             return element;
         }
