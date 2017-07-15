@@ -50,7 +50,6 @@
   #{$prop}: var($var);
 }
 
-
 //---------------- Clip Animation
 @function generateValues ($from, $to, $steps){
   $val1: $to / $steps;
@@ -134,4 +133,9 @@
       $i: $i - 1;
     }
   }
+}
+
+// generate gradient
+@function generate-gradient($color1, $color2){
+  @return linear-gradient(160deg, $color2 10%, $color1 33.33%, $color1 66.66%, $color2 90%);
 }

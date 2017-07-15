@@ -1,0 +1,19 @@
+{
+    "package": "./package.json",
+    "plugins": [],
+    "recurseDepth": 2,
+    "source": {
+        "includePattern": ".+\\.js(doc|x)?$",
+        "include": ["./" ],
+        "exclude": ["./node-modules/", "./bundles/", "./webpack.config.js"]
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    }
+}

@@ -2,7 +2,7 @@ title: A Strange Path to Becoming a Web Developer
 sub-title: The Story of Alfredo J. Bermúdez
 email: alfredo@ajbermudez.com
 description: >
-  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive 
+  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive
   knowledge of <b>HTML</b>, <b>CSS</b> and <b>Vanilla Javascript</b>.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://ajbermudez.com" # the base hostname & protocol for your site
@@ -11,29 +11,17 @@ github_username:  alfredo-xyz
 # Build settings
 plugins:
   - octopress-paginate
-markdown: kramdown
-exclude: [main.scss, README.md, home-init.js, webpack.config.js, package.json, node_modules, src]
-sass:
-  sourcemap: true
-
-menuitems:
-  - 
-    name: musings
-    url: "/blog.html"
-    title: Blog
-  - 
-    name: experience
-    url: "/experience.html"
-    title: Experience
-
-collections:
-  home:
-    defaults:
-    - values:
-        layout: page
-
 excerpt_separator: <!--more-->
-
+markdown: kramdown
+exclude:
+  - '*.scss'
+  - '*-init.js'
+  - '*.json'
+  - node_modules
+  - src
+  - out
+  - README.md
+  - webpack.config.js
 paginate:
   collection:   posts
   per_page:     5               # maximum number of items per page
@@ -45,6 +33,23 @@ paginate:
   tag:          ''              # Paginate items tagged with this tag
   tags:         []              # Paginate items tagged with any of these tags
   reversed:     false           # Reverse the order of the documents
+sass:
+  sourcemap: true
+
+# Site data
+menuitems:
+  - name: musings
+    url: "/blog.html"
+    title: Blog
+  - name: experience
+    url: "/experience.html"
+    title: Experience
+
+collections:
+  home:
+    defaults:
+    - values:
+        layout: page
 
 isDev: true
 version: 1.2
