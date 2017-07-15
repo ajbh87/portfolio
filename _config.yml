@@ -2,7 +2,7 @@ title: A Strange Path to Becoming a Web Developer
 sub-title: The Story of Alfredo J. Bermúdez
 email: alfredo@ajbermudez.com
 description: >
-  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive 
+  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive
   knowledge of <b>HTML</b>, <b>CSS</b> and <b>Vanilla Javascript</b>.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://ajbermudez.com" # the base hostname & protocol for your site
@@ -12,9 +12,8 @@ github_username:  alfredo-xyz
 plugins:
   - octopress-paginate
 excerpt_separator: <!--more-->
-
 markdown: kramdown
-exclude: 
+exclude:
   - '*.scss'
   - '*-init.js'
   - '*.json'
@@ -23,7 +22,17 @@ exclude:
   - out
   - README.md
   - webpack.config.js
-
+paginate:
+  collection:   posts
+  per_page:     5               # maximum number of items per page
+  limit:        false           # Maximum number of pages to paginate (false for unlimited)
+  permalink:    /page:num/      # pagination path (relative to template page)
+  title_suffix: " - page :num"  # Append to template's page title
+  category:     ''              # Paginate items in this category
+  categories:   []              # Paginate items in any of these categories
+  tag:          ''              # Paginate items tagged with this tag
+  tags:         []              # Paginate items tagged with any of these tags
+  reversed:     false           # Reverse the order of the documents
 sass:
   sourcemap: true
 
@@ -41,19 +50,6 @@ collections:
     defaults:
     - values:
         layout: page
-
-
-paginate:
-  collection:   posts
-  per_page:     5               # maximum number of items per page
-  limit:        false           # Maximum number of pages to paginate (false for unlimited)
-  permalink:    /page:num/      # pagination path (relative to template page)
-  title_suffix: " - page :num"  # Append to template's page title
-  category:     ''              # Paginate items in this category
-  categories:   []              # Paginate items in any of these categories
-  tag:          ''              # Paginate items tagged with this tag
-  tags:         []              # Paginate items tagged with any of these tags
-  reversed:     false           # Reverse the order of the documents
 
 isDev: true
 version: 1.2

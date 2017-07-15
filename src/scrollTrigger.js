@@ -1,22 +1,24 @@
-/** 
+/**
  * Exports scrollTrigger class.
  * @module src/scrollTrigger
  * @requires module:src/saKnife saKnife
  */
 import debounce from '../node_modules/lodash.debounce/index.js';
 import saKnife from './saKnife.js';
-/** 
- * Yet another scroll trigger js tool.
- * When an element gets to a certain point in the viewport (crosses a trigger line) run a function.
+/**
+  Yet another scroll trigger js tool.
+  When an element gets to a certain point in the viewport
+  (crosses a trigger line) run a function.
  * @class scrollTrigger
  * @param {object} options
- * @property {string} eventName - Custom event name 
+ * @property {string} eventName - Custom event name
  * @property {number} offset - Trigger line numerical offset.
- * @property {string} position - 'center' (default), 'top', 'bottom' | Position of trigger line.
+ * @property {string} position - 'center' (default), 'top', 'bottom' |
+    Position of trigger line.
  * @property {bool} probe - false (default).
  * @property {string} selector - 'Element' selector. Must be data-*.
  * @example
- * An example invocation showing default parameters, except the functions obviously.
+ * An example invocation showing default parameters.
  * const ST = new scrollTrigger({
     eventName: 'scrollTrigger',
     offset: 0,
@@ -24,7 +26,6 @@ import saKnife from './saKnife.js';
     probe: false,
     selector: '[data-scroll-trigger]'
  });
- * 
  */
 class scrollTrigger {
     constructor(override) {
@@ -67,9 +68,9 @@ class scrollTrigger {
      * @property {number} index - Index. Nuff' said.
      */
     /**
-     * Generate elements array. Each element is wrapped in a an stElement object.
-     * The idea is to precalculate offset position, so that scrolling performance is not impacted
-     * by multiple calls to getBoundingClientRect().
+      Generate elements array. Each element is wrapped in a an stElement object.
+      The idea is to precalculate offset position, so that scrolling performance
+      is not impacted by multiple calls to getBoundingClientRect().
      * @param {string} selector - Elements selector.
      * @returns {array} elementArray - An array of stElements
      */
@@ -115,7 +116,7 @@ class scrollTrigger {
             else if (element.active === true) {
                 elChanged = this._toggleActiveInactive(element, false);
             }
-            elChanged != null ? changed.push(elChanged) : null;  
+            elChanged != null ? changed.push(elChanged) : null;
         });
         if (this.options.event && changed.length > 0) {
             window.dispatchEvent(new CustomEvent(this.options.eventName, {
@@ -124,9 +125,9 @@ class scrollTrigger {
         }
     }
     onScrollProbe() {
-        let percentScrolled = saKnife.round((window.scrollY) / 
+        let percentScrolled = saKnife.round((window.scrollY) /
             (this.window.documentHeight - this.window.height), 4);
-        
+
         window.dispatchEvent(new CustomEvent(this.options.eventNameProbe, {
             detail: percentScrolled
         }));
@@ -143,12 +144,12 @@ class scrollTrigger {
      */
     _toggleActiveInactive(element, active) {
         // set active
-        if (element.active === false && active === true) {               
+        if (element.active === false && active === true) {
             element.active = true;
             return element;
         }
         // set inactive
-        else if (element.active === true && active === false) {         
+        else if (element.active === true && active === false) {
             element.active = false;
             return element;
         }

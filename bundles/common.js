@@ -155,13 +155,13 @@
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/** 
+/**
  * Exports saKnife class.
- * @module src/saKnife 
+ * @module src/saKnife
  */
-/** 
+/**
  * Basic utilities for the Vanilla JS toolbox
- * @class saKnife 
+ * @class saKnife
  */
 class saKnife {
     /**
@@ -227,10 +227,10 @@ class saKnife {
      */
 
     /**
-     * Check 'element' position relative to 'body'
+      Check 'element' position relative to 'body'
      * @param {NodeElement} el - DOM Element
      * @return {offsetObject}
-     *       {@link module:src/saKnife~offsetObject offsetObject} - Element offest information
+        {@link module:src/saKnife~offsetObject offsetObject} - Element offest information
      */
     static offset(el) {
         const rect = el.getBoundingClientRect(),
@@ -243,7 +243,7 @@ class saKnife {
     }
 
     /**
-     * Every property is in pixels
+      Every property is in pixels
      * @typedef {object} winSizeObject
      * @property {number} width - window width
      * @property {number} height - window height
@@ -259,7 +259,7 @@ class saKnife {
      * saKnife.winSize();
      * // returns {width: 1920, height: 1080, ...}
      * @return {winSizeObject}
-     *      {@link module:src/saKnife~winSizeObject winSizeObject} - Windows size information
+        {@link module:src/saKnife~winSizeObject winSizeObject} - Windows size information
      */
     static winSize() {
         const e = document.documentElement,
@@ -301,6 +301,7 @@ if (HTMLElement.getOffset == null) {
     };
 }
 /* harmony default export */ __webpack_exports__["a"] = (saKnife);
+
 
 /***/ })
 /******/ ]);

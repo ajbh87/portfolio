@@ -5,11 +5,11 @@ import saKnife from './src/saKnife.js';
 import debounce from './node_modules/lodash.debounce/index.js';
 import pull from './node_modules/lodash.pull/index.js';
 
-/** 
+/**
     Home page scripts.
-    @function 
+    @function
     @requires src/saKnife
-    @requires src/scrollTrigger    
+    @requires src/scrollTrigger
     @requires node_modules/lodash.debounce
     @requires node_modules/lodash.before
 */
@@ -27,7 +27,8 @@ const homeInit = () => {
                 points: [1, 4, 7, 10, 11]
             }
         }),
-        MARKERS = CONTAINER.querySelectorAll('.bg-line__point'); // needs same # of trigger points
+        // needs same # of trigger points
+        MARKERS = CONTAINER.querySelectorAll('.bg-line__point');
     let sectionRatios = getSectionRatios(),
         active = 0,
         activeMarkers = [],
@@ -61,13 +62,13 @@ const homeInit = () => {
                 ratio = element.offsetHeight / cHeight,
                 lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
                 top = (ratio * 100) + lastTop; // top calculation
-            
+
             marker.style.top = top + '%';
             posArr.push(element.getBoundingClientRect());
             topArr.push(top);
             ratios.push(saKnife.round(ratio, 6));
         });
-        
+
         return { cHeight, posArr, ratios, topArr };
     }
     function changeLine(event) {
@@ -75,7 +76,7 @@ const homeInit = () => {
     }
     function reCheckLine() {
         let newActive = LINE.reCheck();
-        
+
         if (active !== newActive) {
             toggleActive(active, newActive);
 
@@ -117,7 +118,7 @@ const homeInit = () => {
     }
     function sectionInactive(index) {
         SECTIONS[index].classList.remove('focused');
-        BODY.classList.remove(`section-${index}`);       
+        BODY.classList.remove(`section-${index}`);
     }
 };
 window.addEventListener('load', homeInit);

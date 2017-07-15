@@ -694,25 +694,27 @@ module.exports = pull;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__saKnife_js__ = __webpack_require__(0);
-/** 
+/**
  * Exports scrollTrigger class.
  * @module src/scrollTrigger
  * @requires module:src/saKnife saKnife
  */
 
 
-/** 
- * Yet another scroll trigger js tool.
- * When an element gets to a certain point in the viewport (crosses a trigger line) run a function.
+/**
+  Yet another scroll trigger js tool.
+  When an element gets to a certain point in the viewport
+  (crosses a trigger line) run a function.
  * @class scrollTrigger
  * @param {object} options
- * @property {string} eventName - Custom event name 
+ * @property {string} eventName - Custom event name
  * @property {number} offset - Trigger line numerical offset.
- * @property {string} position - 'center' (default), 'top', 'bottom' | Position of trigger line.
+ * @property {string} position - 'center' (default), 'top', 'bottom' |
+    Position of trigger line.
  * @property {bool} probe - false (default).
  * @property {string} selector - 'Element' selector. Must be data-*.
  * @example
- * An example invocation showing default parameters, except the functions obviously.
+ * An example invocation showing default parameters.
  * const ST = new scrollTrigger({
     eventName: 'scrollTrigger',
     offset: 0,
@@ -720,7 +722,6 @@ module.exports = pull;
     probe: false,
     selector: '[data-scroll-trigger]'
  });
- * 
  */
 class scrollTrigger {
     constructor(override) {
@@ -763,9 +764,9 @@ class scrollTrigger {
      * @property {number} index - Index. Nuff' said.
      */
     /**
-     * Generate elements array. Each element is wrapped in a an stElement object.
-     * The idea is to precalculate offset position, so that scrolling performance is not impacted
-     * by multiple calls to getBoundingClientRect().
+      Generate elements array. Each element is wrapped in a an stElement object.
+      The idea is to precalculate offset position, so that scrolling performance
+      is not impacted by multiple calls to getBoundingClientRect().
      * @param {string} selector - Elements selector.
      * @returns {array} elementArray - An array of stElements
      */
@@ -811,7 +812,7 @@ class scrollTrigger {
             else if (element.active === true) {
                 elChanged = this._toggleActiveInactive(element, false);
             }
-            elChanged != null ? changed.push(elChanged) : null;  
+            elChanged != null ? changed.push(elChanged) : null;
         });
         if (this.options.event && changed.length > 0) {
             window.dispatchEvent(new CustomEvent(this.options.eventName, {
@@ -820,9 +821,9 @@ class scrollTrigger {
         }
     }
     onScrollProbe() {
-        let percentScrolled = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].round((window.scrollY) / 
+        let percentScrolled = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].round((window.scrollY) /
             (this.window.documentHeight - this.window.height), 4);
-        
+
         window.dispatchEvent(new CustomEvent(this.options.eventNameProbe, {
             detail: percentScrolled
         }));
@@ -839,12 +840,12 @@ class scrollTrigger {
      */
     _toggleActiveInactive(element, active) {
         // set active
-        if (element.active === false && active === true) {               
+        if (element.active === false && active === true) {
             element.active = true;
             return element;
         }
         // set inactive
-        else if (element.active === true && active === false) {         
+        else if (element.active === true && active === false) {
             element.active = false;
             return element;
         }
@@ -853,23 +854,24 @@ class scrollTrigger {
 }
 /* harmony default export */ __webpack_exports__["a"] = (scrollTrigger);
 
+
 /***/ }),
 /* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/** 
+/**
  * Exports svgLine class.
- * @module src/svgLine 
+ * @module src/svgLine
  */
-/** 
- * A plugin-less way to manipulate the svg path in the home background.
- * @class svgLine 
+/**
+  A plugin-less way to manipulate the svg path in the home background.
+ * @class svgLine
  */
 class svgLine {
     constructor(options) {
         const style = getComputedStyle(options.path);
-        
+
         this.el = Object.assign({
             length: parseFloat(style['stroke-dasharray']),
             height: options.path.viewportElement.viewBox.baseVal.height,
@@ -892,7 +894,7 @@ class svgLine {
                 requestAnimationFrame(() => {
                     this.el.path.style.strokeDashoffset = newLength;
                 });
-            };         
+            };
         this.offset = offset;
         changePath();
 
@@ -926,7 +928,7 @@ class svgLine {
                         if (this.offset < (prevTrigger.val - this.el.triggerPad)) {
                             if (prevIndex > 0)
                                 return checkPrev(index - 1);
-                            else 
+                            else
                                 return prevIndex;
                         } else {
                             return index;
@@ -966,7 +968,7 @@ class svgLine {
         let points = this.el.path.points,
             diffs = [],
             triggerInfo = this.el.triggers.info;
-            
+
         if (triggerPoints != null) {
             ratios.forEach((ratio, i) => {
                 let triggerIndex = triggerPoints[i],
@@ -986,19 +988,21 @@ class svgLine {
         function changeTriggerPoint(triggerIndex, index, diff) {
             const trigger = points.getItem(triggerIndex);
             let prevTriggerIndex = index > 0 ? triggerPoints[index - 1] : 0,
-                prevPoint = ((triggerIndex - 1) >= 0) ? points.getItem(triggerIndex - 1) : null,
-                nextPoint = ((triggerIndex + 1) < points.numberOfItems - 1) ? points.getItem(triggerIndex + 1) : null,
+                prevPoint = ((triggerIndex - 1) >= 0) ?
+                  points.getItem(triggerIndex - 1) : null,
+                nextPoint = ((triggerIndex + 1) < points.numberOfItems - 1) ?
+                  points.getItem(triggerIndex + 1) : null,
                 info = triggerInfo[index] != null ? triggerInfo[index] : {};
 
             if (info.prevOffset == null && prevPoint != null) {
                 if (prevTriggerIndex !== triggerIndex - 1)
                     info.prevOffset = getOffset(prevPoint, trigger);
-                else 
+                else
                     prevPoint = null;
             }
             if (info.nextOffset == null && nextPoint != null) {
                 info.nextOffset = getOffset(nextPoint, trigger);
-                if (info.nextOffset > Math.abs(info.prevOffset)) 
+                if (info.nextOffset > Math.abs(info.prevOffset))
                     nextPoint = null;
             }
 
@@ -1020,8 +1024,9 @@ class svgLine {
                 let pointIndex = prevTriggerIndex + 1,
                     length = 0;
 
-                for (pointIndex; pointIndex <= triggerIndex; pointIndex++) {                
-                    length += svgLine.distance(points.getItem(pointIndex - 1), points.getItem(pointIndex));
+                for (pointIndex; pointIndex <= triggerIndex; pointIndex++) {
+                    length += svgLine.distance(points.getItem(pointIndex - 1),
+                      points.getItem(pointIndex));
                 }
                 if (index > 0)
                     length += triggerInfo[index - 1].val;
@@ -1031,12 +1036,13 @@ class svgLine {
         }
     }
     static distance(pointSet1, pointSet2) {
-        const dx = pointSet2.x - pointSet1.x, 
+        const dx = pointSet2.x - pointSet1.x,
             dy = pointSet2.y - pointSet1.y;
         return Math.hypot(dx, dy);
     }
 }
 /* harmony default export */ __webpack_exports__["a"] = (svgLine);
+
 
 /***/ }),
 /* 8 */,
@@ -1059,11 +1065,11 @@ __webpack_require__(2);
 
 
 
-/** 
+/**
     Home page scripts.
-    @function 
+    @function
     @requires src/saKnife
-    @requires src/scrollTrigger    
+    @requires src/scrollTrigger
     @requires node_modules/lodash.debounce
     @requires node_modules/lodash.before
 */
@@ -1081,7 +1087,8 @@ const homeInit = () => {
                 points: [1, 4, 7, 10, 11]
             }
         }),
-        MARKERS = CONTAINER.querySelectorAll('.bg-line__point'); // needs same # of trigger points
+        // needs same # of trigger points
+        MARKERS = CONTAINER.querySelectorAll('.bg-line__point');
     let sectionRatios = getSectionRatios(),
         active = 0,
         activeMarkers = [],
@@ -1115,13 +1122,13 @@ const homeInit = () => {
                 ratio = element.offsetHeight / cHeight,
                 lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
                 top = (ratio * 100) + lastTop; // top calculation
-            
+
             marker.style.top = top + '%';
             posArr.push(element.getBoundingClientRect());
             topArr.push(top);
             ratios.push(__WEBPACK_IMPORTED_MODULE_2__src_saKnife_js__["a" /* default */].round(ratio, 6));
         });
-        
+
         return { cHeight, posArr, ratios, topArr };
     }
     function changeLine(event) {
@@ -1129,7 +1136,7 @@ const homeInit = () => {
     }
     function reCheckLine() {
         let newActive = LINE.reCheck();
-        
+
         if (active !== newActive) {
             toggleActive(active, newActive);
 
@@ -1171,7 +1178,7 @@ const homeInit = () => {
     }
     function sectionInactive(index) {
         SECTIONS[index].classList.remove('focused');
-        BODY.classList.remove(`section-${index}`);       
+        BODY.classList.remove(`section-${index}`);
     }
 };
 window.addEventListener('load', homeInit);
