@@ -5,9 +5,13 @@
       {% include header.html %}
       {% include icons.html %}
       {% include social-aside.html %}
+      {% if page.summary %}
+      <div class="summary">
+        {{ page.summary | markdownify }}
+      </div>
+      {% endif %}
       {{ content }}
       {% include footer.html %}
     	<div class="map"></div>
-
     </body>
 </html>

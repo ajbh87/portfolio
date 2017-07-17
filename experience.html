@@ -1,7 +1,7 @@
 ---
 layout: page
 isExp: true
-skills: 
+skills:
   - name: Javascript
     percent: 90
     sub:
@@ -26,31 +26,84 @@ skills:
     percent: 60
   - name: ASP.Net C#
     percent: 70
+projects:
+  - title: Personal Website
+    period: 2017
+    link: "http://ajbermudez.com"
+    source: "https://github.com/alfredo-xyz/portfolio"
+    description: >
+      Experimented with the new Web Animation API and SVG manipulation with
+      JavaScript using no frameworks.
+  - title: AngularJS and Wordpress REST API website
+    period: 2017
+    link: "http://ajbermudez.com/aata"
+    source: "https://github.com/alfredo-xyz/aata"
+    description: >
+      Built an AngularJS Wordpress theme that consumes the Wordpress REST API
+      and falls back to regular PHP Wordpress if Javascript is disabled.
+  - title: Alfredo Una Pseudobigrafía
+    period: 2014 - 2015
+    link: "http://alfredounapseudobiografia.com"
+    source: "https://github.com/alfredo-xyz/x-imagenes"
+    description: >
+      Constructed an interactive comic prototype using PHP, MySQL and jQuery
+      for my Bachelor’s final project.
 jobs:
-  - title: Web Developer
-    company: YCS PR Corp.
+  - title: Front-End Developer
+    company: <a href="https://www.ycspr.net/">YCS PR Corp.</a>
     location: San Juan, PR
     period: Jun 2016 - Present
     description: >
-      - Worked tightly with a team of back-end developers to develop several web applications.
-      
-      - Created a medical oriented scheduler prototype in AngularJS and ASP.Net C#. 
+      - Worked tightly with an Agile team of back-end developers and external
+      graphic designers to develop several private web applications.
 
-      - Crafted a front-end experience for a localized billing web app. 
+      - Implemented a multi-language web interface and landing page for a beta
+      Spain-based sports court scheduler. [dribel.io](https://dribel.io)
+
+      - Overhauled the user experience of a localized web based billing and
+      finances application.
+
+      - Worked with different frameworks, including AngularJS, React, Bootstrap
+      and DevExtreme.
+
+      - Revised and optimized JavaScript code of multiple projects.
+
+      - Created a medical oriented scheduler prototype in AngularJS and ASP.Net C#.
+        - Programmed a web socket data interface for AngularJS  using SignalR
+        and Immutable.js
+
   - title: Freelance Web Developer / Designer
     company: <a tabindex="0" data-content="A lot of stress!!!">Self-Employed*</a>
     location: San Juan, PR
     period: Dec 2012 - May 2016
     description: >
-      - Developed custom and responsive wordpress themes.
+      - Developed custom and responsive Wordpress themes and static web pages
+      for a diverse group of clients which included medical facilities, hardware
+      stores, law firms and production companies.
+        - Wordpress, Jekyll, Sass, Less, jQuery, PHP, Liquid
+        - Examples: [povcm.com](http://povcm.com), [ojosypiel.com](http://ojosypiel.com)
 
-      - Worked with graphic designers transforming their designs into working web pages.
+      - Collaborated with graphic designers transforming their static designs
+      into working web pages.
+
+      - Created an interactive presentation using web technologies for a health
+      industry packaging manufacturer.
+        - HTML, jQuery, Less, Web Video
+
   - title: Web Developer and Graphic Designer
     company: Partido Puertorriqueños Por Puerto Rico.
     location: San Juan, PR
     period: Jan 2012 - Nov 2012
     description: >
-      - TODO 
+      - Worked with a group of graphic designers to create the first responsive
+      web site for a political party in Puerto Rico.
+        - PHP, Less, jQuery, Wordpress
+
+      - Assembled a web-based interactive training manual for voting inspectors.
+        - HTML, Less, jQuery
+
+      - Designed the logo for the 2012 campaign of the governor candidate.
+
 ---
 <section class="skills experience">
   <h2 class="experience__title">Skills</h2>
@@ -73,9 +126,35 @@ jobs:
   {% endfor %}
   </dl>
 </section>
-<hr />
+
+<section class="projects experience">
+  <h2 class="experience__title">Selected Projects</h2>
+  {% for project in page.projects %}
+  <dl class="project">
+    <div class="project__info">
+      <dt>Title</dt>
+      <dd class="project__title">{{ project.title }}</dd>
+      <dt>Source</dt>
+      <dd class="project__source">
+        <a href="{{ project.source }}" title="source">Source</a>
+      </dd>
+      <dt>Link</dt>
+      <dd class="project__link">
+        <a href="{{ project.link }}" title="link">Link</a>
+      </dd>
+      <dt>Period</dt>
+      <dd class="project__period">{{ project.period }}</dd>
+    </div>
+    <div class="project__description-cont">
+      <dt>Description</dt>
+      <dd class="project__description">{{ project.description | markdownify }}</dd>
+    </div>
+  </dl>
+  {% endfor %}
+</section>
+
 <section class="jobs experience">
-  <h2 class="experience__title">Experience</h2>
+  <h2 class="experience__title">Work Experience</h2>
   {% for job in page.jobs %}
   <dl class="job">
     <div class="job__info">

@@ -1,20 +1,79 @@
 ---
 layout: default
 ---
+{% assign headerClass = "" %}
+{% if page.multipart %}
+{% assign headerClass = "title--with-multipart" %}
+{% endif %}
 <section class="post">
-    <header class="post__header">
-		<h1 class="post__title" itemprop="name headline">{{ page.title }}</h1>
-		<p class="post__meta">
-			<time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>
-			{% if page.author %} • 
-			<span itemprop="author" itemscope itemtype="http://schema.org/Person">
-				<span itemprop="name">{{ page.author }}</span>
-			</span>
-			{% endif %}
-		</p>
-    </header>
-
-    <div class="post__content" >
-		{{ content }}
+  <header class="post__header">
+    <h1 class="title post__title {{ headerClass }}" itemprop="name headline">{{ page.title }}</h1>
+    {% if page.multipart %}
+    <h2 class="sub-title post__sub-title">
+      {{ page.multipart.title }}
+      <span class="sub-title__multipart post__sub-title">
+        Part {{ page.multipart.num }} of {{ page.multipart.parts.size }}
+      </span>
+    </h2>
+    {% endif %}
+  </header>
+  <p class="post__meta">
+    <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">{{ page.date | date: "%b %-d, %Y" }}</time>
+    {% if page.author %} •
+    <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <span itemprop="name">{{ page.author }}</span>
+    </span>
+    {% endif %}
+  </p>
+  {% if page.multipart or page.table %}
+  <aside class="extra">
+    {% if page.multipart %}
+    <div class="multipart">
+      <h4 class="multipart__title">Series</h4>
+      <ul class="multipart__list">
+        {% for part in page.multipart.parts %}
+        <li class="multipart__item {% if part.active %}multipart__item--active{% endif %}">
+          {% if part.link %}
+          <a href="{{ part.link | prepend: site.url }}">
+            Part {{ forloop.index }}:
+            {{ part.title }}
+          </a>
+          {% else %}
+          Part {{ forloop.index }}:
+          {{ part.title }}
+          {% endif %}
+          {% if part.active %}
+          <code class="highlighter-rouge">this</code>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
     </div>
+    {% endif %}
+    {% if page.table %}
+    <div class="toc">
+      <h4 class="toc__title">Table of Contents</h4>
+      <ul class="toc__list">
+        {% for content in page.table.content %}
+        <li class="toc__item">
+          <a href="#{{ content.id }}">{{ content.name }}</a>
+          {% if content.sub-content %}
+          <ul class="toc__list toc__sub-list">
+            {% for sub in content.sub-content %}
+            <li class="toc__item toc__sub-item">
+              <a href="#{{ sub.id }}">{{ sub.name }}</a>
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </aside>
+  {% endif %}
+  <div class="post__content" >
+    {{ content }}
+  </div>
 </section>

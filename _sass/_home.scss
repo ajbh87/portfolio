@@ -1,7 +1,7 @@
 $time: 0.6s;
 //----------------------- Home Page
 .summary {
-  @extend %container; 
+  @extend %container;
 }
 .home {
   position: relative;
@@ -15,7 +15,7 @@ $time: 0.6s;
   position: relative;
   z-index: 1;
   border-width: 1px 0;
-  
+
   @media screen and (max-width: #{$media-min - 1px}) {
     width: 80%;
     margin-right: 20%;
@@ -41,7 +41,7 @@ $time: 0.6s;
       border-bottom: 1px solid $secondary;
       @include cssVar(border-color, --secondary, $secondary);
 
-      
+
     }
   }
 }
@@ -57,7 +57,7 @@ $time: 0.6s;
   100% {
     transform: scale(2);
     opacity: 0;
-    
+
   }
 }
 @keyframes lineGrow {
@@ -108,7 +108,7 @@ $time: 0.6s;
     $eHeight: $height / $steps;
     $s: 2vw;
     $min: $base-font-size-fixed;
-    
+
     display: block;
     position: absolute;
     right: $offset;
@@ -123,14 +123,14 @@ $time: 0.6s;
 
     border: 0;
     border-radius: 50%;
-    
+
     transform: translate(50%, -50%);
     opacity: 0;
     visibility: hidden;
-    transition: 
-      opacity .5s ease(out-cubic), 
+    transition:
+      opacity .5s ease(out-cubic),
       visibility .5s ease(out-cubic);
-    
+
     &:after {
       content: " ";
       display: block;

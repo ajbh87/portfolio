@@ -1,9 +1,10 @@
-title: A Strange Path to Becoming a Web Developer
-sub-title: The Story of Alfredo J. Bermúdez
+title: Alfredo J. Bermúdez
+display-title: A Strange Path to Becoming a Web Developer
+display-sub-title: The Story of Alfredo J. Bermúdez
 email: alfredo@ajbermudez.com
 description: >
   I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive
-  knowledge of <b>HTML</b>, <b>CSS</b> and <b>Vanilla Javascript</b>.
+  knowledge of <b>HTML</b>, <b>CSS</b> and <b>Javascript</b>.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://ajbermudez.com" # the base hostname & protocol for your site
 github_username:  alfredo-xyz

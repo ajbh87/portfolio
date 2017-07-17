@@ -27,6 +27,18 @@
       margin-right: 0;
     }
   }
+  //----------------------------- Title
+  .title {
+    &__main {
+      &:after {
+        content: ":";
+      }
+    }
+    &__subtitle {
+      display: block;
+      // @include cssVar(color, --secondary, $secondary);
+    }
+  }
   &__nav {
     padding: $spacing-unit $spacing-unit-sm;
     text-align: center;
@@ -42,7 +54,7 @@
 
       &.active {
         @include cssVar(color, --tertiary, $tertiary);
-      } 
+      }
       &:last-child {
         margin-right: 0;
       }
@@ -58,23 +70,6 @@
     }
   }
 }
-
-//----------------------------- Title
-.title {
-  &__main {
-    &:after {
-      content: ":";
-    }
-  }
-  &__subtitle {
-    display: block;
-    // @include cssVar(color, --secondary, $secondary);
-  }
-}
-
-//----------------------------- Content
-
-
 //----------------------------- Blog
 .posts {
   @include cssVar(background-color, --bg, $background-color);
@@ -102,6 +97,7 @@
 
 //----------------------------- Posts & Pages
 .post, .page {
+  position: relative;
   @include cssVar(background-color, --bg, $background-color);
   @extend %container;
 
@@ -111,20 +107,84 @@
   &__title {
     @include cssVar(color, --secondary, $secondary);
   }
+  &__sub-title {
+    font-size: 1.5rem;
+
+  }
   &__content {
 
+  }
+}
+//----------------------------- General titles and sub-titles
+.title { // warning header title has this class
+  &--with-multipart {
+    margin-bottom: .2rem;
+  }
+}
+.sub-title {
+  &__multipart {
+    font-weight: 700;
+    font-size: 0.5rem;
+  }
+}
+
+//----------------------------- Multipart
+.extra {
+  font-size: 0.75rem;
+  padding: 0.75rem;
+  //@include cssVar(background-color, --bg, $background-color);
+
+  @include media-query($media-min) {
+    $w: 10.5rem;
+    font-size: 0.66rem;
+    position: sticky;
+    float: right;
+    width: $w;
+    margin: -5rem #{-$w - $spacing-unit} 0 0;
+    top: 0;
+  };
+}
+//----------------------------- Multipart
+.multipart {
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+  border-style: solid;
+  border-width: 0 0 1px 0;
+  @include cssVar(border-color, --tertiary, $tertiary);
+
+  &__title {
+    margin-bottom: 0;
+  }
+  &__list {
+    list-style: none;
+    margin-left: 0;
+  }
+  &__item {
+    position: relative;
+    &--active {
+      code {
+        font-size: .5rem;
+        position: absolute;
+        top: .1rem;
+        left: 0;
+        margin-left: -0.25rem;
+        transform: translateX(-100%);
+      }
+    }
   }
 }
 
 //----------------------------- Social Aside
 .social-aside {
   text-align: center;
+  margin-bottom: $spacing-unit-sm;
   @include media-query($media-min) {
     position: fixed;
     bottom: 0;
     right: 0;
     z-index: 15;
     text-align: left;
+    margin-bottom: 0;
   }
   &__list {
     margin: 0;
@@ -142,7 +202,7 @@
         margin-right: 0;
       }
       > li > a {
-        transition: 
+        transition:
           background 0.2s ease(out-cubic),
           transform 0.3s ease(out-cubic);
 

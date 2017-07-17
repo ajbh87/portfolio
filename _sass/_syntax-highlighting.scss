@@ -8,6 +8,9 @@
 .highlight {
     background: $grey-color-dark;
     @extend %vertical-rhythm;
+    margin-left: -$spacing-unit;
+    margin-right: -$spacing-unit;
+
     .p     { color: $grey-color-light; }
     .c     { color: #998; font-style: italic } // Comment
     .err   { color: #a61717; background-color: #e3d2d2 } // Error

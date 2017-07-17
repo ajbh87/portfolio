@@ -1,13 +1,15 @@
 ---
-layout: home
+layout: default
 isHome: true
 options: "sectionOptions"
 ---
-{% for section in site.home %}
-<section id="{{ section.title | slugify }}" class="section" data-trigger-sections>
-    <h2 class="section__title">{{ section.title }}</h2>
-    {{ section.content }}
-</section>
-{% endfor %}
-{% include line.html %}
 
+<div class="home">
+  {% for section in site.home %}
+  <section id="{{ section.title | slugify }}" class="section" data-trigger-sections>
+      <h2 class="section__title">{{ section.title }}</h2>
+      {{ section.content }}
+  </section>
+  {% endfor %}
+  {% include line.html %}
+</div>

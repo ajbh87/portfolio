@@ -21,7 +21,7 @@ html {
 body {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center;
   min-height: 100vh;
 
   @include cssVar(color, --text, $text-color);
@@ -29,8 +29,8 @@ body {
   background-image: $bg-gradient;
   background-size: 100vw 100vh;
   background-attachment: fixed;
-  background-position: center;
-  //background-repeat: no-repeat;
+  background-position: center top;
+  background-repeat: no-repeat;
 
   -webkit-text-size-adjust: 100%;
   -webkit-font-feature-settings: "kern" 1;
@@ -38,6 +38,10 @@ body {
   -o-font-feature-settings: "kern" 1;
   font-feature-settings: "kern" 1;
   font-kerning: normal;
+
+  @include media-query($media-min) {
+    align-items: flex-end;
+  }
 }
 .map {
   position: fixed;
@@ -51,12 +55,12 @@ body {
 }
 
 //----------------------------- Vertical Rhythm
-h1, h2, h3, h4, h5, h6,
+h1, h2, h3, h4,
 p, blockquote, pre, hr,
 ul, ol, dl, figure,
 %vertical-rhythm {
   margin-bottom: $spacing-unit;
-  
+
   &:last-child {
     margin-bottom: 0;
   }
@@ -65,29 +69,25 @@ ul, ol, dl, figure,
 //----------------------------- Headings
 h1, .h1 {
   font-size: 2.25rem;
-  line-height: 1.05em;
+  line-height: 1.05;
 }
 h2, .h2 {
-  font-size: 2rem;
-  line-height: 1.1em;
+  font-size: 1.8rem;
+  line-height: 1.1;
 }
 h3, .h3 {
-  font-size: 1.75rem;
-  line-height: 1.2em;
+  font-size: 1.6rem;
 }
 h4, .h4 {
-  font-size: 1.50rem;
-  line-height: 1.2em;
+  font-size: 1.4rem;
 }
 h5, .h5 {
-  font-size: 1.25rem;
-  line-height: 1.2em;
+  font-size: 1.2rem;
 }
 h6, .h6 {
   font-size: .8rem;
-  line-height: 1.2em;
 }
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
   font-weight: $font-weight-light;
 }
 //----------------------------- Font
@@ -123,7 +123,7 @@ figcaption {
 
 //----------------------------- Lists
 ul, ol {
-  margin-left: $spacing-unit;
+  margin-left: 0.7rem;
 }
 
 li {
@@ -164,16 +164,16 @@ a {
       font-style: normal;
       font-weight: 700;
       visibility: hidden;
-      
+
       transform: translate(0%, -100%);
-      transition: 
-        visibility 0.2s ease(out-cubic), 
+      transition:
+        visibility 0.2s ease(out-cubic),
         opacity 0.2s ease(out-cubic);
       opacity: 0;
-      
+
       border-radius: 3px;
       background: $secondary;
-      color: $background-color;  
+      color: $background-color;
     }
   }
   &:hover, &:focus {
@@ -212,12 +212,12 @@ button {
   @include cssVar(color, --bg, $background-color);
 
   &:hover {
-    // ToDO 
+    // ToDO
   }
   &__icon {
     position: relative;
     top: -0.125rem;;
-  } 
+  }
 }
 
 //----------------------------- Icons
@@ -280,17 +280,16 @@ pre {
 .hidden {
   display: none;
 }
-.visually-hidden { 
-  border: 0; 
-  clip: rect(0 0 0 0); 
-  height: 1px; 
-  margin: -1px; 
-  overflow: hidden; 
-  padding: 0; 
-  position: absolute; 
-  width: 1px; 
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
 
 //----------------------------- Paddings and Margins
 @include attr-iterator(padding, $spacing-unit, pad);
-

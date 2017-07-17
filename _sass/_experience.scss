@@ -1,14 +1,21 @@
 $s: 8rem;
 .experience {
   @extend %vertical-rhythm;
+  border-bottom: 1px solid $tertiary;
+  @include cssVar(border-color, --tertiary, $tertiary);
+  padding-bottom: $spacing-unit;
+  &:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
   &__title {
     @include cssVar(color, --secondary, $secondary);
   }
 }
-.jobs {
+.jobs, .projects {
 
 }
-.job {
+.job, .project {
   display: grid;
   grid-gap: 0.25rem;
   grid-template-columns: $s 1fr;
@@ -16,17 +23,14 @@ $s: 8rem;
     @extend .visually-hidden;
   }
   &__info {
-    //flex: 0 1 10rem;
     font-size: $spacing-unit-sm;
 
     dd {
-      margin-bottom: 0.25rem;
     }
   }
   &__description-cont {
-    //flex: 2 1 80%;
     ul {
-      list-style: circle; 
+      //list-style: circle;
     }
   }
 
@@ -48,6 +52,7 @@ $s: 8rem;
 }
 
 .skill {
+  font-size: 0.75rem;
   display: grid;
   grid-gap: 0.5rem 0.25rem;
   grid-template-columns: $s 1fr;
@@ -60,16 +65,17 @@ $s: 8rem;
   &__value {
     position: relative;
     margin-left: -1.75rem;
-    @include cssVar(background-color, --bg, $background-color);
+    //@include cssVar(background-color, --bg, $background-color);
   }
   &__bar {
     position: absolute;
-    top: 50%;
-    top: calc(50% - 2px);
-    height: 4px;
+    top: 0;
+    bottom: 0;
+    //top: calc(50% - 1rem);
+    //height: 2rem;
     width: 100%;
     transform: scaleX(0);
-    transform-origin: center left; 
+    transform-origin: center left;
     background-color: $primary;
   }
   &__name.skill__subskill {
