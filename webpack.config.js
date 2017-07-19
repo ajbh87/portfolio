@@ -13,7 +13,7 @@ const devRules = [
     {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract({
-            fallback: 'style-loader', 
+            fallback: 'style-loader',
             use: [{
                 loader: 'css-loader',
                 options: {
@@ -22,18 +22,18 @@ const devRules = [
                 }
             }, {
                 loader: 'postcss-loader',
-                options: { 
-                    sourceMap: 'inline', 
+                options: {
+                    sourceMap: 'inline',
                     plugins: function() {
                         if (isDev) {
                             return;
                         } else {
-                            return [ 
+                            return [
                                 require('autoprefixer'),
                                 require('cssnano')
                             ];
                         }
-                    } 
+                    }
                 }
             }, {
                 loader: 'sass-loader',
@@ -51,7 +51,7 @@ const productionRules = devRules.concat([
         use: {
             loader: 'babel-loader',
             options: {
-                presets: ['env', { modules: false }],
+                presets: ['env']
             }
         }
     }
@@ -62,7 +62,7 @@ const devPlugins = [
         allChunks: true
     }),
     new webpack.optimize.CommonsChunkPlugin({
-       name: 'common'
+        name: 'common'
     })
 ];
 const productionPlugins = devPlugins.concat([

@@ -1,7 +1,7 @@
-#A Strange Path to Becoming a Web Developer
-##The Story of Alfredo J. Bermúdez
+# A Strange Path to Becoming a Web Developer
+## The Story of Alfredo J. Bermúdez
 
-#####Tools
+##### Tools
 * Jekyll
   * Octopress Paginate
 * Sass
