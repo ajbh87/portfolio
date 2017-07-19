@@ -1,5 +1,5 @@
 # A Strange Path to Becoming a Web Developer
-## The Story of Alfredo J. Bermúdez
+### The Story of Alfredo J. Bermúdez
 
 ##### Tools
 * Jekyll
