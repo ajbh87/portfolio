@@ -1,7 +1,7 @@
 ---
 title: I build things for the <a tabindex="0" data-content="A web developer in other words.">web*</a>
 ---
-I over five years of experience working with __Javascript__, __HTML__ and __CSS__. This includes frameworks and libraries like __Bootstrap__, __AngularJS__ and __React__. In the back-end I've worked with __PHP__ and __ASP.NET C#__.  If you want to get an idea of what I'm capable, this page is built with [Jekyll](jekyll), [SASS](sass) and Vanilla ES6 JavaScript with a smidge of [lodash](lodash) and the new [Web Animation API](web-animation), bundled with [Webpack 2](webpack). The code from this page, and other projects is in my [Github](github). If you'd like to read more of how I got here, just follow the path.
+I have over five years of experience working with __Javascript__, __HTML__ and __CSS__. This includes frameworks and libraries like __Bootstrap__, __AngularJS__ and __React__. In the back-end I've worked with __PHP__ and __ASP.NET C#__.  If you want to get an idea of what I'm capable, this page is built with [Jekyll](jekyll), [SASS](sass) and Vanilla ES6 JavaScript with a smidge of [lodash](lodash) and the new [Web Animation API](web-animation), bundled with [Webpack 2](webpack). The code from this page, and other projects is in my [Github](github). If you'd like to read more of how I got here, just follow the path.
 
 ---
 

@@ -2,8 +2,8 @@ $s: 8rem;
 .experience {
   @extend %vertical-rhythm;
   border-bottom: 1px solid $tertiary;
-  @include cssVar(border-color, --tertiary, $tertiary);
-  padding-bottom: $spacing-unit;
+  @include cssVar(border-color, --bg-2, $bg-2);
+  padding-bottom: $space;
   &:last-child {
     border-bottom: 0;
     padding-bottom: 0;
@@ -23,7 +23,7 @@ $s: 8rem;
     @extend .visually-hidden;
   }
   &__info {
-    font-size: $spacing-unit-sm;
+    font-size: $space-sm;
 
     dd {
     }
@@ -52,20 +52,21 @@ $s: 8rem;
 }
 
 .skill {
-  font-size: 0.75rem;
+  font-size: $font-x-small;
   display: grid;
-  grid-gap: 0.5rem 0.25rem;
+  grid-gap: $space-x-sm $space-xx-sm;
   grid-template-columns: $s 1fr;
 
   &__percent {
     position: relative;
-    border: #5b5b5b solid 0;
-    border-width: 0 2px;
+    border-width: 0 1px;
+    border-style: solid;
+    @include cssVar(border-color, --bg-2, $bg-2);
   }
   &__value {
     position: relative;
     margin-left: -1.75rem;
-    //@include cssVar(background-color, --bg, $background-color);
+    //@include cssVar(background-color, --bg, $bg);
   }
   &__bar {
     position: absolute;

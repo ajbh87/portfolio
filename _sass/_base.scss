@@ -1,5 +1,5 @@
 //----------------------------- Reset
-body, h1, h2, h3, h4, h5, h6,
+html, body, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, hr,
 dl, dd, ol, ul, figure {
   margin: 0;
@@ -10,12 +10,12 @@ dl, dd, ol, ul, figure {
 
 //-----------------------------  Basic styling
 html {
-  font: $base-font-weight #{$base-font-size-fixed}/#{$base-line-height} $base-font-family;
+  font: $font-weight-base #{$font-fixed-base}/#{$line-height-base} $font-family;
   @include media-query($media-min) {
-    font-size: $base-font-size;
+    font-size: $font-base;
   }
   @include media-query($media-max) {
-    font-size: $max-font-size-fixed;
+    font-size: $font-fixed-max;
   }
 }
 body {
@@ -25,7 +25,7 @@ body {
   min-height: 100vh;
 
   @include cssVar(color, --text, $text-color);
-  background-color: $background-color-2;
+  background-color: $bg-2;
   background-image: $bg-gradient;
   background-size: 100vw 100vh;
   background-attachment: fixed;
@@ -43,6 +43,7 @@ body {
     align-items: flex-end;
   }
 }
+
 .map {
   position: fixed;
   top: 0;
@@ -55,11 +56,18 @@ body {
 }
 
 //----------------------------- Vertical Rhythm
-h1, h2, h3, h4,
 p, blockquote, pre, hr,
 ul, ol, dl, figure,
 %vertical-rhythm {
-  margin-bottom: $spacing-unit;
+  margin-bottom: $space;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+%vertical-rhythm-sm {
+  margin-bottom: $space-sm;
 
   &:last-child {
     margin-bottom: 0;
@@ -68,27 +76,36 @@ ul, ol, dl, figure,
 
 //----------------------------- Headings
 h1, .h1 {
+  @extend %vertical-rhythm-sm;
   font-size: 2.25rem;
   line-height: 1.05;
 }
 h2, .h2 {
+  @extend %vertical-rhythm-sm;
   font-size: 1.8rem;
   line-height: 1.1;
 }
 h3, .h3 {
+  @extend %vertical-rhythm-sm;
   font-size: 1.6rem;
 }
 h4, .h4 {
+  @extend %vertical-rhythm-sm;
   font-size: 1.4rem;
+  font-weight: 400;
 }
 h5, .h5 {
+  //@extend %vertical-rhythm-sm;
   font-size: 1.2rem;
+  margin-bottom: $space-sm;
+  //font-weight: 400;
 }
 h6, .h6 {
   font-size: .8rem;
+  margin-bottom: $space-sm;
 }
 h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
-  font-weight: $font-weight-light;
+  //font-weight: $font-weight-light;
 }
 //----------------------------- Font
 .font {
@@ -118,7 +135,7 @@ figure > img {
 }
 
 figcaption {
-  font-size: $small-font-size;
+  font-size: $font-small;
 }
 
 //----------------------------- Lists
@@ -157,9 +174,9 @@ a {
       left: 0;
       top: 0;
       min-width: 10rem;
-      padding: 0.25rem;
+      padding: $space-xx-sm;
       z-index: 0;
-      font-size: $small-font-size;
+      font-size: $font-small;
       line-height: 1.2;
       font-style: normal;
       font-weight: 700;
@@ -173,7 +190,7 @@ a {
 
       border-radius: 3px;
       background: $secondary;
-      color: $background-color;
+      color: $bg;
     }
   }
   &:hover, &:focus {
@@ -195,13 +212,13 @@ a {
     align-items: center;
   }
   &__icon {
-    margin-right: 0.25rem;
+    margin-right: $space-xx-sm;
   }
 }
 
 //----------------------------- Buttons
 button {
-  line-height: $base-line-height;
+  line-height: $line-height-base;
   &:not([disabled]) {
     cursor: pointer;
   }
@@ -209,7 +226,7 @@ button {
 .button {
   border: 1px solid transparent;
   @include cssVar(background-color, --text, $text-color);
-  @include cssVar(color, --bg, $background-color);
+  @include cssVar(color, --bg, $bg);
 
   &:hover {
     // ToDO
@@ -230,12 +247,11 @@ button {
 
 //----------------------------- Blockquotes
 blockquote {
-  color: $grey-color;
-  border-left: 4px solid $grey-color-light;
-  padding-left: $spacing-unit / 2;
-  //font-size: 18px;
-  //letter-spacing: -1px;
-  font-style: italic;
+  padding: $space-sm;
+  border-left: 4px solid $secondary;
+  @include cssVar(border-color, --secondary, $secondary);
+  @include cssVar(background-color, --bg-2, $bg-2);
+  font-size: $font-small;
 
   > :last-child {
       margin-bottom: 0;
@@ -246,27 +262,48 @@ blockquote {
 pre,
 code {
   font-family: $font-code;
-  font-size: 0.9em;
-  //border: 1px solid $grey-color-light;
+  font-size: $font-small;
   border-radius: 3px;
-  //background-color: $grey-color-dark;
 }
 
 code {
-    padding: 1px 5px;
+  padding: 1px 5px;
 }
 
 pre {
-    padding: 8px 12px;
-    overflow-x: auto;
+  position: relative;
+  padding: 0;
+  overflow-x: auto;
 
-    > code {
-        border: 0;
-        padding-right: 0;
-        padding-left: 0;
-    }
+  > code {
+    display: block;
+    border: 0;
+    padding: $space-sm;
+  }
 }
+.language-js,
+.language-javascript,
+.language-json,
+.language-yaml,
+.language-css,
+.language-scss,
+.language-html {
+  $fs: $font-xx-small;
+  $s: ($fs * $line-height-base) + 0.5rem + ($space-sm / 2);
 
+  padding-top: $s;
+  &:before {
+    content: attr(data-lang);
+    position: absolute;
+    font-size: $fs;
+    left: 0;
+    right: 0;
+    top: 0;
+    display: block;
+    padding: $space-xx-sm $space-x-sm;
+    @include cssVar(background, --bg-2, $bg-2);
+  }
+}
 //----------------------------- Clearfix
 %clearfix {
   &:after {
@@ -292,4 +329,4 @@ pre {
 }
 
 //----------------------------- Paddings and Margins
-@include attr-iterator(padding, $spacing-unit, pad);
+@include attr-iterator(padding, $space, pad);

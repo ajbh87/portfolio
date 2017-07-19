@@ -50,11 +50,11 @@ layout: default
       </ul>
     </div>
     {% endif %}
-    {% if page.table %}
+    {% if page.toc %}
     <div class="toc">
-      <h4 class="toc__title">Table of Contents</h4>
+      <h6 class="toc__title">Table of Contents</h6>
       <ul class="toc__list">
-        {% for content in page.table.content %}
+        {% for content in page.toc %}
         <li class="toc__item">
           <a href="#{{ content.id }}">{{ content.name }}</a>
           {% if content.sub-content %}

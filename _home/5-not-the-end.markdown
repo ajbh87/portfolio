@@ -1,4 +1,14 @@
 ---
 title: This is not the end
 ---
-For my final project I decided to make an interactive webcomic. In my webcomic, the reader/user would become my co-author. Yet, how to make sure their work wouldn’t be lost and refreshed, to never be seen again? For that I would need to learn how to make a database and actually know how to interact with it. Due to my familiarity with Wordpress, I settled for programming it with PHP and MySQL in the backend.
+The spark I felt when I first wrote some HTML, has become a forest fire. Front-End development is what I wanted since the beginning. For me part of the fun of all this is how fast this community is growing and changing. I find the slew frameworks and tools that keep popping up exciting. That's why I decided to make this webpage something more than just another "Web Business Card". I want to really become part of the community of Front-End Developers and to start giving back by helping other people.
+
+#### Here's the plan
+
+I'll be writing in my [musings](/blog.html) section about, mostly JavaScript related experiments that I'll be doing for my own learning purposes. I'll explain how I solved the problem and document the tools and research I needed to solve it. Hopefully this helps someone in search for similar answers.
+
+Follow me or contact me for questions, suggestions or just about anything:
+
+<ul class="section__social-list">
+    {% include social-links.html %}
+</ul>

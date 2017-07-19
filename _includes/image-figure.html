@@ -1,0 +1,7 @@
+<figure class="image-figure">
+  <img src="{{ include.src | prepend: site.url }}"
+    alt="{{ include.alt }}">
+  {% if include.caption %}
+    <figcaption>{{ include.caption }}</figcaption>
+  {% endif %}
+</figure>

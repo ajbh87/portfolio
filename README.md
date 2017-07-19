@@ -1,6 +1,5 @@
 #A Strange Path to Becoming a Web Developer
 ##The Story of Alfredo J. Bermúdez
-Several years ago I saw an article by CSS master Chris Coyier in css-tricks.com called [How SVG Line Animation Works](https://css-tricks.com/svg-line-animation-works/). The article basically showed that by using `stroke-dasharray` and `stroke-dashoffset` you could animate the stroke of an SVG path. Fast-forward a few years and I'm brainstorming what to do with my long-pending personal website. Being an art school grad, I started to think about a concept.
 
 #####Tools
 * Jekyll
@@ -9,6 +8,8 @@ Several years ago I saw an article by CSS master Chris Coyier in css-tricks.com 
 * JavaScript
   * Web Animation Framework!
     * Polyfill
+
+More info coming soon.
 
 ---
 

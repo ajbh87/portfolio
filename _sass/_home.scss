@@ -21,7 +21,7 @@ $time: 0.6s;
     margin-right: 20%;
   }
 
-  @include cssVar(background-color, --bg, $background-color)
+  @include cssVar(background-color, --bg, $bg)
 
   &:first-child {
     border-top: 0;
@@ -42,6 +42,16 @@ $time: 0.6s;
       @include cssVar(border-color, --secondary, $secondary);
 
 
+    }
+  }
+
+  &__social-list {
+    list-style: none;
+    margin-left: 0;
+
+    li {
+      display: inline-block;
+      margin-right: $space-sm;
     }
   }
 }
@@ -71,10 +81,10 @@ $time: 0.6s;
 .bg-line {
   $height: 250;
   position: absolute;
+  top: 0;
   bottom: 0;
+  left: 0;
   right: -2.5%;
-  width: 100%;
-  height: 100%;
   @include media-query($media-min) {
     right: 0;
   }
@@ -86,7 +96,7 @@ $time: 0.6s;
   }
   &__straight {
     fill: none;
-    stroke: $background-color;
+    stroke: $bg;
     stroke-miterlimit: 10;
   }
   &__path {
@@ -107,7 +117,7 @@ $time: 0.6s;
     $steps: 5;
     $eHeight: $height / $steps;
     $s: 2vw;
-    $min: $base-font-size-fixed;
+    $min: $font-fixed-base;
 
     display: block;
     position: absolute;

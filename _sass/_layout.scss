@@ -1,7 +1,7 @@
 %container {
   width: 100%;
   display: block;
-  padding: $spacing-unit;
+  padding: $space;
   border-width: 0 0 1px 0;
   border-style: solid;
   @include cssVar(border-color, --primary, $primary);
@@ -29,6 +29,7 @@
   }
   //----------------------------- Title
   .title {
+    font-weight: $font-weight-light;
     &__main {
       &:after {
         content: ":";
@@ -40,7 +41,7 @@
     }
   }
   &__nav {
-    padding: $spacing-unit $spacing-unit-sm;
+    padding: $space $space-sm;
     text-align: center;
     @include media-query($media-min) {
       flex: 0 0 auto;
@@ -50,7 +51,7 @@
     a {
       font-weight: 700;
       display: inline-block;
-      margin-right: $spacing-unit-sm;
+      margin-right: $space-sm;
 
       &.active {
         @include cssVar(color, --tertiary, $tertiary);
@@ -61,7 +62,7 @@
       @include media-query($media-min) {
         display: block;
         margin-right: 0;
-        margin-bottom: $spacing-unit / 4;
+        margin-bottom: $space / 4;
 
         &:last-child {
           margin-bottom: 0;
@@ -70,25 +71,26 @@
     }
   }
 }
+
 //----------------------------- Blog
 .posts {
-  @include cssVar(background-color, --bg, $background-color);
+  @include cssVar(background-color, --bg, $bg);
   @extend %container;
 
   &__heading {
     @include cssVar(color, --secondary, $secondary);
-    margin-bottom: $spacing-unit;
+    margin-bottom: $space;
   }
   &__list {
     margin-left: 0;
     list-style: none;
 
     > li {
-      margin-bottom: $spacing-unit;
+      margin-bottom: $space;
     }
   }
   &__meta {
-    font-size: $small-font-size;
+    font-size: $font-small;
   }
   &__link {
     display: block;
@@ -98,11 +100,11 @@
 //----------------------------- Posts & Pages
 .post, .page {
   position: relative;
-  @include cssVar(background-color, --bg, $background-color);
+  @include cssVar(background-color, --bg, $bg);
   @extend %container;
 
   &__header {
-    margin-bottom: $spacing-unit-sm;
+    margin-bottom: $space-sm;
   }
   &__title {
     @include cssVar(color, --secondary, $secondary);
@@ -114,9 +116,42 @@
   &__content {
 
   }
+  figure {
+    margin-left: -$space;
+    margin-right: -$space;
+  }
 }
+
+//----------------------------- Figures
+.image-figure {
+  border-style: solid;
+  border-width: 1px 0;
+  @include cssVar(border-color, --tertiary, $tertiary);
+  @include cssVar(background-color, --bg-2, $bg-2);
+  > figcaption {
+    text-align: center;
+    margin: $space-sm $space;
+  }
+  > img {
+    @include cssVar(background-color, --text, $text-color);
+  }
+}
+.codepen-figure {
+  $h: 350px;
+  min-height: $h;
+  @include cssVar(background-color, --bg-2, $bg-2);
+
+  .cp_embed_wrapper {
+    height: $h;
+  }
+  > p {
+    padding: $space;
+  }
+}
+
 //----------------------------- General titles and sub-titles
-.title { // warning header title has this class
+// warning header title has this class
+.title {
   &--with-multipart {
     margin-bottom: .2rem;
   }
@@ -130,27 +165,28 @@
 
 //----------------------------- Multipart
 .extra {
-  font-size: 0.75rem;
-  padding: 0.75rem;
-  //@include cssVar(background-color, --bg, $background-color);
+  font-size: $font-x-small;
+  padding: 0 $space-sm;
+  //@include cssVar(background-color, --bg, $bg);
 
   @include media-query($media-min) {
     $w: 10.5rem;
-    font-size: 0.66rem;
+    font-size: $font-xx-small;
     position: sticky;
     float: right;
     width: $w;
-    margin: -5rem #{-$w - $spacing-unit} 0 0;
+    margin: -5rem #{-$w - $space} 0 0;
     top: 0;
   };
 }
-//----------------------------- Multipart
-.multipart {
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.75rem;
+
+//----------------------------- Multipart and Table of Contents
+.multipart, .toc {
+  padding-bottom: $space-x-sm;
+  margin-bottom: $space-x-sm;
   border-style: solid;
   border-width: 0 0 1px 0;
-  @include cssVar(border-color, --tertiary, $tertiary);
+  @include cssVar(border-color, --bg-2, $bg-2);
 
   &__title {
     margin-bottom: 0;
@@ -167,17 +203,23 @@
         position: absolute;
         top: .1rem;
         left: 0;
-        margin-left: -0.25rem;
+        margin-left: -$space-xx-sm;
         transform: translateX(-100%);
       }
     }
+  }
+}
+.toc {
+  display: none;
+  @include media-query($media-min) {
+    display: block;
   }
 }
 
 //----------------------------- Social Aside
 .social-aside {
   text-align: center;
-  margin-bottom: $spacing-unit-sm;
+  margin-bottom: $space-sm;
   @include media-query($media-min) {
     position: fixed;
     bottom: 0;
@@ -191,7 +233,7 @@
     list-style: none;
     > li {
       display: inline-block;
-      margin-right: $spacing-unit-sm;
+      margin-right: $space-sm;
       &:last-child {
         margin-right: 0;
       }
@@ -207,11 +249,11 @@
           transform 0.3s ease(out-cubic);
 
         transform: translate(75%, 0);
-        transform: translate(calc(100% - 1.5em - 1rem), 0);
-        padding: 0.25rem 0.75rem;
+        transform: translate(calc(100% - 1.5em - #{$space-x-sm + $space-xx-sm}), 0);
+        padding: $space-xx-sm $space-x-sm;
 
         &:hover, &:focus {
-          @include cssVar(background, --bg, $background-color);
+          @include cssVar(background, --bg, $bg);
           transform: translate(0, 0);
         }
 
@@ -236,7 +278,7 @@
 
     li {
       display: inline-block;
-      margin-right: $spacing-unit-sm;
+      margin-right: $space-sm;
 
       &:last-child {
         margin-right: 0;
