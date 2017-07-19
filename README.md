@@ -6,8 +6,7 @@
   * Octopress Paginate
 * Sass
 * JavaScript
-  * Web Animation Framework!
-    * Polyfill
+  * Web Animation API!
 
 More info coming soon.
 
