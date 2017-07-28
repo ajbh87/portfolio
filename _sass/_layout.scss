@@ -98,7 +98,8 @@
 }
 
 //----------------------------- Posts & Pages
-.post, .page {
+.post,
+.page {
   position: relative;
   @include cssVar(background-color, --bg, $bg);
   @extend %container;
@@ -111,10 +112,8 @@
   }
   &__sub-title {
     font-size: 1.5rem;
-
   }
   &__content {
-
   }
   figure {
     margin-left: -$space;
@@ -167,8 +166,6 @@
 .extra {
   font-size: $font-x-small;
   padding: 0 $space-sm;
-  //@include cssVar(background-color, --bg, $bg);
-
   @include media-query($media-min) {
     $w: 10.5rem;
     font-size: $font-xx-small;
@@ -177,11 +174,13 @@
     width: $w;
     margin: -5rem #{-$w - $space} 0 0;
     top: 0;
-  };
+    z-index: 5;
+  }
 }
 
 //----------------------------- Multipart and Table of Contents
-.multipart, .toc {
+.multipart,
+.toc {
   padding-bottom: $space-x-sm;
   margin-bottom: $space-x-sm;
   border-style: solid;
@@ -244,15 +243,18 @@
         margin-right: 0;
       }
       > li > a {
-        transition:
-          background 0.2s ease(out-cubic),
+        transition: background 0.2s ease(out-cubic),
           transform 0.3s ease(out-cubic);
 
         transform: translate(75%, 0);
-        transform: translate(calc(100% - 1.5em - #{$space-x-sm + $space-xx-sm}), 0);
+        transform: translate(
+          calc(100% - 1.5em - #{$space-x-sm + $space-xx-sm}),
+          0
+        );
         padding: $space-xx-sm $space-x-sm;
 
-        &:hover, &:focus {
+        &:hover,
+        &:focus {
           @include cssVar(background, --bg, $bg);
           transform: translate(0, 0);
         }
@@ -268,8 +270,8 @@
 
 //----------------------------- Footer
 .footer {
-  //@extend %container;
   @extend %container;
+  border-bottom: 0;
 
   &__social-list {
     list-style: none;

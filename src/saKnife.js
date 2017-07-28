@@ -7,28 +7,28 @@
  * @class saKnife
  */
 class saKnife {
-    /**
+  /**
     * Check the name of CSS transitionEnd Event
-    * From Modernizr via 'https://davidwalsh.name/css-animation-callback'
+    * @copyright Modernizr - via {@link https://davidwalsh.name/css-animation-callback|davidwalsh}
     * @return {string} CSS transitionEnd Event name
     */
-    static whichTransitionEvent(){
-        const el = document.createElement('fakeelement'),
-            transitions = {
-                transition: 'transitionend',
-                OTransition: 'oTransitionEnd',
-                MozTransition: 'transitionend',
-                WebkitTransition: 'webkitTransitionEnd'
-            };
-        let t;
+  static whichTransitionEvent(){
+    const el = document.createElement('fakeelement'),
+      transitions = {
+        transition: 'transitionend',
+        OTransition: 'oTransitionEnd',
+        MozTransition: 'transitionend',
+        WebkitTransition: 'webkitTransitionEnd'
+      };
+    let t;
 
-        for(t in transitions){
-            if( el.style[t] !== undefined ){
-                return transitions[t];
-            }
-        }
+    for(t in transitions){
+      if( el.style[t] !== undefined ){
+        return transitions[t];
+      }
     }
-    /**
+  }
+  /**
      * Iterate through NodeList
      * @param {NodeList} elements - a NodeList of Elements.
      * @param {function} fn - function to run for each element.
@@ -38,65 +38,53 @@ class saKnife {
      *     doSometing(el);
      * });
      */
-    static forEach(elements, fn) {
-        const total = elements.length;
-        let index = 0;
-        for (index = 0; index < total; index++) {
-            fn(elements[index], index);
-        }
+  static forEach(elements, fn) {
+    const total = elements.length;
+    let index = 0;
+    for (index = 0; index < total; index++) {
+      fn(elements[index], index);
     }
-    /**
+  }
+  /**
      * Check if 'element' has specified 'class'
-     * @param {NodeElement} el - DOM Element
+     * @param {HTMLElement} el - HTMLElement
      * @param {string} className - CSS class name
-     * @return {bool} true/false if 'el' has class 'className'
+     * @return {boolean} true/false if 'el' has class 'className'
      * @example
      * const element = document.querySelector('.some-class');
      * saKnife.hasClass(element, 'some-class');
      * // returns true
      */
-    static hasClass(el, className) {
-        if (el.classList)
-            return el.classList.contains(className);
-        else
-            return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
-    }
+  static hasClass(el, className) {
+    if (el.classList)
+      return el.classList.contains(className);
+    else
+      return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
+  }
 
-    /**
+  /**
      * Every property is in pixels
      * @typedef {object} offsetObject
      * @property {number} top - 'top' position relative to 'body'
      * @property {number} left - 'left' position relative to 'body'
      */
 
-    /**
+  /**
       Check 'element' position relative to 'body'
-     * @param {NodeElement} el - DOM Element
-     * @return {offsetObject}
-        {@link module:src/saKnife~offsetObject offsetObject} - Element offest information
+     * @param {HTMLElement} el - HTMLElement
+     * @return {offsetObject} - Offset information [offsetObject]{@link module:src/saKnife~offsetObject} 
      */
-    static offset(el) {
-        const rect = el.getBoundingClientRect(),
-            body = document.body.getBoundingClientRect();
+  static offset(el) {
+    const rect = el.getBoundingClientRect(),
+      body = document.body.getBoundingClientRect();
 
-        return {
-            top: Math.abs(body.top) + rect.top,
-            left: Math.abs(body.left) + rect.left
-        };
-    }
+    return {
+      top: Math.abs(body.top) + rect.top,
+      left: Math.abs(body.left) + rect.left
+    };
+  }
 
-    /**
-      Every property is in pixels
-     * @typedef {object} winSizeObject
-     * @property {number} width - window width
-     * @property {number} height - window height
-     * @property {number} vCenter - window vertical center
-     * @property {number} hCenter - window horizontal center
-     * @property {number} documentHeight - full document height
-     * @property {number} documentWidth - full document width
-     */
-
-    /**
+  /**
      * Check 'window' size
      * @example
      * saKnife.winSize();
@@ -104,43 +92,43 @@ class saKnife {
      * @return {winSizeObject}
         {@link module:src/saKnife~winSizeObject winSizeObject} - Windows size information
      */
-    static winSize() {
-        const e = document.documentElement,
-            g = document.querySelector('body'),
-            width = window.innerWidth||e.clientWidth||g.clientWidth,
-            height = window.innerHeight||e.clientHeight||g.clientHeight;
-        return {
-            width,
-            height,
-            vCenter: height / 2,
-            hCenter: width / 2,
-            documentHeight: g.offsetHeight,
-            documentWidth: g.offsetWidth
-        };
-    }
-    /**
+  static winSize() {
+    const e = document.documentElement,
+      g = document.querySelector('body'),
+      width = window.innerWidth||e.clientWidth||g.clientWidth,
+      height = window.innerHeight||e.clientHeight||g.clientHeight;
+    return {
+      width,
+      height,
+      vCenter: height / 2,
+      hCenter: width / 2,
+      documentHeight: g.offsetHeight,
+      documentWidth: g.offsetWidth
+    };
+  }
+  /**
      * Round a number to specified decimals
      * @param {number} value
      * @param {number} decimals
      * @return {number}
      */
-    static round(value, decimals) {
-        return Number( Math.round(value + 'e' + decimals) + 'e-' + decimals );
-    }
+  static round(value, decimals) {
+    return Number( Math.round(value + 'e' + decimals) + 'e-' + decimals );
+  }
 }
 if (NodeList.forEach == null) {
-    NodeList.prototype.forEach = function(fn) {
-        saKnife.forEach(this, fn);
-    };
+  NodeList.prototype.forEach = function(fn) {
+    saKnife.forEach(this, fn);
+  };
 }
 if (HTMLElement.hasClass == null) {
-    HTMLElement.prototype.hasClass = function(className) {
-        return saKnife.hasClass(this, className);
-    };
+  HTMLElement.prototype.hasClass = function(className) {
+    return saKnife.hasClass(this, className);
+  };
 }
 if (HTMLElement.getOffset == null) {
-    HTMLElement.prototype.getOffset = function() {
-        return saKnife.offset(this);
-    };
+  HTMLElement.prototype.getOffset = function() {
+    return saKnife.offset(this);
+  };
 }
 export default saKnife;

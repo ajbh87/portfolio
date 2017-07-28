@@ -1,19 +1,29 @@
 {
-    "package": "./package.json",
-    "plugins": [],
-    "recurseDepth": 2,
-    "source": {
-        "includePattern": ".+\\.js(doc|x)?$",
-        "include": ["./" ],
-        "exclude": ["./node-modules/", "./bundles/", "./webpack.config.js"]
-    },
-    "sourceType": "module",
-    "tags": {
-        "allowUnknownTags": true,
-        "dictionaries": ["jsdoc"]
-    },
-    "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false
-    }
+  "plugins": ["plugins/markdown"],  
+  "source": {
+    "includePattern": ".+\\.js(doc|x)?$",
+    "include": ["./"],
+    "exclude": [
+      "./node_modules/",
+      "./_site/",
+      "./bundles/", 
+      "./webpack.config.js"
+    ]
+  },
+  "sourceType": "module",
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc"]
+  },
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": false
+  },
+  "opts": {
+    "destination": "./docs/",
+    "template": "./node_modules/docdash/",
+    "recurse": true,
+    "readme": "./README.md",
+    "package": "./package.json"
+  }
 }

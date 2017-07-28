@@ -697,160 +697,189 @@ module.exports = pull;
 /**
  * Exports scrollTrigger class.
  * @module src/scrollTrigger
- * @requires module:src/saKnife saKnife
+ * @requires src/saKnife - saKnife
+ * @requires node_modules/lodash.debounce - lodash.debounce
  */
+
 
 
 /**
-  Yet another scroll trigger js tool.
-  When an element gets to a certain point in the viewport
-  (crosses a trigger line) run a function.
- * @class scrollTrigger
- * @param {object} options
+ * Scroll Trigger Options Object
+ * @typedef {object} stOptions
  * @property {string} eventName - Custom event name
  * @property {number} offset - Trigger line numerical offset.
  * @property {string} position - 'center' (default), 'top', 'bottom' |
-    Position of trigger line.
- * @property {bool} probe - false (default).
- * @property {string} selector - 'Element' selector. Must be data-*.
+ Position of trigger line.
+ * @property {boolean} probe - false (default).
+ * @property {string} selector - 'Element' selector. Must be data-*.  
+ */
+
+/**
+ * Yet another scroll trigger js tool. When an element gets to a 
+ * certain point in the viewport (crosses a trigger line) run a function.
  * @example
- * An example invocation showing default parameters.
+ * // Showing default parameters.
  * const ST = new scrollTrigger({
-    eventName: 'scrollTrigger',
-    offset: 0,
-    position: 'center',
-    probe: false,
-    selector: '[data-scroll-trigger]'
- });
+      eventName: 'scrollTrigger',
+      offset: 0,
+      position: 'center',
+      probe: false,
+      selector: '[data-scroll-trigger]'
+  });
  */
 class scrollTrigger {
-    constructor(override) {
-        // Merge overrides and defaults into options object
-        this.options =  Object.assign({
-            selector: '[data-scroll-trigger]',
-            eventName: 'scrollTrigger',
-            eventNameProbe: 'scrollProbe',
-            offset: 0,
-            position: 'center',
-            probe: false
-        }, override);
-        // Get window and document size
-        this.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
-        this.options.triggerLine = this._getTriggerLine(this.options.position);
+  /**
+   * @param {stOptions} override - [stOptions]{@link module:src/scrollTrigger~stOptions}
+   */
+  constructor(override) {
+    // Merge overrides and defaults into options object
+    this.options = Object.assign(
+      {
+        selector: '[data-scroll-trigger]',
+        eventName: 'scrollTrigger',
+        eventNameProbe: 'scrollProbe',
+        offset: 0,
+        position: 'center',
+        probe: false
+      },
+      override
+    );
+    // Get window and document size
+    this.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
+    this.options.triggerLine = this._getTriggerLine(this.options.position);
 
-        // Find elements and add them to array
-        this.elements = scrollTrigger.generateElementsObj(this.options.selector);
+    // Find elements and add them to array
+    this.elements = scrollTrigger.generateElementsObj(this.options.selector);
+
+    this.onScrollResize();
+
+    // Add event listeners
+    if (this.elements.length > 0) {
+      window.addEventListener(
+        'scroll',
+        __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(() => {
+          this.onScrollTrigger();
+        }, 100)
+      );
+    }
+    if (this.options.probe !== false) {
+      window.addEventListener('scroll', () => {
+        this.onScrollProbe();
+      });
+    }
+    window.addEventListener(
+      'resize',
+      __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(() => {
         this.onScrollResize();
-        if (this.elements.length > 0) {
-            window.addEventListener('scroll', __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(() => {
-                this.onScrollTrigger();
-            }, 100));
-        }
-        if (this.options.probe !== false) {
-            window.addEventListener('scroll', () => {
-                this.onScrollProbe();
-            });
-        }
-        window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_0__node_modules_lodash_debounce_index_js___default()(() => {
-            this.onScrollResize();
-        }, 200));
-    }
-    /**
-     * Scroll Trigger Elements wrapper
-     * @typedef {object} stElement
-     * @property {NodeElement} el - Element
-     * @property {number} offset - Element offsetObject.
-     * @property {bool} active - True/False if is element is active.
-     * @property {number} index - Index. Nuff' said.
-     */
-    /**
-      Generate elements array. Each element is wrapped in a an stElement object.
-      The idea is to precalculate offset position, so that scrolling performance
-      is not impacted by multiple calls to getBoundingClientRect().
-     * @param {string} selector - Elements selector.
-     * @returns {array} elementArray - An array of stElements
-     */
-    static generateElementsObj(selector) {
-        const elements = document.querySelectorAll(selector);
-        let elArray = [];
-        elements.forEach((element, index) => {
-            let newElement = {
-                el: element,
-                offset: __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].offset(element),
-                active: false,
-                index
-            };
-            elArray.push(newElement);
-        });
-        return elArray;
-    }
-    _getTriggerLine(position) {
-        switch(position) {
-        case 'top':
-            return 0;
-        case 'bottom':
-            return this.window.height;
-        case 'center':
-        default:
-            return this.window.vCenter;
-        }
-    }
-    onScrollTrigger() {
-        let changed = [];
-        this.elements.forEach(element => {
-            const scrolled = window.scrollY + this.options.triggerLine,
-                bottomTrigger = element.offset.top + element.el.offsetHeight,
-                checks = {
-                    afterTop: element.offset.top <= scrolled,
-                    beforeBottom: scrolled <= bottomTrigger
-                };
-            let elChanged = null;
-            // active | inactive
-            if (checks.afterTop && checks.beforeBottom) {
-                elChanged = this._toggleActiveInactive(element, true);
-            }
-            else if (element.active === true) {
-                elChanged = this._toggleActiveInactive(element, false);
-            }
-            elChanged != null ? changed.push(elChanged) : null;
-        });
-        if (this.options.event && changed.length > 0) {
-            window.dispatchEvent(new CustomEvent(this.options.eventName, {
-                detail: changed
-            }));
-        }
-    }
-    onScrollProbe() {
-        let percentScrolled = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].round((window.scrollY) /
-            (this.window.documentHeight - this.window.height), 4);
+      }, 200)
+    );
+  }
 
-        window.dispatchEvent(new CustomEvent(this.options.eventNameProbe, {
-            detail: percentScrolled
-        }));
+  /**
+   * Scroll Trigger Elements wrapper
+   * @typedef stElement
+   * @type {object}
+   * @property {HTMLElement} el - HTMLElement
+   * @property {offsetObject} offset - HTMLElement [offsetObject]{@link module:src/saKnife~offsetObject}.
+   * @property {boolean} active - True/False if is element is active.
+   * @property {number} index - Index. Nuff' said.
+  */
+
+  /**
+   * Generate elements array. Each element is wrapped in a an stElement object.
+   * The idea is to precalculate offset position, so that scrolling performance
+   * is not impacted by multiple calls to getBoundingClientRect().
+   * @param {string} selector - Elements selector.
+   * @returns {stElement[]} An array of [stElements]{@link module:src/scrollTrigger~stElement}
+  */
+  static generateElementsObj(selector) {
+    const elements = document.querySelectorAll(selector);
+    let elArray = [];
+    elements.forEach((element, index) => {
+      let newElement = {
+        el: element,
+        offset: __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].offset(element),
+        active: false,
+        index
+      };
+      elArray.push(newElement);
+    });
+    return elArray;
+  }
+  /**
+   * Get Trigger Line position in pixels.
+   * @param {string} position - Position option.
+   * @returns {number} - Trigger Line position in pixels
+  */
+  _getTriggerLine(position) {
+    switch (position) {
+      case 'top':
+        return 0;
+      case 'bottom':
+        return this.window.height;
+      case 'center':
+      default:
+        return this.window.vCenter;
     }
-    onScrollResize() {
-        this.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
-        this.options.triggerLine = this._getTriggerLine(this.options.position);
-        this.elements.forEach(element => {
-            element.offset = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].offset(element.el);
-        });
+  }
+
+  /**
+   * Scroll Trigger default event.
+   * @event module:src/scrollTrigger#event
+   * @type {object}
+   * @property {stElement[]} detail - An array of [stElements]{@link module:src/scrollTrigger~stElement}
+   */
+
+  /**
+   * Method to run on document scroll. Dispatches custom event named by 'options.eventName'.
+   * @fires module:src/scrollTrigger#event
+  */
+  onScrollTrigger() {
+    let changed = this.elements.filter(element => {
+      const scrolled = window.scrollY + this.options.triggerLine,
+        bottomTrigger = element.offset.top + element.el.offsetHeight,
+        checks = {
+          afterTop: element.offset.top <= scrolled,
+          beforeBottom: scrolled <= bottomTrigger
+        };
+      // active | inactive
+      if (checks.afterTop && checks.beforeBottom && element.active === false) {
+        element.active = true;
+        return true;
+      } else if (element.active === true) {
+        element.active = false;
+        return true;
+      }
+    });
+
+    if (this.options.event && changed.length > 0) {
+      window.dispatchEvent(
+        new CustomEvent(this.options.eventName, {
+          detail: changed
+        })
+      );
     }
-    /**
-     * @private
-     */
-    _toggleActiveInactive(element, active) {
-        // set active
-        if (element.active === false && active === true) {
-            element.active = true;
-            return element;
-        }
-        // set inactive
-        else if (element.active === true && active === false) {
-            element.active = false;
-            return element;
-        }
-        return null;
-    }
+  }
+
+  onScrollProbe() {
+    let percentScrolled = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].round(
+      window.scrollY / (this.window.documentHeight - this.window.height),
+      4
+    );
+
+    window.dispatchEvent(
+      new CustomEvent(this.options.eventNameProbe, {
+        detail: percentScrolled
+      })
+    );
+  }
+  onScrollResize() {
+    this.window = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].winSize();
+    this.options.triggerLine = this._getTriggerLine(this.options.position);
+    this.elements.forEach(element => {
+      element.offset = __WEBPACK_IMPORTED_MODULE_1__saKnife_js__["a" /* default */].offset(element.el);
+    });
+  }
 }
 /* harmony default export */ __webpack_exports__["a"] = (scrollTrigger);
 
@@ -869,177 +898,180 @@ class scrollTrigger {
  * @class svgLine
  */
 class svgLine {
-    constructor(options) {
-        const style = getComputedStyle(options.path);
+  constructor(options) {
+    const style = getComputedStyle(options.path);
 
-        this.el = Object.assign({
-            length: parseFloat(style['stroke-dasharray']),
-            height: options.path.viewportElement.viewBox.baseVal.height,
-            ratios: [],
-            triggers: {},
-            triggerPad: 0
-        }, options);
-        this.active = 0;
-        this.el.triggers.info = [];
+    this.el = Object.assign(
+      {
+        length: parseFloat(style['stroke-dasharray']),
+        height: options.path.viewportElement.viewBox.baseVal.height,
+        ratios: [],
+        triggers: {},
+        triggerPad: 0
+      },
+      options
+    );
+    this.active = 0;
+    this.el.triggers.info = [];
 
-        if (this.el.triggers.points != null) {
-            this.el.ratios = this.getRatios(this.el.triggers.points);
-        }
+    if (this.el.triggers.points != null) {
+      this.el.ratios = this.getRatios(this.el.triggers.points);
     }
-    pathLength(percent){
-        const l = this.el.length,
-            offset = l * percent,
-            newLength = l - offset,
-            changePath = () => {
-                requestAnimationFrame(() => {
-                    this.el.path.style.strokeDashoffset = newLength;
-                });
-            };
-        this.offset = offset;
-        changePath();
-
-        return newLength;
-    }
-    reCheck() {
-        const checkActive = (index) => {
-            const checkForward = (index) => {
-                    let nextTrigger = infoArray[index];
-                    if (index === infoArray.length) {
-                        return index;
-                    }
-                    if (this.offset === this.el.length) {
-                        return infoArray.length;
-                    }
-                    if (this.offset >= (nextTrigger.val - this.el.triggerPad)) {
-                        if (index < infoArray.length - 1) {
-                            return checkForward(index + 1);
-                        } else {
-                            return index;
-                        }
-                    } else {
-                        return index;
-                    }
-                },
-                checkPrev = (index) => {
-                    let prevTrigger,
-                        prevIndex = index - 1;
-                    if (index > 0) {
-                        prevTrigger = infoArray[prevIndex];
-                        if (this.offset < (prevTrigger.val - this.el.triggerPad)) {
-                            if (prevIndex > 0)
-                                return checkPrev(index - 1);
-                            else
-                                return prevIndex;
-                        } else {
-                            return index;
-                        }
-                    } else {
-                        return index;
-                    }
-                },
-                infoArray =  this.el.triggers.info;
-            let next = checkForward(index);
-            if (next !== index) {
-                return next;
-            } else {
-                return checkPrev(index);
-            }
-        };
-        this.active = checkActive(this.active);
-        return this.active;
-    }
-    getRatios(triggerPoints) {
-        const points = this.el.path.points;
-        let ratios = [],
-            ys = [];
-        triggerPoints.forEach((triggerPoint) => {
-            let y = points.getItem(triggerPoint).y,
-                newRatio = 0;
-            ys.push(y);
-
-            newRatio = (y / this.el.height) * 100;
-            ratios.push(newRatio);
+  }
+  pathLength(percent) {
+    const l = this.el.length,
+      offset = l * percent,
+      newLength = l - offset,
+      changePath = () => {
+        requestAnimationFrame(() => {
+          this.el.path.style.strokeDashoffset = newLength;
         });
-        return ratios;
-    }
-    setRatios(ratios) {
-        const triggerPoints = this.el.triggers.points,
-            oldRatios = this.el.ratios;
-        let points = this.el.path.points,
-            diffs = [],
-            triggerInfo = this.el.triggers.info;
+      };
+    this.offset = offset;
+    changePath();
 
-        if (triggerPoints != null) {
-            ratios.forEach((ratio, i) => {
-                let triggerIndex = triggerPoints[i],
-                    y = points.getItem(triggerIndex).y,
-                    ratioDiff = ratio / oldRatios[i],
-                    newY = 0;
-
-                newY = y * ratioDiff;
-
-                changeTriggerPoint(triggerIndex, i, newY);
-                diffs.push(newY);
-            });
-
-            this.el.ratios = ratios;
-            this.el.length = triggerInfo[triggerInfo.length - 1].val;
+    return newLength;
+  }
+  reCheck() {
+    const checkActive = index => {
+      const infoArray = this.el.triggers.info;
+      const checkForward = index => {
+        let nextTrigger = infoArray[index];
+        if (index === infoArray.length) {
+          return index;
         }
-        function changeTriggerPoint(triggerIndex, index, diff) {
-            const trigger = points.getItem(triggerIndex);
-            let prevTriggerIndex = index > 0 ? triggerPoints[index - 1] : 0,
-                prevPoint = ((triggerIndex - 1) >= 0) ?
-                  points.getItem(triggerIndex - 1) : null,
-                nextPoint = ((triggerIndex + 1) < points.numberOfItems - 1) ?
-                  points.getItem(triggerIndex + 1) : null,
-                info = triggerInfo[index] != null ? triggerInfo[index] : {};
-
-            if (info.prevOffset == null && prevPoint != null) {
-                if (prevTriggerIndex !== triggerIndex - 1)
-                    info.prevOffset = getOffset(prevPoint, trigger);
-                else
-                    prevPoint = null;
-            }
-            if (info.nextOffset == null && nextPoint != null) {
-                info.nextOffset = getOffset(nextPoint, trigger);
-                if (info.nextOffset > Math.abs(info.prevOffset))
-                    nextPoint = null;
-            }
-
-            if (triggerIndex < (points.numberOfItems - 1))
-                trigger.y = diff;
-
-            if (prevPoint != null)
-                prevPoint.y = trigger.y + info.prevOffset;
-            if (nextPoint != null)
-                nextPoint.y = trigger.y + info.nextOffset;
-
-            triggerInfo[index] = info;
-            triggerInfo[index].val = calculateSectionLength();
-
-            function getOffset(point1, point2) {
-                return point1.y - point2.y;
-            }
-            function calculateSectionLength() {
-                let pointIndex = prevTriggerIndex + 1,
-                    length = 0;
-
-                for (pointIndex; pointIndex <= triggerIndex; pointIndex++) {
-                    length += svgLine.distance(points.getItem(pointIndex - 1),
-                      points.getItem(pointIndex));
-                }
-                if (index > 0)
-                    length += triggerInfo[index - 1].val;
-
-                return length;
-            }
+        if (this.offset === this.el.length) {
+          return infoArray.length;
         }
+        if (this.offset >= nextTrigger.val - this.el.triggerPad) {
+          if (index < infoArray.length - 1) {
+            return checkForward(index + 1);
+          } else {
+            return index;
+          }
+        } else {
+          return index;
+        }
+      };
+      const checkPrev = index => {
+        let prevTrigger,
+          prevIndex = index - 1;
+        if (index > 0) {
+          prevTrigger = infoArray[prevIndex];
+          if (this.offset < prevTrigger.val - this.el.triggerPad) {
+            if (prevIndex > 0) return checkPrev(index - 1);
+            else return prevIndex;
+          } else {
+            return index;
+          }
+        } else {
+          return index;
+        }
+      };
+      
+      let next = checkForward(index);
+
+      if (next !== index) {
+        return next;
+      } else {
+        return checkPrev(index);
+      }
+    };
+    this.active = checkActive(this.active);
+    return this.active;
+  }
+  getRatios(triggerPoints) {
+    const points = this.el.path.points;
+    let ratios = [],
+      ys = [];
+
+    triggerPoints.forEach(triggerPoint => {
+      let y = points.getItem(triggerPoint).y,
+        newRatio = 0;
+      ys.push(y);
+
+      newRatio = y / this.el.height * 100;
+      ratios.push(newRatio);
+    });
+    return ratios;
+  }
+  setRatios(ratios) {
+    const triggerPoints = this.el.triggers.points,
+      oldRatios = this.el.ratios;
+    let points = this.el.path.points,
+      diffs = [],
+      triggerInfo = this.el.triggers.info;
+
+    if (triggerPoints != null) {
+      ratios.forEach((ratio, i) => {
+        let triggerIndex = triggerPoints[i],
+          y = points.getItem(triggerIndex).y,
+          ratioDiff = ratio / oldRatios[i],
+          newY = 0;
+
+        newY = y * ratioDiff;
+
+        changeTriggerPoint(triggerIndex, i, newY);
+        diffs.push(newY);
+      });
+
+      this.el.ratios = ratios;
+      this.el.length = triggerInfo[triggerInfo.length - 1].val;
     }
-    static distance(pointSet1, pointSet2) {
-        const dx = pointSet2.x - pointSet1.x,
-            dy = pointSet2.y - pointSet1.y;
-        return Math.hypot(dx, dy);
+    function changeTriggerPoint(triggerIndex, index, diff) {
+      const trigger = points.getItem(triggerIndex);
+      let prevTriggerIndex = index > 0 ? triggerPoints[index - 1] : 0,
+        prevPoint =
+          triggerIndex - 1 >= 0 ? points.getItem(triggerIndex - 1) : null,
+        nextPoint =
+          triggerIndex + 1 < points.numberOfItems - 1
+            ? points.getItem(triggerIndex + 1)
+            : null,
+        info = triggerInfo[index] != null ? triggerInfo[index] : {};
+
+      if (info.prevOffset == null && prevPoint != null) {
+        if (prevTriggerIndex !== triggerIndex - 1)
+          info.prevOffset = getOffset(prevPoint, trigger);
+        else prevPoint = null;
+      }
+      if (info.nextOffset == null && nextPoint != null) {
+        info.nextOffset = getOffset(nextPoint, trigger);
+        if (info.nextOffset > Math.abs(info.prevOffset)) nextPoint = null;
+      }
+
+      if (triggerIndex < points.numberOfItems - 1) trigger.y = diff;
+
+      if (prevPoint != null) prevPoint.y = trigger.y + info.prevOffset;
+      if (nextPoint != null) nextPoint.y = trigger.y + info.nextOffset;
+
+      triggerInfo[index] = info;
+      triggerInfo[index].val = calculateSectionLength();
+
+      function getOffset(point1, point2) {
+        return point1.y - point2.y;
+      }
+      function calculateSectionLength() {
+        let pointIndex = prevTriggerIndex + 1,
+          length = 0;
+
+        for (pointIndex; pointIndex <= triggerIndex; pointIndex++) {
+          length += svgLine.distance(
+            points.getItem(pointIndex - 1),
+            points.getItem(pointIndex)
+          );
+        }
+        if (index > 0) length += triggerInfo[index - 1].val;
+
+        return length;
+      }
     }
+  }
+  static distance(pointSet1, pointSet2) {
+    const dx = pointSet2.x - pointSet1.x,
+      dy = pointSet2.y - pointSet1.y;
+
+    return Math.hypot(dx, dy);
+  }
 }
 /* harmony default export */ __webpack_exports__["a"] = (svgLine);
 
@@ -1066,121 +1098,115 @@ __webpack_require__(2);
 
 
 /**
-    Home page scripts.
-    @function
-    @requires src/saKnife
-    @requires src/scrollTrigger
-    @requires node_modules/lodash.debounce
-    @requires node_modules/lodash.before
+  Home page scripts.
+  @function
+  @requires src/saKnife
+  @requires src/scrollTrigger
+  @requires node_modules/lodash.debounce
+  @requires node_modules/lodash.before
 */
 const homeInit = () => {
-    'use strict';
-    const BODY = document.querySelector('body'),
-        CONTAINER = document.querySelector('.bg-line'),
-        SECTIONS = document.querySelectorAll('.section'),
-        ST = new __WEBPACK_IMPORTED_MODULE_0__src_scrollTrigger_js__["a" /* default */]({ probe: true }),
-        LINE = new __WEBPACK_IMPORTED_MODULE_1__src_svgLine_js__["a" /* default */]({
-            svg: CONTAINER.querySelector('.bg-line__svg'),
-            path: CONTAINER.querySelector('.bg-line__path'),
-            pathSelector: '.bg-line__path',
-            triggers: {
-                points: [1, 4, 7, 10, 11]
-            }
-        }),
-        // needs same # of trigger points
-        MARKERS = CONTAINER.querySelectorAll('.bg-line__point');
-    let sectionRatios = getSectionRatios(),
-        active = 0,
-        activeMarkers = [],
-        inactiveMarkers = [ 0, 1, 2, 3, 4, 5 ];
+  'use strict';
+  const BODY = document.querySelector('body'),
+    CONTAINER = document.querySelector('.home'),
+    SECTIONS = document.querySelectorAll('.section'),
+    ST = new __WEBPACK_IMPORTED_MODULE_0__src_scrollTrigger_js__["a" /* default */]({ probe: true }),
+    LINE = new __WEBPACK_IMPORTED_MODULE_1__src_svgLine_js__["a" /* default */]({
+      svg: CONTAINER.querySelector('.bg-line__svg'),
+      path: CONTAINER.querySelector('.bg-line__path'),
+      triggers: {
+        points: [1, 4, 7, 10, 11]
+      }
+    }),
+    // needs same # of trigger points
+    MARKERS = CONTAINER.querySelectorAll('.bg-line__point');
+  let sectionRatios = getSectionRatios(),
+    active = 0,
+    activeMarkers = [],
+    inactiveMarkers = [0, 1, 2, 3, 4, 5];
+
+  LINE.setRatios(sectionRatios.topArr);
+
+  window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));
+
+  window.addEventListener('scrollProbe', changeLine);
+  window.addEventListener('scrollProbe', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(reCheckLine, 50));
+
+  ST.onScrollProbe();
+  if (active === 0) sectionActive(active);
+
+  function onResize() {
+    sectionRatios = getSectionRatios();
 
     LINE.setRatios(sectionRatios.topArr);
-
-    window.addEventListener('resize', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(onResize, 250));
-
-    window.addEventListener('scrollProbe', changeLine);
-    window.addEventListener('scrollProbe', __WEBPACK_IMPORTED_MODULE_3__node_modules_lodash_debounce_index_js___default()(reCheckLine, 50));
-
     ST.onScrollProbe();
-    if (active === 0)
-        sectionActive(active);
+  }
+  function getSectionRatios() {
+    let cHeight = CONTAINER.offsetHeight,
+      ratios = [], // Ratio array
+      topArr = []; // Top Percent array
 
-    function onResize() {
-        sectionRatios = getSectionRatios();
+    SECTIONS.forEach((element, index) => {
+      let marker = MARKERS[index],
+        ratio = element.offsetHeight / cHeight, // Section Height / Container Height
+        // To calculate the Top Percent we need to know if it's not the first section.
+        lastTop = index === 0 ? 0 : topArr[topArr.length - 1],
+        top = ratio * 100 + lastTop;
 
-        LINE.setRatios(sectionRatios.topArr);
-        ST.onScrollProbe();
+      marker.style.top = top + '%';
+      topArr.push(top);
+      ratios.push(__WEBPACK_IMPORTED_MODULE_2__src_saKnife_js__["a" /* default */].round(ratio, 6));
+    });
+
+    return { cHeight, ratios, topArr };
+  }
+  function changeLine(event) {
+    LINE.pathLength(event.detail);
+  }
+  function reCheckLine() {
+    let newActive = LINE.reCheck();
+
+    if (active !== newActive) {
+      toggleActive(active, newActive);
+
+      addMarkers(newActive);
+      removeMarkers(newActive);
+
+      active = newActive;
     }
-    function getSectionRatios() {
-        let cHeight = CONTAINER.offsetHeight,
-            posArr = [], // top position array
-            ratios = [], // ratio calculation array
-            topArr = []; // top calculation array
-
-        SECTIONS.forEach((element, index) => {
-            let marker = MARKERS[index],
-                ratio = element.offsetHeight / cHeight,
-                lastTop = (index === 0) ? 0 : topArr[topArr.length - 1],
-                top = (ratio * 100) + lastTop; // top calculation
-
-            marker.style.top = top + '%';
-            posArr.push(element.getBoundingClientRect());
-            topArr.push(top);
-            ratios.push(__WEBPACK_IMPORTED_MODULE_2__src_saKnife_js__["a" /* default */].round(ratio, 6));
-        });
-
-        return { cHeight, posArr, ratios, topArr };
+    function addMarkers(active) {
+      let toChange = inactiveMarkers.filter(m => m <= active);
+      __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_pull_index_js___default()(inactiveMarkers, ...toChange);
+      activeMarkers = activeMarkers.concat(toChange);
+      toChange.forEach(i => {
+        if (i > 0) MARKERS[i - 1].classList.add('bg-line__point--active');
+      });
     }
-    function changeLine(event) {
-        LINE.pathLength(event.detail);
+    function removeMarkers(active) {
+      let toChange = activeMarkers.filter(m => m > active);
+      __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_pull_index_js___default()(activeMarkers, ...toChange);
+      inactiveMarkers = inactiveMarkers.concat(toChange);
+      toChange.forEach(i => {
+        if (i > 0) MARKERS[i - 1].classList.remove('bg-line__point--active');
+      });
     }
-    function reCheckLine() {
-        let newActive = LINE.reCheck();
-
-        if (active !== newActive) {
-            toggleActive(active, newActive);
-
-            addMarkers(newActive);
-            removeMarkers(newActive);
-
-            active = newActive;
-        }
-        function addMarkers(active) {
-            let toChange = inactiveMarkers.filter( m => m <= active);
-            __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_pull_index_js___default()(inactiveMarkers, ...toChange);
-            activeMarkers = activeMarkers.concat(toChange);
-            toChange.forEach( i => {
-                if (i > 0)
-                    MARKERS[i - 1].classList.add('bg-line__point--active');
-            });
-        }
-        function removeMarkers(active) {
-            let toChange = activeMarkers.filter( m => m > active);
-            __WEBPACK_IMPORTED_MODULE_4__node_modules_lodash_pull_index_js___default()(activeMarkers, ...toChange);
-            inactiveMarkers = inactiveMarkers.concat(toChange);
-            toChange.forEach( i => {
-                if (i > 0)
-                    MARKERS[i - 1].classList.remove('bg-line__point--active');
-            });
-        }
-    }
-    function toggleActive(inactive, active) {
-        requestAnimationFrame(() => {
-            if (inactive < SECTIONS.length)
-                sectionInactive(inactive);
-            if (active < SECTIONS.length)
-                sectionActive(active);
-        });
-    }
-    function sectionActive(index) {
-        SECTIONS[index].classList.add('focused');
-        BODY.classList.add(`section-${index}`);
-    }
-    function sectionInactive(index) {
-        SECTIONS[index].classList.remove('focused');
-        BODY.classList.remove(`section-${index}`);
-    }
+  }
+  function toggleActive(inactive, active) {
+    requestAnimationFrame(() => {
+      if (inactive < SECTIONS.length) sectionInactive(inactive);
+      if (active < SECTIONS.length) sectionActive(active);
+    });
+  }
+  function sectionActive(index) {
+    SECTIONS[index].classList.add('focused');
+    BODY.classList.add(`section-${index}`);
+  }
+  function sectionInactive(index) {
+    SECTIONS[index].classList.remove('focused');
+    BODY.classList.remove(`section-${index}`);
+  }
 };
+
 window.addEventListener('load', homeInit);
 
 

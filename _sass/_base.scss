@@ -1,16 +1,33 @@
 //----------------------------- Reset
-html, body, h1, h2, h3, h4, h5, h6,
-p, blockquote, pre, hr,
-dl, dd, ol, ul, figure {
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+hr,
+dl,
+dd,
+ol,
+ul,
+figure {
   margin: 0;
   padding: 0;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 //-----------------------------  Basic styling
 html {
-  font: $font-weight-base #{$font-fixed-base}/#{$line-height-base} $font-family;
+  font: $font-weight-base #{$font-fixed-base}/#{$line-height-base} sans-serif;
+  font-family: $font-family;
   @include media-query($media-min) {
     font-size: $font-base;
   }
@@ -56,8 +73,14 @@ body {
 }
 
 //----------------------------- Vertical Rhythm
-p, blockquote, pre, hr,
-ul, ol, dl, figure,
+p,
+blockquote,
+pre,
+hr,
+ul,
+ol,
+dl,
+figure,
 %vertical-rhythm {
   margin-bottom: $space;
 
@@ -75,38 +98,42 @@ ul, ol, dl, figure,
 }
 
 //----------------------------- Headings
-h1, .h1 {
+h1,
+.h1 {
   @extend %vertical-rhythm-sm;
   font-size: 2.25rem;
   line-height: 1.05;
 }
-h2, .h2 {
+h2,
+.h2 {
   @extend %vertical-rhythm-sm;
   font-size: 1.8rem;
   line-height: 1.1;
 }
-h3, .h3 {
+h3,
+.h3 {
   @extend %vertical-rhythm-sm;
   font-size: 1.6rem;
 }
-h4, .h4 {
+h4,
+.h4 {
   @extend %vertical-rhythm-sm;
   font-size: 1.4rem;
   font-weight: 400;
 }
-h5, .h5 {
+h5,
+.h5 {
   //@extend %vertical-rhythm-sm;
   font-size: 1.2rem;
   margin-bottom: $space-sm;
   //font-weight: 400;
 }
-h6, .h6 {
+h6,
+.h6 {
   font-size: .8rem;
   margin-bottom: $space-sm;
 }
-h1, .h1, h2, .h2, h3, .h3, h4, .h4 {
-  //font-weight: $font-weight-light;
-}
+
 //----------------------------- Font
 .font {
   &--biggest {
@@ -139,14 +166,15 @@ figcaption {
 }
 
 //----------------------------- Lists
-ul, ol {
+ul,
+ol {
   margin-left: 0.7rem;
 }
 
 li {
   > ul,
   > ol {
-       margin-bottom: 0;
+    margin-bottom: 0;
   }
 }
 
@@ -159,7 +187,8 @@ a {
     color: $primary-hue-1;
   }
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     color: $secondary;
   }
 
@@ -183,9 +212,7 @@ a {
       visibility: hidden;
 
       transform: translate(0%, -100%);
-      transition:
-        visibility 0.2s ease(out-cubic),
-        opacity 0.2s ease(out-cubic);
+      transition: visibility 0.2s ease(out-cubic), opacity 0.2s ease(out-cubic);
       opacity: 0;
 
       border-radius: 3px;
@@ -193,7 +220,8 @@ a {
       color: $bg;
     }
   }
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     &::before {
       opacity: 1;
       z-index: 10;
@@ -233,7 +261,7 @@ button {
   }
   &__icon {
     position: relative;
-    top: -0.125rem;;
+    top: -0.125rem;
   }
 }
 
@@ -254,20 +282,16 @@ blockquote {
   font-size: $font-small;
 
   > :last-child {
-      margin-bottom: 0;
+    margin-bottom: 0;
   }
 }
 
 //----------------------------- Code formatting
 pre,
 code {
+  position: relative;
   font-family: $font-code;
-  font-size: $font-small;
-  border-radius: 3px;
-}
-
-code {
-  padding: 1px 5px;
+  font-size: 0.875em;
 }
 
 pre {
@@ -293,7 +317,7 @@ pre {
 
   padding-top: $s;
   &:before {
-    content: attr(data-lang);
+    content: "";
     position: absolute;
     font-size: $fs;
     left: 0;
@@ -302,6 +326,42 @@ pre {
     display: block;
     padding: $space-xx-sm $space-x-sm;
     @include cssVar(background, --bg-2, $bg-2);
+  }
+}
+.language-js,
+.language-javascript {
+  &:before {
+    content: "JS";
+  }
+}
+.language-css {
+  &:before {
+    content: "CSS";
+  }
+}
+.language-css {
+  &:before {
+    content: "CSS";
+  }
+}
+.language-scss {
+  &:before {
+    content: "SCSS";
+  }
+}
+.language-html {
+  &:before {
+    content: "HTML";
+  }
+}
+.language-json {
+  &:before {
+    content: "JSON";
+  }
+}
+.language-yaml {
+  &:before {
+    content: "YAML";
   }
 }
 //----------------------------- Clearfix

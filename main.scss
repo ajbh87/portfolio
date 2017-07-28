@@ -2,7 +2,8 @@
 
 @import "./_sass/mixins";
 
-$font-family: 'Quicksand', Helvetica, Helvetica Neue, Arial, sans-serif;
+$font-family: 'Quicksand', Helvetica, 'Helvetica Neue', Arial, sans-serif;
+$font-header: '';
 $font-code: monaco, Consolas, "Lucida Console", monospace;
 $media-min: 800px;
 
@@ -20,7 +21,7 @@ $font-weight-light: 300;
 $font-weight-bold: 700;
 
 // Needs to be calculated after base font
-$media-max: $font-fixed-max * ( 1 /strip-unit($font-base/100));
+$media-max: $font-fixed-max * (1 /strip-unit($font-base/100));
 
 $space: 1.5rem;
 $space-sm: ($space / 2);
@@ -33,19 +34,19 @@ $content-max: 32rem;
 $text-color: #fff;
 
 $grey-lighter: #f5f1f1;
-$grey-color: #403D3C;
+$grey-color: #403d3c;
 $grey-light: lighten($grey-color, 50%);
-$grey-dark: #1C1919;
+$grey-dark: #1c1919;
 
-$primary: #5AACFF;
-$primary-hue-1: #94C1FF;
-$primary-hue-2: #2E71EA; // Dark
-$secondary: #C1E829;
-$secondary-hue-1: #D3EC70;
+$primary: #5aacff;
+$primary-hue-1: #94c1ff;
+$primary-hue-2: #2e71ea; // Dark
+$secondary: #c1e829;
+$secondary-hue-1: #d3ec70;
 $secondary-hue-2: #576812;
-$tertiary: #FF6958;
-$tertiary-hue-1: #CC5446;
-$tertiary-hue-2: #D14642; // dark
+$tertiary: #ff6958;
+$tertiary-hue-1: #cc5446;
+$tertiary-hue-2: #d14642; // dark
 
 $bg: $grey-color;
 $bg-2: darken($bg, 8);
@@ -55,30 +56,30 @@ $bg-gradient: generate-gradient($bg, $bg-2);
 $content-width: 1200px;
 
 $ease: (
-  in-quad:      cubic-bezier(0.550,  0.085, 0.680, 0.530),
-  in-cubic:     cubic-bezier(0.550,  0.055, 0.675, 0.190),
-  in-quart:     cubic-bezier(0.895,  0.030, 0.685, 0.220),
-  in-quint:     cubic-bezier(0.755,  0.050, 0.855, 0.060),
-  in-sine:      cubic-bezier(0.470,  0.000, 0.745, 0.715),
-  in-expo:      cubic-bezier(0.950,  0.050, 0.795, 0.035),
-  in-circ:      cubic-bezier(0.600,  0.040, 0.980, 0.335),
-  in-back:      cubic-bezier(0.600, -0.280, 0.735, 0.045),
-  out-quad:     cubic-bezier(0.250,  0.460, 0.450, 0.940),
-  out-cubic:    cubic-bezier(0.215,  0.610, 0.355, 1.000),
-  out-quart:    cubic-bezier(0.165,  0.840, 0.440, 1.000),
-  out-quint:    cubic-bezier(0.230,  1.000, 0.320, 1.000),
-  out-sine:     cubic-bezier(0.390,  0.575, 0.565, 1.000),
-  out-expo:     cubic-bezier(0.190,  1.000, 0.220, 1.000),
-  out-circ:     cubic-bezier(0.075,  0.820, 0.165, 1.000),
-  out-back:     cubic-bezier(0.175,  0.885, 0.320, 1.275),
-  in-out-quad:  cubic-bezier(0.455,  0.030, 0.515, 0.955),
-  in-out-cubic: cubic-bezier(0.645,  0.045, 0.355, 1.000),
-  in-out-quart: cubic-bezier(0.770,  0.000, 0.175, 1.000),
-  in-out-quint: cubic-bezier(0.860,  0.000, 0.070, 1.000),
-  in-out-sine:  cubic-bezier(0.445,  0.050, 0.550, 0.950),
-  in-out-expo:  cubic-bezier(1.000,  0.000, 0.000, 1.000),
-  in-out-circ:  cubic-bezier(0.785,  0.135, 0.150, 0.860),
-  in-out-back:  cubic-bezier(0.680, -0.550, 0.265, 1.550)
+  in-quad: cubic-bezier(0.550, 0.085, 0.680, 0.530),
+  in-cubic: cubic-bezier(0.550, 0.055, 0.675, 0.190),
+  in-quart: cubic-bezier(0.895, 0.030, 0.685, 0.220),
+  in-quint: cubic-bezier(0.755, 0.050, 0.855, 0.060),
+  in-sine: cubic-bezier(0.470, 0.000, 0.745, 0.715),
+  in-expo: cubic-bezier(0.950, 0.050, 0.795, 0.035),
+  in-circ: cubic-bezier(0.600, 0.040, 0.980, 0.335),
+  in-back: cubic-bezier(0.600, -0.280, 0.735, 0.045),
+  out-quad: cubic-bezier(0.250, 0.460, 0.450, 0.940),
+  out-cubic: cubic-bezier(0.215, 0.610, 0.355, 1.000),
+  out-quart: cubic-bezier(0.165, 0.840, 0.440, 1.000),
+  out-quint: cubic-bezier(0.230, 1.000, 0.320, 1.000),
+  out-sine: cubic-bezier(0.390, 0.575, 0.565, 1.000),
+  out-expo: cubic-bezier(0.190, 1.000, 0.220, 1.000),
+  out-circ: cubic-bezier(0.075, 0.820, 0.165, 1.000),
+  out-back: cubic-bezier(0.175, 0.885, 0.320, 1.275),
+  in-out-quad: cubic-bezier(0.455, 0.030, 0.515, 0.955),
+  in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1.000),
+  in-out-quart: cubic-bezier(0.770, 0.000, 0.175, 1.000),
+  in-out-quint: cubic-bezier(0.860, 0.000, 0.070, 1.000),
+  in-out-sine: cubic-bezier(0.445, 0.050, 0.550, 0.950),
+  in-out-expo: cubic-bezier(1.000, 0.000, 0.000, 1.000),
+  in-out-circ: cubic-bezier(0.785, 0.135, 0.150, 0.860),
+  in-out-back: cubic-bezier(0.680, -0.550, 0.265, 1.550)
 );
 
 :root {
@@ -158,10 +159,10 @@ $ease: (
   --bg: #fff;
   --bg-2: #{darken(#fff, 4)};
   --text: #{$bg};
-  --primary: #2E71EA;
+  --primary: #2e71ea;
   --primary-hue-1: #{$tertiary-hue-1};
   --primary-hue-2: #{$tertiary-hue-2};
-  --secondary: #CE4946;
+  --secondary: #ce4946;
   --secondary-hue-1: #{$primary-hue-1};
   --secondary-hue-2: #{$primary-hue-2};
   --tertiary: #{$secondary};
@@ -170,11 +171,9 @@ $ease: (
 }
 
 // Import partials from `sass_dir` (defaults to `_sass`)
-@import
-  "./_sass/bg-pattern",
+@import "./_sass/bg-pattern",
   "./_sass/base",
   "./_sass/layout",
   "./_sass/home",
   "./_sass/experience",
-  "./_sass/syntax-highlighting"
-;
+  "./_sass/syntax-highlighting";

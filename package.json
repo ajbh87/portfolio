@@ -4,61 +4,67 @@
   "description": "Personal website for Alfredo J. Bermúdez",
   "main": "home-init.js",
   "scripts": {
+    "jsdoc": "jsdoc -c ./jsdoc-conf.json",
+    "svgo": "svgo -f ./assets",
     "webpack-dev": "cross-env NODE_ENV=dev webpack --config webpack.config.js",
     "webpack-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js"
   },
-  "author": "ALfredo J Bermudez",
-  "license": "ISC",
+  "author": "Alfredo J Bermúdez",
+  "license": "MIT",
   "dependencies": {
-    "intersection-observer": "^0.3.1",
     "lodash.debounce": "^4.0.8",
     "lodash.pull": "^4.1.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
-    "babel-loader": "^7.1.0",
-    "babel-preset-env": "^1.5.2",
+    "babel-loader": "^7.1.1",
+    "babel-preset-env": "^1.6.0",
     "babel-preset-es2016": "^6.24.1",
     "compression-webpack-plugin": "^0.4.0",
     "cross-env": "^5.0.1",
     "css-loader": "^0.28.4",
     "cssnano": "^3.10.0",
-    "node-sass": "^4.5.3",
+    "docdash": "^0.4.0",
     "extract-text-webpack-plugin": "^2.1.2",
+    "node-sass": "^4.5.3",
     "postcss-loader": "^2.0.5",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.18.2",
+    "svgo": "^0.7.2",
     "uglifyjs-webpack-plugin": "^0.4.3",
-    "web-animations-js": "^2.2.5",
-    "webpack": "^2.6.1"
+    "web-animations-js": "^2.3.1",
+    "webpack": "^2.7.0"
   },
   "eslintConfig": {
-      "env": {
-          "browser": true,
-          "commonjs": true,
-          "es6": true
-      },
-      "extends": "eslint:recommended",
-      "parserOptions": {
-          "sourceType": "module"
-      },
-      "rules": {
-          "indent": [
-              "error",
-              4
-          ],
-          "linebreak-style": [
-              0,
-              "windows"
-          ],
-          "quotes": [
-              "error",
-              "single"
-          ],
-          "semi": [
-              "error",
-              "always"
-          ]
-      }
+    "env": {
+      "browser": true,
+      "commonjs": true,
+      "es6": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "sourceType": "module"
+    },
+    "rules": {
+      "indent": [
+        "error",
+        2,
+        {
+          "SwitchCase": 1
+        }
+      ],
+      "linebreak-style": [
+        0,
+        "windows"
+      ],
+      "quotes": [
+        "error",
+        "single"
+      ],
+      "semi": [
+        "error",
+        "always"
+      ]
+    }
   }
 }

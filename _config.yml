@@ -34,8 +34,6 @@ paginate:
   tag:          ''              # Paginate items tagged with this tag
   tags:         []              # Paginate items tagged with any of these tags
   reversed:     false           # Reverse the order of the documents
-sass:
-  sourcemap: true
 
 # Site data
 menuitems:
@@ -53,4 +51,4 @@ collections:
         layout: page
 
 isDev: true
-version: 1.2
+version: 1.3

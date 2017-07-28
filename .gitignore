@@ -1,6 +1,7 @@
 _site/
 .sass-cache/
-.jekyll-metadata
+.vscode/
 node_modules/
-watch-all.bat
-out/
+docs/
+
+.jekyll-metadata
