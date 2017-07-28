@@ -63,17 +63,17 @@ class saKnife {
   }
 
   /**
-     * Every property is in pixels
-     * @typedef {object} offsetObject
-     * @property {number} top - 'top' position relative to 'body'
-     * @property {number} left - 'left' position relative to 'body'
-     */
+   * Every property is in pixels
+   * @typedef {object} offsetObject
+   * @property {number} top - 'top' position relative to 'body'
+   * @property {number} left - 'left' position relative to 'body'
+   */
 
   /**
-      Check 'element' position relative to 'body'
-     * @param {HTMLElement} el - HTMLElement
-     * @return {offsetObject} - Offset information [offsetObject]{@link module:src/saKnife~offsetObject} 
-     */
+   * Check 'element' position relative to 'body'
+   * @param {HTMLElement} el - HTMLElement
+   * @return {offsetObject} - Offset information [offsetObject]{@link module:src/saKnife~offsetObject} 
+   */
   static offset(el) {
     const rect = el.getBoundingClientRect(),
       body = document.body.getBoundingClientRect();
@@ -85,13 +85,13 @@ class saKnife {
   }
 
   /**
-     * Check 'window' size
-     * @example
-     * saKnife.winSize();
-     * // returns {width: 1920, height: 1080, ...}
-     * @return {winSizeObject}
-        {@link module:src/saKnife~winSizeObject winSizeObject} - Windows size information
-     */
+   * Check 'window' size
+   * @example
+   * saKnife.winSize();
+   * // returns {width: 1920, height: 1080, ...}
+   * @return {winSizeObject}
+      {@link module:src/saKnife~winSizeObject winSizeObject} - Windows size information
+    */
   static winSize() {
     const e = document.documentElement,
       g = document.querySelector('body'),
@@ -107,11 +107,11 @@ class saKnife {
     };
   }
   /**
-     * Round a number to specified decimals
-     * @param {number} value
-     * @param {number} decimals
-     * @return {number}
-     */
+   * Round a number to specified decimals
+   * @param {number} value
+   * @param {number} decimals
+   * @return {number}
+   */
   static round(value, decimals) {
     return Number( Math.round(value + 'e' + decimals) + 'e-' + decimals );
   }

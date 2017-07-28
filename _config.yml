@@ -1,17 +1,35 @@
-title: Alfredo J. Bermúdez
+title: Alfredo J. Bermúdez - Web Developer
 display-title: A Strange Path to Becoming a Web Developer
 display-sub-title: The Story of Alfredo J. Bermúdez
 email: alfredo@ajbermudez.com
 description: >
-  I'm Alfredo J. Bermúdez, a web developer from Puerto Rico with extensive
-  knowledge of <b>HTML</b>, <b>CSS</b> and <b>Javascript</b>.
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://ajbermudez.com" # the base hostname & protocol for your site
-github_username:  alfredo-xyz
+  I'm Alfredo J. Bermúdez, an experienced web developer with a front-end focus based in NYC.
+baseurl: ""
+url: "http://ajbermudez.com"
+
+
+# SEO/Meta settings
+author: Alfredo J. Bermúdez
+twitter:
+  username: AlfBerm
+github:
+  username: alfredo-xyz
+seo:
+  name: Alfredo J. Bermúdez
+  type: Person
+social:
+  name: Alfredo J. Bermúdez
+  links:
+    - https://twitter.com/AlfBerm
+    - https://www.linkedin.com/in/alfredo-berm%C3%BAdez-61654516/
+    - https://github.com/alfredo-xyz
 
 # Build settings
 plugins:
   - octopress-paginate
+  - jekyll-postfiles
+  - jekyll-seo-tag
+  - jekyll-email-protect
 excerpt_separator: <!--more-->
 markdown: kramdown
 exclude:
@@ -19,10 +37,12 @@ exclude:
   - '*-init.js'
   - '*.json'
   - node_modules
-  - src
   - out
   - README.md
+  - src
   - webpack.config.js
+
+# Octopress Paginate Settings
 paginate:
   collection:   posts
   per_page:     5               # maximum number of items per page
@@ -37,7 +57,7 @@ paginate:
 
 # Site data
 menuitems:
-  - name: musings
+  - name: experiments
     url: "/blog.html"
     title: Blog
   - name: experience

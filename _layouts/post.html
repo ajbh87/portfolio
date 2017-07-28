@@ -1,5 +1,6 @@
 ---
 layout: default
+isPost: true
 ---
 {% assign headerClass = "" %}
 {% if page.multipart %}
@@ -56,12 +57,12 @@ layout: default
       <ul class="toc__list">
         {% for content in page.toc %}
         <li class="toc__item">
-          <a href="#{{ content.id }}">{{ content.name }}</a>
+          <a href="#{{ content | slugify }}">{{ content }}</a>
           {% if content.sub-content %}
           <ul class="toc__list toc__sub-list">
             {% for sub in content.sub-content %}
             <li class="toc__item toc__sub-item">
-              <a href="#{{ sub.id }}">{{ sub.name }}</a>
+              <a href="#{{ sub | slugify }}">{{ sub }}</a>
             </li>
             {% endfor %}
           </ul>

@@ -23,7 +23,7 @@
 	</a>
 </li>
 <li>
-	<a class="link link--with-icon" href="mailto:{{ site.email }}" title="Alfredo's Email">
+	<a class="link link--with-icon" href="mailto:{{ site.email | encode_email }}" title="Alfredo's Email">
 		<svg class="icon link__icon" aria-hidden="true">
 			<use xlink:href="#icon--email" />
 		</svg>

@@ -3,7 +3,8 @@ layout: post
 title:  "Preview - SVG Manipulation with JavaScript"
 author: "Alfredo J. Bermúdez"
 date:   2017-07-18 10:00:00 -0400
-tags: [Process]
+category: Experiments
+tags: [Process, Explainer, SVG, JavaScript, SVG + JavaScript]
 multipart:
   title: "SVG and JS a Love/Hate Story"
   num: 1
@@ -13,19 +14,7 @@ multipart:
       active: true
     - title: "Yet Another JS Scroll Trigger"
     - title: "It All Comes Together"
-toc:
-  - id: "love-at-first-path"
-    name: "Love at First Path"
-  - id: "the-concept"
-    name: "The Concept"  
-  - id: "the-challenge"
-    name: "The Challenge"
-tools:
-  - Jekyll
-    - Octopress Paginate
-  - Sass
-  - JavaScript
-    - Web Animation API! with [Polyfill](https://github.com/web-animations/web-animations-js)
+
 research:
   - author: "Chris Coyier"
     title: "Practical SVG"
@@ -41,6 +30,9 @@ research:
     date: 2011-02-22
 has-pen: true
 ---
+* Table of Contents
+{:toc}
+
 > Important: This post is a __work in progress__. When it's finished I'll repost it with a new URL.
 
 A few months ago I was brainstorming what to do with my long-pending personal website, specifically with the landing page. So I decided to do an experiment and document the process. This is the first part in a series of three in which I'll try to explain how to manipulate SVGs with JavaScript, how to make performant scroll-based transitions and animations, and how to tie everything together.
@@ -58,10 +50,11 @@ Finally, after many days of procrastination, or more accurately, after many days
 
 Vectors are made of paths, and when you go through life you take different... PATHS. Silly I know, but that led me to thinking of a path that would change course several times. This would represent the twists and turns in life. Beside it would be sections summarizing the 'chapters' caused by those twists and turns. Something like this.
 
-{% include image-figure.html
-    caption = "High five to myself, I have a concept and a mockup!"
-    src = "/assets/2017-07-14-mockup.jpg"
-    alt = "Landing Page Mockup" %}
+<figure class="image-figure">
+  <img src="./mockup.jpg"
+    alt="Landing page mockup.">
+  <figcaption>High five to myself, I have a concept and a mockup!</figcaption>
+</figure>
 
 ### The Challenge
 
@@ -81,10 +74,11 @@ Before we start with the JavaScript let's throw together some HTML and SCSS with
 
 Look at points 1, 4, 7, 10 in the mockup and compare them with the Pen. This points should be aligned to the end of each corresponding section, and as you can see they are not. That's what we'll be working on in this article.
 
-{% include image-figure.html
-    caption = "Look at point 1 and its relation to the end of section 1."
-    src = "/assets/2017-07-14-zoom.jpg"
-    alt = "Zoom to Points in Mockup" %}
+<figure class="image-figure">
+  <img src="./zoom.jpg"
+    alt="Zoom comparing points in mockup and result.">
+  <figcaption>Look at point 1 and its relation to the end of section 1.</figcaption>
+</figure>
 
 #### 2. Getting `section` Ratios
 

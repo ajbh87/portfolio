@@ -5,6 +5,6 @@ The spark I felt when I first wrote some HTML, has become a forest fire. Front-E
 
 #### Here's the plan
 
-I'll be writing in my [musings](/blog.html) section about, mostly JavaScript related experiments that I'll be doing for my own learning purposes. I'll explain how I solved the problem and document the tools and research I needed to solve it. Hopefully this helps someone in search of similar answers.
+I'll be writing in my [experiments](/blog.html) section about, mostly JavaScript related experiments that I'll be doing for my own learning purposes. I'll explain how I solved the problem and document the tools and research I needed to solve it. Hopefully this helps someone in search of similar answers.
 
 Follow me or contact me for questions, suggestions or just about anything:
