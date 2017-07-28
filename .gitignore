@@ -3,5 +3,6 @@ _site/
 .vscode/
 node_modules/
 docs/
+bundles/
 
 .jekyll-metadata
