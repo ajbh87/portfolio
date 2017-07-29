@@ -1,8 +1,4 @@
 /**
- * Exports saKnife class.
- * @module src/saKnife
- */
-/**
  * Basic utilities for the Vanilla JS toolbox
  * @class saKnife
  */
@@ -72,7 +68,7 @@ class saKnife {
   /**
    * Check 'element' position relative to 'body'
    * @param {HTMLElement} el - HTMLElement
-   * @return {offsetObject} - Offset information [offsetObject]{@link module:src/saKnife~offsetObject} 
+   * @return {offsetObject} - Offset information [offsetObject]{@link offsetObject} 
    */
   static offset(el) {
     const rect = el.getBoundingClientRect(),

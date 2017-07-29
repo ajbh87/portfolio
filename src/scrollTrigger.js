@@ -1,9 +1,3 @@
-/**
- * Exports scrollTrigger class.
- * @module src/scrollTrigger
- * @requires src/saKnife - saKnife
- * @requires node_modules/lodash.debounce - lodash.debounce
- */
 import debounce from '../node_modules/lodash.debounce/index.js';
 import saKnife from './saKnife.js';
 
@@ -19,6 +13,16 @@ import saKnife from './saKnife.js';
  */
 
 /**
+ * Scroll Trigger Elements wrapper
+ * @typedef stElement
+ * @type {object}
+ * @property {HTMLElement} el - HTMLElement
+ * @property {offsetObject} offset - HTMLElement's [offsetObject]{@link offsetObject}.
+ * @property {boolean} active - True/False if is element is active.
+ * @property {number} index - Index. Nuff' said.
+*/
+
+/**
  * Yet another scroll trigger js tool. When an element gets to a 
  * certain point in the viewport (crosses a trigger line) run a function.
  * @example
@@ -30,10 +34,12 @@ import saKnife from './saKnife.js';
       probe: false,
       selector: '[data-scroll-trigger]'
   });
+ * @requires src/saKnife - saKnife
+ * @requires node_modules/lodash.debounce - lodash.debounce
  */
 class scrollTrigger {
   /**
-   * @param {stOptions} override - [stOptions]{@link module:src/scrollTrigger~stOptions}
+   * @param {stOptions} override - [stOptions]{@link stOptions}
    */
   constructor(override) {
     // Merge overrides and defaults into options object
@@ -80,21 +86,11 @@ class scrollTrigger {
   }
 
   /**
-   * Scroll Trigger Elements wrapper
-   * @typedef stElement
-   * @type {object}
-   * @property {HTMLElement} el - HTMLElement
-   * @property {offsetObject} offset - HTMLElement [offsetObject]{@link module:src/saKnife~offsetObject}.
-   * @property {boolean} active - True/False if is element is active.
-   * @property {number} index - Index. Nuff' said.
-  */
-
-  /**
    * Generate elements array. Each element is wrapped in a an stElement object.
    * The idea is to precalculate offset position, so that scrolling performance
    * is not impacted by multiple calls to getBoundingClientRect().
    * @param {string} selector - Elements selector.
-   * @returns {stElement[]} An array of [stElements]{@link module:src/scrollTrigger~stElement}
+   * @returns {stElement[]} An array of [stElements]{@link stElement}
   */
   static generateElementsObj(selector) {
     const elements = document.querySelectorAll(selector);
@@ -126,17 +122,16 @@ class scrollTrigger {
         return this.window.vCenter;
     }
   }
-
   /**
-   * Scroll Trigger default event.
-   * @event module:src/scrollTrigger#event
+   * scrollTrigger default event.
+   * @event module:src/scrollTrigger#defaultEvent
    * @type {object}
-   * @property {stElement[]} detail - An array of [stElements]{@link module:src/scrollTrigger~stElement}
+   * @property {stElement[]} detail - An array of [stElements]{@link stElement}
    */
 
   /**
-   * Method to run on document scroll. Dispatches custom event named by 'options.eventName'.
-   * @fires module:src/scrollTrigger#event
+   * Method to run on document scroll if elements are found by _getTriggerLine. Dispatches custom event named by 'options.eventName'.
+   * @fires module:src/scrollTrigger#defaultEvent
   */
   onScrollTrigger() {
     let changed = this.elements.filter(element => {
@@ -164,12 +159,19 @@ class scrollTrigger {
       );
     }
   }
-
+  /**
+   * scrollTrigger probe event.
+   * @event module:src/scrollTrigger#probeEvent
+   * @type {object}
+   * @property {number} detail - Scrolled percent in decimals
+   */
+  /**
+   * Method to run on document scroll if probe is set to true. Dispatches custom event named by 'options.eventName'.
+   * @fires module:src/scrollTrigger#probeEvent
+  */
   onScrollProbe() {
-    let percentScrolled = saKnife.round(
-      window.scrollY / (this.window.documentHeight - this.window.height),
-      4
-    );
+    let percentScrolled = window.scrollY / 
+      (this.window.documentHeight - this.window.height);
 
     window.dispatchEvent(
       new CustomEvent(this.options.eventNameProbe, {
@@ -177,6 +179,10 @@ class scrollTrigger {
       })
     );
   }
+  /**
+   * Method to run on document resize if elements are found by _getTriggerLine.
+   * It recalculates the window size, trigger line position and each elements offset.
+   */
   onScrollResize() {
     this.window = saKnife.winSize();
     this.options.triggerLine = this._getTriggerLine(this.options.position);

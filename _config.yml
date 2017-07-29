@@ -30,8 +30,10 @@ plugins:
   - jekyll-postfiles
   - jekyll-seo-tag
   - jekyll-email-protect
+  - jekyll-sitemap
 excerpt_separator: <!--more-->
 markdown: kramdown
+
 exclude:
   - '*.scss'
   - '*-init.js'

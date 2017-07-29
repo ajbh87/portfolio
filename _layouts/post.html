@@ -57,7 +57,7 @@ isPost: true
       <ul class="toc__list">
         {% for content in page.toc %}
         <li class="toc__item">
-          <a href="#{{ content | slugify }}">{{ content }}</a>
+          <a href="#{{ content.name | slugify }}">{{ content.name }}</a>
           {% if content.sub-content %}
           <ul class="toc__list toc__sub-list">
             {% for sub in content.sub-content %}

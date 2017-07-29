@@ -13,8 +13,14 @@ multipart:
       link: "/2017/07/18/preview-svg-manipulation.html"
       active: true
     - title: "Yet Another JS Scroll Trigger"
-    - title: "It All Comes Together"
-
+toc:
+  - name: "Love at First Path"
+  - name: "The Concept"  
+  - name: "The Challenge"
+    sub-content:
+    - "1. HTML /CSS /SVG"
+    - "2. Getting `section` Ratios"
+    - "3. ---"
 research:
   - author: "Chris Coyier"
     title: "Practical SVG"
@@ -30,10 +36,8 @@ research:
     date: 2011-02-22
 has-pen: true
 ---
-* Table of Contents
-{:toc}
-
-> Important: This post is a __work in progress__. When it's finished I'll repost it with a new URL.
+This post is a __work in progress__. When it's finished I'll repost it with a new URL.
+{: .note .note--important}
 
 A few months ago I was brainstorming what to do with my long-pending personal website, specifically with the landing page. So I decided to do an experiment and document the process. This is the first part in a series of three in which I'll try to explain how to manipulate SVGs with JavaScript, how to make performant scroll-based transitions and animations, and how to tie everything together.
 <!--more-->
@@ -62,7 +66,7 @@ The first problem is that each section will not have the same height. This means
 
 The plan is to get the ratio of each section relative to their parent, which we'll call `div.home`. The SVG will also be a direct descendant of `div.home` and will have the same height and width as it. This way we only need to apply the ratio measured to the corresponding area in the SVG. I'll try to explain it better as we go.
 
-#### 1. HTML/CSS + SVG
+#### 1. HTML /CSS /SVG
 
 Before we start with the JavaScript let's throw together some HTML and SCSS with the SVG I made.
 
@@ -70,7 +74,8 @@ Before we start with the JavaScript let's throw together some HTML and SCSS with
     name = "Portfolio Process - Part 1"
     slug = "WOBVdN" %}
 
-> Note: I added `preserveAspectRatio="none"` to the SVG because SVGs scale proportionally, keeping the same aspect ratio. This is not really a problem, more like a feature of SVGs but in this case is not what we want to happen. We want it to stretch to the same size as its parent `div.home`.
+I added `preserveAspectRatio="none"` to the SVG because SVGs scale proportionally, keeping the same aspect ratio. This is not really a problem, more like a feature of SVGs but in this case is not what we want to happen. We want it to stretch to the same size as its parent `div.home`.
+{: .note}
 
 Look at points 1, 4, 7, 10 in the mockup and compare them with the Pen. This points should be aligned to the end of each corresponding section, and as you can see they are not. That's what we'll be working on in this article.
 
@@ -107,11 +112,14 @@ function getSectionRatios() {
   return { cHeight, ratios };
 }
 ```
+If you're using Edge or IE the last piece of code will not work for you. The thing is that `SECTIONS` is a NodeList not an Array, and up until recently NodeLists didn't have the method `forEach`. That has changed for most browsers but some have lagged behind, most notably the aforementioned browsers.
+{: .note}
+
 #### 3. ---
 
 After we get the ratio of each section we need to modify the SVG. During the process I realized that this part was going to be much more difficult than what I expected. So, I'll guide you through my final version and I'll do my best to explain why I did it.
 
-To tackle this problem I created a class called svgLine. An svgLine object has several useful methods that will help us solve  
+To tackle this problem I created a class called svgLine.
 
 [how-svg-line]: https://css-tricks.com/svg-line-animation-works/
 [wiki-vectors]: https://en.wikipedia.org/wiki/Vector_graphics

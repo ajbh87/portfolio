@@ -9,10 +9,11 @@
   background: $grey-dark;
  }
  code.highlighter-rouge {
-  background: $secondary;
-  color: $grey-dark;
+   //color: $grey-dark;
   border-radius: 3px;
   padding: 1px 5px;
+  @include cssVar(background-color, --bg-2, $bg-2);
+  //@include cssVar(color, --tertiary, $tertiary);
 }
 .highlight {
   .p     { color: $grey-light; }

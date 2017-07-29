@@ -148,6 +148,34 @@
   }
 }
 
+//----------------------------- Notes
+.note {
+  position: relative;
+  @extend blockquote;
+  @include cssVar(border-color, --primary, $primary);
+
+  &:before {
+    content: "Note";
+    display: block;
+    position: absolute;
+    left: $space-sm;
+    top: 0;
+    padding: 0 $space-x-sm;
+    @include cssVar(background-color, --bg-2, $bg-2);
+    @include cssVar(color, --primary, $primary);
+    font-weight: 700;
+    transform: translateY(-50%);
+  }
+
+  &--important {
+    @include cssVar(border-color, --tertiary, $tertiary);
+    &:before {
+      content: "Important!";
+      @include cssVar(color, --tertiary, $tertiary);
+    }
+  }
+}
+
 //----------------------------- General titles and sub-titles
 // warning header title has this class
 .title {
@@ -206,6 +234,9 @@
         transform: translateX(-100%);
       }
     }
+  }
+  &__sub-list {
+    padding-left: $space-x-sm;
   }
 }
 .toc {

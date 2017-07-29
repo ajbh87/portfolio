@@ -22,9 +22,13 @@ const homeInit = () => {
     LINE = new svgLine({
       svg: CONTAINER.querySelector('.bg-line__svg'),
       path: CONTAINER.querySelector('.bg-line__path'),
-      triggers: {
-        points: [1, 4, 7, 10, 11]
-      }
+      triggers: [
+        { point: 1 },
+        { point: 4 },
+        { point: 7 },
+        { point: 10 },
+        { point: 11 }
+      ]
     }),
     // needs same # of trigger points
     MARKERS = CONTAINER.querySelectorAll('.bg-line__point');
@@ -69,7 +73,7 @@ const homeInit = () => {
     return { cHeight, ratios, topArr };
   }
   function changeLine(event) {
-    LINE.pathLength(event.detail);
+    LINE.drawPath(event.detail);
   }
   function reCheckLine() {
     let newActive = LINE.reCheck();

@@ -1,39 +1,80 @@
 /**
- * Exports svgLine class.
- * @module src/svgLine
+ * Triggers info
+ * @typedef {object} triggerInfo
+ * @property {number} point - Trigger index for SVGElement.points
+ * @property {number} sectionLength - Length from start of path to this trigger point
+ * @property {number} prevOffset - Vertical distance between previous point and this
+ * @property {number} nextOffset - Vertical distance between this point ant the next
  */
+
 /**
-  A plugin-less way to manipulate the svg path in the home background.
- * @class svgLine
+ * svgLine options object
+ * @typedef {object} svglOptions
+ * @property {SVGElement} svg - SVG | Required
+ * @property {SVGPolylineElement | SVGPolygonElement} path - Path to draw | Required
+ * @property {triggerInfo[]} triggers - [triggerInfo]{@link triggerInfo} Array | Required
+ * @property {number} triggerPad - optional padding for the trigger points.
+ */
+
+/** 
+ * A plugin-less way to manipulate SVGPolylineElement or SVGPolygonElement.
+ * @param {svglOptions} options - [svglOptions]{@link svglOptions}
  */
 class svgLine {
+  /** 
+   * @param {svglOptions} options 
+   */
   constructor(options) {
     const style = getComputedStyle(options.path);
 
-    this.el = Object.assign(
+    /** 
+     * svgLine Options [svglOptions]{@link svglOptions}
+     * @type {svglOptions}
+     */
+    this.options = Object.assign(
       {
-        length: parseFloat(style['stroke-dasharray']),
-        height: options.path.viewportElement.viewBox.baseVal.height,
-        ratios: [],
-        triggers: {},
+        triggers: [],
         triggerPad: 0
       },
       options
     );
+    /**
+     * SVG viewbox height
+     * @type {number} 
+     */
+    this.height = options.path.viewportElement.viewBox.baseVal.height;
+    /** 
+     * Path length
+     * @type {number}
+     */
+    this.length = parseFloat(style['stroke-dasharray']);
+    /**
+     * Segments ratio
+     * @type {number[]}
+     */
+    this.ratios = [];
+    /**
+     * Last active trigger point
+     * @type {number}
+     */
     this.active = 0;
-    this.el.triggers.info = [];
 
-    if (this.el.triggers.points != null) {
-      this.el.ratios = this.getRatios(this.el.triggers.points);
+    if (this.options.triggers.length > 0) {
+      this.ratios = this.getRatios();
     }
   }
-  pathLength(percent) {
-    const l = this.el.length,
+  /**
+   * Draws the path by changing the strokeDashoffset of it. 
+   * @param {number} percent - decimal from 0 t0 1
+   * @returns {number} - New strokeDashoffset length.
+   */
+  drawPath(percent) {
+    const l = this.length,
       offset = l * percent,
       newLength = l - offset,
       changePath = () => {
         requestAnimationFrame(() => {
-          this.el.path.style.strokeDashoffset = newLength;
+          this.options.path.style.strokeDashoffset = newLength;
         });
       };
     this.offset = offset;
@@ -41,143 +82,205 @@ class svgLine {
 
     return newLength;
   }
+  /**
+   * Method use to calculate the last active trigger point. 
+   * An active trigger point is point by which the line has already passed. 
+   * @returns {number} - active index
+   */
   reCheck() {
-    const checkActive = index => {
-      const infoArray = this.el.triggers.info;
-      const checkForward = index => {
-        let nextTrigger = infoArray[index];
-        if (index === infoArray.length) {
-          return index;
-        }
-        if (this.offset === this.el.length) {
-          return infoArray.length;
-        }
-        if (this.offset >= nextTrigger.val - this.el.triggerPad) {
-          if (index < infoArray.length - 1) {
-            return checkForward(index + 1);
-          } else {
-            return index;
-          }
+    const triggerArray = this.options.triggers;
+    /**
+     * Recursive function that checks if svgLine.length is bigger than the  following trigger points length.
+     * @param {number} index - index to check
+     * @returns {number} - new active index 
+     */
+    const checkForward = index => {
+      let nextTrigger = triggerArray[index];
+      if (index === triggerArray.length) {
+        return index;
+      }
+      if (this.offset === this.length) {
+        return triggerArray.length;
+      }
+      if (
+        this.offset >=
+        nextTrigger.sectionLength - this.options.triggerPad
+      ) {
+        if (index < triggerArray.length - 1) {
+          return checkForward(index + 1);
         } else {
           return index;
         }
-      };
-      const checkPrev = index => {
-        let prevTrigger,
-          prevIndex = index - 1;
-        if (index > 0) {
-          prevTrigger = infoArray[prevIndex];
-          if (this.offset < prevTrigger.val - this.el.triggerPad) {
-            if (prevIndex > 0) return checkPrev(index - 1);
-            else return prevIndex;
-          } else {
-            return index;
-          }
-        } else {
-          return index;
-        }
-      };
-      
-      let next = checkForward(index);
-
-      if (next !== index) {
-        return next;
       } else {
-        return checkPrev(index);
+        return index;
       }
     };
-    this.active = checkActive(this.active);
-    return this.active;
-  }
-  getRatios(triggerPoints) {
-    const points = this.el.path.points;
-    let ratios = [],
-      ys = [];
+    /**
+     * Recursive function that checks if svgLine.length is smaller than the  previous trigger points length.
+     * @param {number} index - index to check
+     * @returns {number} - new active index 
+     */
+    const checkPrev = index => {
+      let prevTrigger,
+        prevIndex = index - 1;
+      if (index > 0) {
+        prevTrigger = triggerArray[prevIndex];
+        if (
+          this.offset <
+          prevTrigger.sectionLength - this.options.triggerPad
+        ) {
+          if (prevIndex > 0) return checkPrev(index - 1);
+          else return prevIndex;
+        } else {
+          return index;
+        }
+      } else {
+        return index;
+      }
+    };
 
-    triggerPoints.forEach(triggerPoint => {
-      let y = points.getItem(triggerPoint).y,
-        newRatio = 0;
-      ys.push(y);
+    let next = checkForward(this.active);
 
-      newRatio = y / this.el.height * 100;
-      ratios.push(newRatio);
-    });
-    return ratios;
-  }
-  setRatios(ratios) {
-    const triggerPoints = this.el.triggers.points,
-      oldRatios = this.el.ratios;
-    let points = this.el.path.points,
-      diffs = [],
-      triggerInfo = this.el.triggers.info;
-
-    if (triggerPoints != null) {
-      ratios.forEach((ratio, i) => {
-        let triggerIndex = triggerPoints[i],
-          y = points.getItem(triggerIndex).y,
-          ratioDiff = ratio / oldRatios[i],
-          newY = 0;
-
-        newY = y * ratioDiff;
-
-        changeTriggerPoint(triggerIndex, i, newY);
-        diffs.push(newY);
-      });
-
-      this.el.ratios = ratios;
-      this.el.length = triggerInfo[triggerInfo.length - 1].val;
+    if (next !== this.active) {
+      return next;
+    } else {
+      return checkPrev(this.active);
     }
-    function changeTriggerPoint(triggerIndex, index, diff) {
+  }
+  /**
+   * Gets ratio of trigger points position relative to viewport height.
+   * @returns {number[]} 
+   */
+  getRatios() {
+    const triggerPoints = this.options.triggers;
+    const points = this.options.path.points;
+    return triggerPoints.map(triggerPoint => {
+      let y = points.getItem(triggerPoint.point).y;
+      return y / this.height * 100;
+    });
+  }
+  /**
+   * Redraws paths based on ratios provided. 
+   * @param {number[]} ratios
+   */
+  setRatios(ratios) {
+    if (this.ratios === null) return;
+
+    const triggerPoints = this.options.triggers,
+      oldRatios = this.ratios,
+      points = this.options.path.points;
+    /**
+     * Changes Trigger Point position, also previous and next point positions.
+     * @param {triggerInfo} triggerInfo - Trigger point index for SVGPointList "points"
+     * @param {number} index - Trigger point index
+     * @param {number} diff - Difference between Ratios
+     */
+    const changeTriggerPoint = (triggerInfo, index, diff) => {
+      const triggerIndex = triggerInfo.point;
       const trigger = points.getItem(triggerIndex);
-      let prevTriggerIndex = index > 0 ? triggerPoints[index - 1] : 0,
+      let prevTriggerIndex = (index > 0) ? triggerPoints[index - 1].point : 0,
         prevPoint =
-          triggerIndex - 1 >= 0 ? points.getItem(triggerIndex - 1) : null,
+          (triggerIndex - 1 >= 0) ? points.getItem(triggerIndex - 1) : null,
         nextPoint =
-          triggerIndex + 1 < points.numberOfItems - 1
+          (triggerIndex + 1 < points.numberOfItems - 1)
             ? points.getItem(triggerIndex + 1)
             : null,
-        info = triggerInfo[index] != null ? triggerInfo[index] : {};
+        secLength = 0;
 
-      if (info.prevOffset == null && prevPoint != null) {
+      if (triggerInfo.prevOffset == null && prevPoint != null) {
         if (prevTriggerIndex !== triggerIndex - 1)
-          info.prevOffset = getOffset(prevPoint, trigger);
+          triggerInfo.prevOffset = svgLine.distanceV(prevPoint, trigger);
         else prevPoint = null;
       }
-      if (info.nextOffset == null && nextPoint != null) {
-        info.nextOffset = getOffset(nextPoint, trigger);
-        if (info.nextOffset > Math.abs(info.prevOffset)) nextPoint = null;
+      if (triggerInfo.nextOffset == null && nextPoint != null) {
+        triggerInfo.nextOffset = svgLine.distanceV(nextPoint, trigger);
+        if (triggerInfo.nextOffset > Math.abs(triggerInfo.prevOffset))
+          nextPoint = null;
       }
 
       if (triggerIndex < points.numberOfItems - 1) trigger.y = diff;
 
-      if (prevPoint != null) prevPoint.y = trigger.y + info.prevOffset;
-      if (nextPoint != null) nextPoint.y = trigger.y + info.nextOffset;
+      if (prevPoint != null) prevPoint.y = trigger.y + triggerInfo.prevOffset;
+      if (nextPoint != null) nextPoint.y = trigger.y + triggerInfo.nextOffset;
 
-      triggerInfo[index] = info;
-      triggerInfo[index].val = calculateSectionLength();
+      secLength = svgLine.calculateSectionLength(
+        this.options.path,
+        prevTriggerIndex,
+        triggerIndex
+      );
+      triggerInfo.sectionLength =
+        (index > 0)
+          ? triggerPoints[index - 1].sectionLength + secLength
+          : secLength;
+    };
 
-      function getOffset(point1, point2) {
-        return point1.y - point2.y;
-      }
-      function calculateSectionLength() {
-        let pointIndex = prevTriggerIndex + 1,
-          length = 0;
+    ratios.forEach((ratio, i) => {
+      let triggerInfo = triggerPoints[i],
+        y = points.getItem(triggerInfo.point).y,
+        ratioDiff = ratio / oldRatios[i],
+        newY = y * ratioDiff;
 
-        for (pointIndex; pointIndex <= triggerIndex; pointIndex++) {
-          length += svgLine.distance(
-            points.getItem(pointIndex - 1),
-            points.getItem(pointIndex)
-          );
-        }
-        if (index > 0) length += triggerInfo[index - 1].val;
+      changeTriggerPoint(triggerInfo, i, newY);
+    });
 
-        return length;
-      }
-    }
+    this.ratios = ratios;
+
+    // the sectionLength of the last trigger point equals the total polyline length
+    this.length = triggerPoints[triggerPoints.length - 1].sectionLength;
+    
   }
-  static distance(pointSet1, pointSet2) {
-    const dx = pointSet2.x - pointSet1.x,
-      dy = pointSet2.y - pointSet1.y;
+  /**
+   * Calculates length starting from start point up to end point.
+   * sectionLength is the sum of all the segment lengths inside the section.
+   * @param {SVGPolylineElement | SVGPolygonElement} path
+   * @param {number} start - Starting point index
+   * @param {number} end - End point index
+   * @returns {number} - Section length
+   */
+  static calculateSectionLength(path, start, end) {
+    let pointIndex = start + 1,
+      length = 0;
+
+    for (pointIndex; pointIndex <= end; pointIndex++) {
+      length += svgLine.distance(
+        path.points.getItem(pointIndex - 1),
+        path.points.getItem(pointIndex)
+      );
+    }
+    return length;
+  }
+  /**
+   * Calculates total length.
+   * @param {SVGPolylineElement | SVGPolygonElement} path
+   * @returns {number}
+   */
+  static getTotalLength(path) {
+    return svgLine.calculateSectionLength(path, 0, path.points.length - 1);
+  }
+  /**
+   * Calculate vertical difference between points
+   * @param {SVGPoint} point1 
+   * @param {SVGPoint} point2 
+   */
+  static distanceV(point1, point2) {
+    return point1.y - point2.y;
+  }
+  /**
+   * Calculate horizontal difference between points
+   * @param {SVGPoint} point1 
+   * @param {SVGPoint} point2 
+   */
+  static distanceH(point1, point2) {
+    return point1.x - point2.x;
+  }
+  /**
+   * Calculate length from point1 to point2
+   * @param {SVGPoint} point1 
+   * @param {SVGPoint} point2 
+   */
+  static distance(point1, point2) {
+    const dx = point2.x - point1.x,
+      dy = point2.y - point1.y;
 
     return Math.hypot(dx, dy);
   }
