@@ -1,11 +1,19 @@
 import saKnife from './src/saKnife.js';
 import Animation from './node_modules/web-animations-js/web-animations.min.js';
 import Color from './src/color.js';
-
-const expInit = () => {
+/**
+ * Home page scripts.
+ * @function
+ * @requires src/saKnife
+ * @requires src/color
+ * @requires node_modules/web-animations-js
+ */
+const EXP_INIT = () => {
   'use strict';
-  const barCharts = document.querySelectorAll('.skill__percent');
-  let delay = 0;
+  const barCharts = document.querySelectorAll('.skill__percent'),
+    DURATION = 3500,
+    DELAY = 333;
+  let delayed = 0;
 
   barCharts.forEach((container) => {
     const barElement = container.querySelector('.skill__bar'),
@@ -33,7 +41,7 @@ const expInit = () => {
         left: newPos
       }], 
       timing = {
-        duration: 3000,
+        duration: DURATION,
         easing: 'cubic-bezier(0.215,  0.610, 0.355, 1.000)'
       };
 
@@ -47,8 +55,8 @@ const expInit = () => {
         barElement.style.backgroundColor = mixed;
       };
       valueAnimation.onfinish = () => valueElement.style.left = newPos;
-    }, delay);
-    delay += 333;
+    }, delayed);
+    delayed += DELAY;
   });
 };
-window.addEventListener('load', expInit);
+window.addEventListener('load', EXP_INIT);

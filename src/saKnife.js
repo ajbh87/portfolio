@@ -1,13 +1,20 @@
 /**
+ * HTMLElement offset. Every property is in pixels
+ * @typedef {object} offsetObject
+ * @property {number} top - 'top' position relative to 'body'
+ * @property {number} left - 'left' position relative to 'body'
+ */
+
+/**
  * Basic utilities for the Vanilla JS toolbox
  * @class saKnife
  */
 class saKnife {
   /**
-    * Check the name of CSS transitionEnd Event
-    * @copyright Modernizr - via {@link https://davidwalsh.name/css-animation-callback|davidwalsh}
-    * @return {string} CSS transitionEnd Event name
-    */
+   * Check the name of CSS transitionEnd Event
+   * @copyright Modernizr - via {@link https://davidwalsh.name/css-animation-callbackdavidwalsh}
+   * @return {string} CSS transitionEnd Event name
+   */
   static whichTransitionEvent(){
     const el = document.createElement('fakeelement'),
       transitions = {
@@ -59,13 +66,6 @@ class saKnife {
   }
 
   /**
-   * Every property is in pixels
-   * @typedef {object} offsetObject
-   * @property {number} top - 'top' position relative to 'body'
-   * @property {number} left - 'left' position relative to 'body'
-   */
-
-  /**
    * Check 'element' position relative to 'body'
    * @param {HTMLElement} el - HTMLElement
    * @return {offsetObject} - Offset information [offsetObject]{@link offsetObject} 
@@ -87,7 +87,7 @@ class saKnife {
    * // returns {width: 1920, height: 1080, ...}
    * @return {winSizeObject}
       {@link module:src/saKnife~winSizeObject winSizeObject} - Windows size information
-    */
+   */
   static winSize() {
     const e = document.documentElement,
       g = document.querySelector('body'),
@@ -127,4 +127,11 @@ if (HTMLElement.getOffset == null) {
     return saKnife.offset(this);
   };
 }
+
+/**
+ * Exports class [saKnife]{@link saKnife}
+ * - Polyfills NodeList.forEach
+ * - Extends HTMLElement with getOffset and hasClass
+ * @module src/saKnife
+ */
 export default saKnife;

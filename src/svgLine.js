@@ -13,7 +13,7 @@
  * @property {SVGElement} svg - SVG | Required
  * @property {SVGPolylineElement | SVGPolygonElement} path - Path to draw | Required
  * @property {triggerInfo[]} triggers - [triggerInfo]{@link triggerInfo} Array | Required
- * @property {number} triggerPad - optional padding for the trigger points.
+ * @property {number} triggerPad - padding for the trigger points | Optional
  */
 
 /** 
@@ -49,17 +49,16 @@ class svgLine {
      */
     this.length = parseFloat(style['stroke-dasharray']);
     /**
-     * Segments ratio
-     * @type {number[]}
-     */
-    this.ratios = [];
-    /**
      * Last active trigger point
      * @type {number}
      */
     this.active = 0;
 
     if (this.options.triggers.length > 0) {
+      /**
+       * Segments ratio
+       * @type {number[]}
+       */
       this.ratios = this.getRatios();
     }
   }
@@ -102,10 +101,7 @@ class svgLine {
       if (this.offset === this.length) {
         return triggerArray.length;
       }
-      if (
-        this.offset >=
-        nextTrigger.sectionLength - this.options.triggerPad
-      ) {
+      if (this.offset >= nextTrigger.sectionLength - this.options.triggerPad) {
         if (index < triggerArray.length - 1) {
           return checkForward(index + 1);
         } else {
@@ -125,10 +121,7 @@ class svgLine {
         prevIndex = index - 1;
       if (index > 0) {
         prevTrigger = triggerArray[prevIndex];
-        if (
-          this.offset <
-          prevTrigger.sectionLength - this.options.triggerPad
-        ) {
+        if (this.offset < prevTrigger.sectionLength - this.options.triggerPad) {
           if (prevIndex > 0) return checkPrev(index - 1);
           else return prevIndex;
         } else {
@@ -152,6 +145,7 @@ class svgLine {
    * @returns {number[]} 
    */
   getRatios() {
+    if (this.options.triggers.length === 0) return;
     const triggerPoints = this.options.triggers;
     const points = this.options.path.points;
     return triggerPoints.map(triggerPoint => {
@@ -165,7 +159,6 @@ class svgLine {
    */
   setRatios(ratios) {
     if (this.ratios === null) return;
-
     const triggerPoints = this.options.triggers,
       oldRatios = this.ratios,
       points = this.options.path.points;
@@ -178,22 +171,22 @@ class svgLine {
     const changeTriggerPoint = (triggerInfo, index, diff) => {
       const triggerIndex = triggerInfo.point;
       const trigger = points.getItem(triggerIndex);
-      let prevTriggerIndex = (index > 0) ? triggerPoints[index - 1].point : 0,
+      let prevTriggerIndex = index > 0 ? triggerPoints[index - 1].point : 0,
         prevPoint =
-          (triggerIndex - 1 >= 0) ? points.getItem(triggerIndex - 1) : null,
+          triggerIndex - 1 >= 0 ? points.getItem(triggerIndex - 1) : null,
         nextPoint =
-          (triggerIndex + 1 < points.numberOfItems - 1)
+          triggerIndex + 1 < points.numberOfItems - 1
             ? points.getItem(triggerIndex + 1)
             : null,
         secLength = 0;
 
       if (triggerInfo.prevOffset == null && prevPoint != null) {
         if (prevTriggerIndex !== triggerIndex - 1)
-          triggerInfo.prevOffset = svgLine.distanceV(prevPoint, trigger);
+          triggerInfo.prevOffset = svgLine.dY(prevPoint, trigger);
         else prevPoint = null;
       }
       if (triggerInfo.nextOffset == null && nextPoint != null) {
-        triggerInfo.nextOffset = svgLine.distanceV(nextPoint, trigger);
+        triggerInfo.nextOffset = svgLine.dY(nextPoint, trigger);
         if (triggerInfo.nextOffset > Math.abs(triggerInfo.prevOffset))
           nextPoint = null;
       }
@@ -209,7 +202,7 @@ class svgLine {
         triggerIndex
       );
       triggerInfo.sectionLength =
-        (index > 0)
+        index > 0
           ? triggerPoints[index - 1].sectionLength + secLength
           : secLength;
     };
@@ -227,7 +220,6 @@ class svgLine {
 
     // the sectionLength of the last trigger point equals the total polyline length
     this.length = triggerPoints[triggerPoints.length - 1].sectionLength;
-    
   }
   /**
    * Calculates length starting from start point up to end point.
@@ -252,7 +244,7 @@ class svgLine {
   /**
    * Calculates total length.
    * @param {SVGPolylineElement | SVGPolygonElement} path
-   * @returns {number}
+   * @returns {number} - Total length of path
    */
   static getTotalLength(path) {
     return svgLine.calculateSectionLength(path, 0, path.points.length - 1);
@@ -262,7 +254,7 @@ class svgLine {
    * @param {SVGPoint} point1 
    * @param {SVGPoint} point2 
    */
-  static distanceV(point1, point2) {
+  static dY(point1, point2) {
     return point1.y - point2.y;
   }
   /**
@@ -270,7 +262,7 @@ class svgLine {
    * @param {SVGPoint} point1 
    * @param {SVGPoint} point2 
    */
-  static distanceH(point1, point2) {
+  static dX(point1, point2) {
     return point1.x - point2.x;
   }
   /**
@@ -279,10 +271,12 @@ class svgLine {
    * @param {SVGPoint} point2 
    */
   static distance(point1, point2) {
-    const dx = point2.x - point1.x,
-      dy = point2.y - point1.y;
-
-    return Math.hypot(dx, dy);
+    return Math.hypot(svgLine.dX(point1, point2), svgLine.dY(point1, point2));
   }
 }
+
+/**
+ * exports class [svgLine]{@link svgLine}
+ * @module src/svgLine
+ */
 export default svgLine;

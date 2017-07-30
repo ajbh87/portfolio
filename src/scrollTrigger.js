@@ -1,6 +1,5 @@
 import debounce from '../node_modules/lodash.debounce/index.js';
 import saKnife from './saKnife.js';
-
 /**
  * Scroll Trigger Options Object
  * @typedef {object} stOptions
@@ -34,8 +33,6 @@ import saKnife from './saKnife.js';
       probe: false,
       selector: '[data-scroll-trigger]'
   });
- * @requires src/saKnife - saKnife
- * @requires node_modules/lodash.debounce - lodash.debounce
  */
 class scrollTrigger {
   /**
@@ -170,8 +167,8 @@ class scrollTrigger {
    * @fires module:src/scrollTrigger#probeEvent
   */
   onScrollProbe() {
-    let percentScrolled = window.scrollY / 
-      (this.window.documentHeight - this.window.height);
+    let percentScrolled =
+      window.scrollY / (this.window.documentHeight - this.window.height);
 
     window.dispatchEvent(
       new CustomEvent(this.options.eventNameProbe, {
@@ -191,4 +188,10 @@ class scrollTrigger {
     });
   }
 }
+/**
+ * exports class [scrollTrigger]{@link scrollTrigger}
+ * @module src/scrollTrigger
+ * @requires src/saKnife - saKnife
+ * @requires node_modules/lodash.debounce - lodash.debounce
+ */
 export default scrollTrigger;

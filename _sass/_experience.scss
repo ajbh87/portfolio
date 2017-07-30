@@ -58,9 +58,7 @@ $s: 8rem;
 
   &__percent {
     position: relative;
-    border-width: 0 1px;
-    border-style: solid;
-    @include cssVar(border-color, --bg-2, $bg-2);
+    @include cssVar(background-color, --bg-2, $bg-2);
   }
   &__value {
     position: relative;

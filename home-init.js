@@ -6,13 +6,14 @@ import debounce from './node_modules/lodash.debounce/index.js';
 import pull from './node_modules/lodash.pull/index.js';
 
 /**
-  Home page scripts.
-  @function
-  @requires src/saKnife
-  @requires src/scrollTrigger
-  @requires node_modules/lodash.debounce
-  @requires node_modules/lodash.before
-*/
+ * Home page scripts.
+ * @function
+ * @requires src/saKnife
+ * @requires src/scrollTrigger
+ * @requires src/svgLine
+ * @requires node_modules/lodash.debounce
+ * @requires node_modules/lodash.before
+ */
 const homeInit = () => {
   'use strict';
   const BODY = document.querySelector('body'),
