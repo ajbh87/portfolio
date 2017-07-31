@@ -4,10 +4,11 @@
   "description": "Personal website for Alfredo J. Bermúdez",
   "main": "home-init.js",
   "scripts": {
+    "aws": "aws s3 sync ./_site  s3://aws-website-personalwebsite-qkil9",
     "jsdoc": "jsdoc -c ./jsdoc-conf.json",
-    "svgo": "svgo -f ./assets",
     "webpack-dev": "cross-env NODE_ENV=dev webpack --config webpack.config.js",
-    "webpack-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js"
+    "webpack-prod": "cross-env NODE_ENV=production webpack --config webpack.config.js",
+    "build-production": "npm run webpack-prod && jekyll build"
   },
   "author": "Alfredo J Bermúdez",
   "license": "MIT",

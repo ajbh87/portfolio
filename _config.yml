@@ -5,7 +5,7 @@ email: alfredo@ajbermudez.com
 description: >
   I'm Alfredo J. Bermúdez, an experienced web developer with a front-end focus based in NYC.
 baseurl: ""
-url: "http://ajbermudez.com"
+url: "https://ajbermudez.com"
 
 
 # SEO/Meta settings
@@ -74,5 +74,5 @@ collections:
     - values:
         layout: page
 
-isDev: true
-version: 1.3
+isDev: false
+version: 1.4
