@@ -1,5 +1,5 @@
 /**
- * Triggers info
+ * Trigger points info
  * @typedef {object} triggerInfo
  * @property {number} point - Trigger index for SVGElement.points
  * @property {number} sectionLength - Length from start of path to this trigger point
@@ -8,7 +8,7 @@
  */
 
 /**
- * svgLine options object
+ * __svgLine__ options object
  * @typedef {object} svglOptions
  * @property {SVGElement} svg - SVG | Required
  * @property {SVGPolylineElement | SVGPolygonElement} path - Path to draw | Required
@@ -16,8 +16,8 @@
  * @property {number} triggerPad - padding for the trigger points | Optional
  */
 
-/** 
- * A plugin-less way to manipulate SVGPolylineElement or SVGPolygonElement.
+/**
+ * A plugin-less way to manipulate `SVGPolylineElement` or `SVGPolygonElement`.
  * @param {svglOptions} options - [svglOptions]{@link svglOptions}
  */
 class svgLine {
@@ -28,7 +28,7 @@ class svgLine {
     const style = getComputedStyle(options.path);
 
     /** 
-     * svgLine Options [svglOptions]{@link svglOptions}
+     * __svgLine__ options [svglOptions]{@link svglOptions}
      * @type {svglOptions}
      */
     this.options = Object.assign(
@@ -49,7 +49,7 @@ class svgLine {
      */
     this.length = parseFloat(style['stroke-dasharray']);
     /**
-     * Last active trigger point
+     * Last *active trigger point*
      * @type {number}
      */
     this.active = 0;
@@ -63,7 +63,7 @@ class svgLine {
     }
   }
   /**
-   * Draws the path by changing the strokeDashoffset of it. 
+   * Draws the path by changing the `strokeDashoffset` of it. 
    * @param {number} percent - decimal from 0 t0 1
    * @returns {number} - New strokeDashoffset length.
    */
@@ -82,14 +82,15 @@ class svgLine {
     return newLength;
   }
   /**
-   * Method use to calculate the last active trigger point. 
-   * An active trigger point is point by which the line has already passed. 
+   * Method use to calculate the last *active trigger point*. 
+   * An *active trigger point* is a point by which the stroke has already passed. 
    * @returns {number} - active index
    */
-  reCheck() {
+  checkActiveTrigger() {
+    debugger;
     const triggerArray = this.options.triggers;
     /**
-     * Recursive function that checks if svgLine.length is bigger than the  following trigger points length.
+     * Recursive function that checks if `svgLine.length` is bigger than the following trigger points length.
      * @param {number} index - index to check
      * @returns {number} - new active index 
      */
@@ -112,7 +113,7 @@ class svgLine {
       }
     };
     /**
-     * Recursive function that checks if svgLine.length is smaller than the  previous trigger points length.
+     * Recursive function that checks if `svgLine.length` is smaller than the previous trigger points length.
      * @param {number} index - index to check
      * @returns {number} - new active index 
      */
@@ -131,13 +132,16 @@ class svgLine {
         return index;
       }
     };
-
+    let prev;
     let next = checkForward(this.active);
 
     if (next !== this.active) {
+      this.active = next;
       return next;
     } else {
-      return checkPrev(this.active);
+      prev = checkPrev(this.active);
+      this.active = prev;
+      return prev;
     }
   }
   /**

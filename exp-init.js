@@ -1,5 +1,5 @@
-import saKnife from './src/saKnife.js';
-import Animation from './node_modules/web-animations-js/web-animations.min.js';
+import './src/saKnife.js';
+import './node_modules/web-animations-js/web-animations.min.js';
 import Color from './src/color.js';
 /**
  * Home page scripts.

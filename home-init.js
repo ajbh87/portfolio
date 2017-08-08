@@ -77,7 +77,7 @@ const homeInit = () => {
     LINE.drawPath(event.detail);
   }
   function reCheckLine() {
-    let newActive = LINE.reCheck();
+    let newActive = LINE.checkActiveTrigger();
 
     if (active !== newActive) {
       toggleActive(active, newActive);
@@ -91,23 +91,33 @@ const homeInit = () => {
       let toChange = inactiveMarkers.filter(m => m <= active);
       pull(inactiveMarkers, ...toChange);
       activeMarkers = activeMarkers.concat(toChange);
-      toChange.forEach(i => {
-        if (i > 0) MARKERS[i - 1].classList.add('bg-line__point--active');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          toChange.forEach(i => {
+            if (i > 0) MARKERS[i - 1].classList.add('bg-line__point--active');
+          });
+        });
       });
     }
     function removeMarkers(active) {
       let toChange = activeMarkers.filter(m => m > active);
       pull(activeMarkers, ...toChange);
       inactiveMarkers = inactiveMarkers.concat(toChange);
-      toChange.forEach(i => {
-        if (i > 0) MARKERS[i - 1].classList.remove('bg-line__point--active');
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          toChange.forEach(i => {
+            if (i > 0) MARKERS[i - 1].classList.remove('bg-line__point--active');
+          });
+        });
       });
     }
   }
   function toggleActive(inactive, active) {
     requestAnimationFrame(() => {
-      if (inactive < SECTIONS.length) sectionInactive(inactive);
-      if (active < SECTIONS.length) sectionActive(active);
+      requestAnimationFrame(() => {
+        if (inactive < SECTIONS.length) sectionInactive(inactive);
+        if (active < SECTIONS.length) sectionActive(active);
+      });
     });
   }
   function sectionActive(index) {

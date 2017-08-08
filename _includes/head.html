@@ -14,19 +14,21 @@
 	{% assign root = site.baseurl | prepend: site.url | append: "/bundles" %}
 	{% assign version = "?v=" | append: site.version %}
 
+	{% assign maincss = "/main.css" | prepend: root | append: version %}
 	{% assign common = "/common.js" | prepend: root | append: version %}
 	{% assign home = "/home.js" | prepend: root | append: version %}
 	{% assign exp = "/exp.js" | prepend: root | append: version %}
 	{% assign posts = "/posts.js" | prepend: root | append: version %}
 	
 	{% if site.isDev != true %}
+		{% assign maincss = "/main.min.css" | prepend: root | append: version %}
 		{% assign common = "/common.min.js" | prepend: root | append: version %}
 		{% assign home = "/home.min.js" | prepend: root | append: version %}
 		{% assign exp = "/exp.min.js" | prepend: root | append: version %}
 		{% assign posts = "/posts.min.js" | prepend: root | append: version %}
 	{% endif %}
 	
-	<link rel="stylesheet" href="{{ "/main.css" | prepend: root | append: version }}">
+	<link rel="stylesheet" href="{{ maincss }}">
 
 	<script src="{{ common }}"></script>
 
